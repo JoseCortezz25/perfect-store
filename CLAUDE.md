@@ -4,7 +4,11 @@ This file provides guidance to Opencode when working with code in this repositor
 
 ## Project Overview
 
-This is a Next.js 15 application using React 19, TypeScript, and Tailwind CSS v4. It follows a Screaming Architecture approach with domain-driven organization at the top level, where each domain implements Atomic Design principles for component structure. The project includes Storybook for component development and uses shadcn/ui for the component library foundation and Jest with Testing Library for testing.
+Sphere is an **internal web platform** for centralizing and guaranteeing the technical quality of digital display pieces (banners) before client delivery. It replaces a shared staging link with a structured QC flow: designers upload ZIPs, the platform validates each banner automatically (weight, dimensions, naming, scripts, animations), generates a 0–100 score with a detailed checklist, manages versions with immutable history, and enables client approval through a controlled-access portal.
+
+**Banner lifecycle**: `uploaded → qc_pending → qc_approved / qc_rejected → client_review → client_approved → delivered`
+
+For full business context see `.claude/knowledge/business-context.md`. For the platform sitemap see `.claude/knowledge/sitemap.md`.
 
 **Tech Stack**: Next 15, React 19, TailwindCSS v4, shadcn/ui, TypeScript, zod, React Hook Form
 
@@ -78,6 +82,8 @@ Implement directly (typos, simple edits) - no session needed.
 
 ### Load As Needed (Use Grep for sections)
 
+- `.claude/knowledge/business-context.md` - What Sphere is, the problem it solves, banner lifecycle, product phases
+- `.claude/knowledge/sitemap.md` - Pages, sections and business features of the platform
 - `.claude/knowledge/architecture-patterns.md` - Architecture rules
 - `.claude/knowledge/business-rules.md` - Domain rules
 - `.claude/knowledge/context-strategy.md` - Context loading strategy
@@ -102,6 +108,46 @@ Implement directly (typos, simple edits) - no session needed.
 - Follow architecture dependency rules strictly
 - Agents create plans, parent executes
 - Session context is append-only (never overwrite)
+
+## Design Guidelines (ALWAYS Follow)
+
+**When designing or implementing any UI**, you MUST consult the files in `.claude/design/`. These are the Source of Truth for all visual decisions in Sphere.
+
+| File | What it defines |
+|------|----------------|
+| `.claude/design/color-system.md` | OP Blue palette, dark surface hierarchy (level-0→6), button/card/action tokens, transparencies |
+| `.claude/design/typography-system.md` | Mulish font, display/heading/body/caption/CTA scales with sizes, weights and line-heights |
+| `.claude/design/strokes-and-radius.md` | Border widths (none/thin/medium/thick), border-radius scale (2px→9999px), nested radius rule |
+| `.claude/design/spacing-system.md` | Semantic padding/gap for buttons, cards, inputs, containers, navigation and utility gaps |
+| `.claude/design/grid-system.md` | 12-column grid, max-widths (1376px / 1135px), 141px static sidebar, desktop margins and gutters |
+| `.claude/design/status-colors.md` | Status tokens (approved, rejected, warning, pending, in_review, delivered), QC validation colors |
+| `.claude/design/motion-system.md` | Durations (120ms→600ms), easing curves (ui/premium/editorial), per-component animation rules |
+
+**Non-negotiable design rules:**
+- This is a **dark-mode only** system — never use white or light backgrounds as base canvas
+- Principal brand color is **`#4361EF`** (op-blue-600) — use `#6689F4` only for hover states
+- Font is always **Mulish** — no other typeface is permitted
+- Always animate with **GPU-composited properties only** (`opacity`, `transform`, `background-position`)
+- Respect the **nested radius formula**: `Inner Radius = Outer Radius − Padding`
+- Always implement **`prefers-reduced-motion`** when adding animations
+
+---
+
+## Code Rules
+
+**When writing any code in `src/`**, these rules in `.claude/rules/` are enforced automatically. Load the relevant file when the task touches that area.
+
+| File | What it enforces |
+|------|-----------------|
+| `.claude/rules/code-quality.md` | ESLint rules, no `any`, no unused vars, camelCase, no console in prod |
+| `.claude/rules/naming-conventions.md` | kebab-case files, mandatory suffixes (`.store.ts`, `.schema.ts`, `.types.ts`), boolean prefixes (`is/has/should`) |
+| `.claude/rules/folder-structure.md` | Full `src/` directory tree, Screaming Architecture + Atomic Design layout |
+| `.claude/rules/project-characteristics.md` | RSC-first architecture, state management strategy (React Query / Zustand / useState) |
+| `.claude/rules/styling.md` | Tailwind v4, `@apply`, BEM, `cn()` for variants, shadcn/ui wrapping, mobile-first |
+| `.claude/rules/text-management.md` | No hardcoded strings — domain `messages.ts` or `config/messages.ts` |
+| `.claude/rules/document-component-storybook.md` | `*.stories.tsx` conventions, folder structure mirroring Figma |
+
+---
 
 ## MCP Configuration
 

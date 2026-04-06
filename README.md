@@ -1,14 +1,14 @@
-# Next.js 15 Starter Template
+# Sphere — Banner Validation Platform
 
-**A production-ready Next.js 15 starter template with TypeScript, Tailwind CSS v4, shadcn/ui, and modern architecture patterns.**
+**Internal platform for technical quality control of digital display pieces (banners) before client delivery.**
 
-[Quick Start](#-quick-start) • [Features](#-features) • [Architecture](#-architecture) • [Tech Stack](#-tech-stack) • [AI-Assisted Development](#-ai-assisted-development) • [Documentation](#-documentation)
+[What is Sphere](#what-is-sphere) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [Tech Stack](#-tech-stack) • [AI-Assisted Development](#-ai-assisted-development) • [Documentation](#-documentation)
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [Overview](#-overview)
+- [What is Sphere](#what-is-sphere)
 - [Quick Start](#-quick-start)
 - [Features](#-features)
 - [Architecture](#-architecture)
@@ -16,6 +16,7 @@
 - [Project Structure](#-project-structure)
 - [Available Scripts](#-available-scripts)
 - [Code Standards](#-code-standards)
+- [Code Rules](#-code-rules)
 - [Development Workflow](#-development-workflow)
 - [AI-Assisted Development](#-ai-assisted-development)
 - [Documentation](#-documentation)
@@ -23,9 +24,41 @@
 
 ---
 
+## What is Sphere
+
+Sphere is an **internal web platform** for the banner production team. It centralizes and guarantees the technical quality of digital display pieces before delivery to the client.
+
+### The Problem it Solves
+
+The team used a shared staging link (`prevwork.quadi.io`) with critical issues: no technical validation, no access control, no traceability, and an unreliable history. Sphere replaces that chaotic system with a structured QC flow.
+
+### What Sphere Does
+
+- **Receives ZIPs** with digital banners uploaded by designers
+- **Validates each banner automatically** — weight, dimensions, naming, scripts, animations
+- **Generates a score from 0 to 100** per version with a checklist of critical, important, and informational checks
+- **Manages versions** (V1, V2, V3…) with immutable activity history
+- **Previews banners** at real size with dark/light mode
+- **Facilitates client approval** through a controlled-access portal
+
+### Banner Lifecycle
+
+```
+uploaded → qc_pending → qc_approved / qc_rejected → client_review → client_approved → delivered
+```
+
+### Product Phases
+
+| Phase | Status | Scope |
+| ----- | ------ | ----- |
+| **Phase 1 — MVP** | Current | Upload, automatic validation, QC checklist, internal preview, version management |
+| **Phase 2** | Planned | Client portal, executive dashboard with metrics, client-side approvals |
+
+---
+
 ## 🎯 Overview
 
-This is a professional-grade Next.js 15 starter template designed for building scalable, maintainable web applications. It implements modern architectural patterns including **Screaming Architecture** and **Atomic Design**, with a focus on React Server Components (RSC) and Server Actions.
+This project is built on a Next.js 15 stack and implements modern architectural patterns including **Screaming Architecture** and **Atomic Design**, with a focus on React Server Components (RSC) and Server Actions.
 
 ### Key Highlights
 
@@ -637,6 +670,52 @@ This project includes a complete setup for coding with AI assistance using **Ope
 - **[CLAUDE.md](./CLAUDE.md)** — Project context for Claude Code
 - **[AGENTS.md](./AGENTS.md)** — Project context for OpenCode
 - **[Critical Constraints](./.claude/knowledge/critical-constraints.md)** — Non-negotiable architectural rules
+
+---
+
+## 📐 Code Rules
+
+The project enforces a set of rules under `.claude/rules/` that define coding standards, architecture conventions, and design guidelines. These are automatically loaded by Claude Code and OpenCode when editing files under `src/`.
+
+| Rule File | Coverage |
+| --------- | -------- |
+| [**code-quality.md**](./.claude/rules/code-quality.md) | ESLint rules, TypeScript strictness, no `any`, camelCase enforcement |
+| [**naming-conventions.md**](./.claude/rules/naming-conventions.md) | File names (kebab-case), suffixes (`.store.ts`, `.schema.ts`, `.types.ts`), variable prefixes (`is`, `has`, `handle`) |
+| [**folder-structure.md**](./.claude/rules/folder-structure.md) | Full `src/` directory tree, Screaming Architecture + Atomic Design layout |
+| [**project-characteristics.md**](./.claude/rules/project-characteristics.md) | State management strategy (React Query / Zustand / useState), RSC-first component architecture |
+| [**styling.md**](./.claude/rules/styling.md) | Tailwind v4, `@apply`, BEM, `cn()` for variants, shadcn/ui usage, mobile-first |
+| [**text-management.md**](./.claude/rules/text-management.md) | Domain `messages.ts` files, global `config/messages.ts`, dynamic text functions |
+| [**document-component-storybook.md**](./.claude/rules/document-component-storybook.md) | Story file conventions, folder structure mirroring Figma, `*.stories.tsx` |
+
+### Architecture at a Glance
+
+```
+src/
+├── app/          → Routes & pages (Next.js App Router)
+├── domains/      → Business logic by domain (Screaming Architecture)
+│   └── {domain}/
+│       ├── components/   atoms/ + molecules/
+│       ├── hooks/        Business logic hooks
+│       ├── stores/       Zustand UI state only
+│       ├── actions.ts    Server Actions ('use server')
+│       ├── messages.ts   Domain UI text strings
+│       └── *.schema.ts   Zod validation schemas
+├── components/   → Reusable UI: ui/ atoms/ molecules/ organisms/ layout/
+├── lib/          → Initializations (auth, db, middleware)
+├── config/       → Global config: site.ts, messages.ts, constants.ts
+├── utils/        → Pure utility functions
+└── styles/       → CSS: components/ + domains/ + utils/
+```
+
+### Layer Dependency Rules
+
+```
+app/        → imports: domains/, components/, lib/, config/
+domains/    → imports: components/, lib/, utils/, config/
+components/ → imports: lib/, utils/
+lib/        → imports: utils/
+utils/      → imports: nothing
+```
 
 ---
 
