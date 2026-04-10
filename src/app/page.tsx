@@ -1,103 +1,234 @@
-import Image from 'next/image';
+import { Topbar } from '@/components/layout/topbar';
+import { ProjectsGrid } from '@/domains/projects/components/organisms/projects-grid';
+import { projectMessages } from '@/domains/projects/messages';
+import type { Project, BannerStatus } from '@/domains/projects/projects.types';
+import { Layers, CheckCircle, AlertTriangle, Send } from 'lucide-react';
+import '@/styles/components/layout/topbar.css';
+import '@/styles/domains/projects/home.css';
 
-export default function Home() {
+const MOCK_PROJECTS: Project[] = [
+  {
+    id: '1',
+    name: 'Summer Campaign 2025',
+    brand: 'Pepsi',
+    client: 'PepsiCo',
+    designer: 'Michaela O',
+    status: 'qc_approved',
+    totalPieces: 24,
+    latestVersion: 3,
+    createdAt: new Date('2025-03-10'),
+    updatedAt: new Date('2026-04-01')
+  },
+  {
+    id: '2',
+    name: 'Back to School',
+    brand: 'Pepsi',
+    client: 'PepsiCo',
+    designer: 'Carlos R',
+    status: 'client_review',
+    totalPieces: 12,
+    latestVersion: 2,
+    createdAt: new Date('2026-03-20'),
+    updatedAt: new Date('2026-04-05')
+  },
+  {
+    id: '3',
+    name: 'World Cup Launch',
+    brand: 'Gatorade',
+    client: 'PepsiCo',
+    designer: 'Daniela S',
+    status: 'qc_rejected',
+    totalPieces: 36,
+    latestVersion: 1,
+    createdAt: new Date('2026-04-01'),
+    updatedAt: new Date('2026-04-08')
+  },
+  {
+    id: '4',
+    name: 'Brand Refresh Q2',
+    brand: 'Nike',
+    client: 'Nike Inc.',
+    designer: 'Michaela O',
+    status: 'delivered',
+    totalPieces: 18,
+    latestVersion: 4,
+    createdAt: new Date('2026-02-14'),
+    updatedAt: new Date('2026-03-28')
+  },
+  {
+    id: '5',
+    name: 'Air Max Drop',
+    brand: 'Nike',
+    client: 'Nike Inc.',
+    designer: 'Luis P',
+    status: 'needs_fix',
+    totalPieces: 8,
+    latestVersion: 2,
+    createdAt: new Date('2026-03-28'),
+    updatedAt: new Date('2026-04-09')
+  },
+  {
+    id: '6',
+    name: 'Holiday Collection',
+    brand: 'Zara',
+    client: 'Inditex',
+    designer: 'Ana G',
+    status: 'qc_pending',
+    totalPieces: 30,
+    latestVersion: 1,
+    createdAt: new Date('2026-04-08'),
+    updatedAt: new Date('2026-04-08')
+  },
+  {
+    id: '7',
+    name: 'Spring Drop 2025',
+    brand: 'Massimo Dutti',
+    client: 'Inditex',
+    designer: 'Carlos R',
+    status: 'client_approved',
+    totalPieces: 16,
+    latestVersion: 3,
+    createdAt: new Date('2026-01-15'),
+    updatedAt: new Date('2026-04-03')
+  },
+  {
+    id: '8',
+    name: 'Horizon Talent Spring Recruitment Ads',
+    brand: 'Horizon',
+    client: 'Horizon Talent Group',
+    designer: 'Daniela S',
+    status: 'qc_approved',
+    totalPieces: 6,
+    latestVersion: 2,
+    createdAt: new Date('2025-12-15'),
+    updatedAt: new Date('2025-12-20')
+  },
+  {
+    id: '9',
+    name: 'Suncrest Influencer Push',
+    brand: 'Suncrest',
+    client: 'Suncrest Marketing',
+    designer: 'Luis P',
+    status: 'client_review',
+    totalPieces: 12,
+    latestVersion: 1,
+    createdAt: new Date('2026-01-02'),
+    updatedAt: new Date('2026-01-08')
+  },
+  {
+    id: '10',
+    name: 'Evergreen Brand Refresh Toolkit',
+    brand: 'Evergreen',
+    client: 'Evergreen Communications',
+    designer: 'Ana G',
+    status: 'delivered',
+    totalPieces: 5,
+    latestVersion: 3,
+    createdAt: new Date('2025-11-20'),
+    updatedAt: new Date('2025-11-29')
+  },
+  {
+    id: '11',
+    name: 'Radiant Studio Holiday Creative Suite',
+    brand: 'Radiant',
+    client: 'Radiant Brand Studio',
+    designer: 'Michaela O',
+    status: 'needs_fix',
+    totalPieces: 8,
+    latestVersion: 1,
+    createdAt: new Date('2025-12-05'),
+    updatedAt: new Date('2025-12-11')
+  },
+  {
+    id: '12',
+    name: 'Summit Digital Paid Search Overhaul',
+    brand: 'Summit',
+    client: 'Summit Digital Agency',
+    designer: 'Carlos R',
+    status: 'qc_pending',
+    totalPieces: 10,
+    latestVersion: 2,
+    createdAt: new Date('2026-01-10'),
+    updatedAt: new Date('2026-01-16')
+  }
+];
+
+const ACTIVE_STATUSES: BannerStatus[] = ['uploaded', 'qc_pending', 'qc_approved', 'client_review', 'needs_fix'];
+const APPROVED_STATUSES: BannerStatus[] = ['qc_approved', 'client_approved'];
+const CORRECTION_STATUSES: BannerStatus[] = ['qc_rejected', 'needs_fix'];
+const SENT_STATUSES: BannerStatus[] = ['client_review', 'delivered'];
+
+function countPieces(projects: Project[], statuses: BannerStatus[]): number {
+  return projects
+    .filter(p => statuses.includes(p.status))
+    .reduce((acc, p) => acc + p.totalPieces, 0);
+}
+
+const msgs = projectMessages.home;
+
+export default function HomePage() {
+  const activeBanners = countPieces(MOCK_PROJECTS, ACTIVE_STATUSES);
+  const approved = countPieces(MOCK_PROJECTS, APPROVED_STATUSES);
+  const inCorrection = countPieces(MOCK_PROJECTS, CORRECTION_STATUSES);
+  const sentToClient = countPieces(MOCK_PROJECTS, SENT_STATUSES);
+
   return (
-    <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
-      <main className="row-start-2 flex flex-col items-center gap-[32px] sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-center font-[family-name:var(--font-geist-mono)] text-sm/6 sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{' '}
-            <code className="rounded bg-black/[.05] px-1 py-0.5 font-[family-name:var(--font-geist-mono)] font-semibold dark:bg-white/[.06]">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="dashboard">
+      <Topbar />
+      <main className="dashboard__main">
+        <div className="dashboard__bg" />
 
-        <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <a
-            className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="flex h-10 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-4 text-sm font-medium transition-colors hover:border-transparent hover:bg-[#f2f2f2] sm:h-12 sm:w-auto sm:px-5 sm:text-base md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        <div className="welcome-header">
+          <div className="welcome-header__accent">
+            <div className="welcome-header__line" />
+          </div>
+          <h1 className="welcome-header__title">{msgs.welcome}</h1>
         </div>
+
+        <div className="home-metrics">
+          <div className="metric-item">
+            <div className="metric-item__top">
+              <div className="metric-item__icon">
+                <Layers size={20} strokeWidth={1.5} />
+              </div>
+              <p className="metric-item__label">{msgs.metrics.activeBanners}</p>
+            </div>
+            <p className="metric-item__value">{activeBanners}</p>
+          </div>
+
+          <div className="metric-item">
+            <div className="metric-item__top">
+              <div className="metric-item__icon">
+                <CheckCircle size={20} strokeWidth={1.5} />
+              </div>
+              <p className="metric-item__label">{msgs.metrics.approved}</p>
+            </div>
+            <p className="metric-item__value">{approved}</p>
+          </div>
+
+          <div className="metric-item">
+            <div className="metric-item__top">
+              <div className="metric-item__icon">
+                <AlertTriangle size={20} strokeWidth={1.5} />
+              </div>
+              <p className="metric-item__label">{msgs.metrics.inCorrection}</p>
+            </div>
+            <p className="metric-item__value">{inCorrection}</p>
+          </div>
+
+          <div className="metric-item">
+            <div className="metric-item__top">
+              <div className="metric-item__icon">
+                <Send size={20} strokeWidth={1.5} />
+              </div>
+              <p className="metric-item__label">{msgs.metrics.sentToClient}</p>
+            </div>
+            <p className="metric-item__value">{sentToClient}</p>
+          </div>
+        </div>
+
+        <ProjectsGrid projects={MOCK_PROJECTS} />
       </main>
-      <footer className="row-start-3 flex flex-wrap items-center justify-center gap-[24px]">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }

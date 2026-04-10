@@ -1,0 +1,167 @@
+/* ─── Topbar ──────────────────────────────────────────────────── */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  padding: 0 32px;
+  flex-shrink: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 50;
+  background-color: #000000;
+  border-bottom: 1px solid #141414;
+}
+
+/* ─── Left: Sphere brand ──────────────────────────────────────── */
+
+.topbar__left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.topbar__brand {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: #DCDCDC;
+  letter-spacing: 0.08em;
+}
+
+/* ─── Center: floating nav pill ──────────────────────────────── */
+
+.topbar__navbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 46px;
+  padding: 0 28px;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #3B3B3B;
+  border-radius: 24px;
+  flex-shrink: 0;
+}
+
+.topbar__nav-items {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.topbar__nav-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  color: #8C8C8C;
+  line-height: 18px;
+  white-space: nowrap;
+  transition: color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.topbar__nav-item:hover {
+  color: #DCDCDC;
+}
+
+.topbar__nav-item--active {
+  font-weight: 500;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Active glow bar — sits at bottom edge of the pill */
+
+.topbar__glow {
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 2px;
+  background-color: #4361EF;
+  border-radius: 2px;
+  filter: blur(2px);
+  box-shadow:
+    0 0 10px 3px rgba(67, 97, 239, 0.65),
+    0 -2px 14px 0 rgba(67, 97, 239, 0.45);
+}
+
+/* ─── Right: user profile ─────────────────────────────────────── */
+
+.topbar__right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+.topbar__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 14px;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #3B3B3B;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: border-color 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.topbar__user:hover {
+  border-color: #545454;
+}
+
+.topbar__user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: #4361EF;
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.topbar__user-name {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #DCDCDC;
+  white-space: nowrap;
+}
+
+.topbar__user-chevron {
+  color: #8C8C8C;
+  flex-shrink: 0;
+}
+
+/* ─── Reduced Motion ──────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .topbar__nav-item,
+  .topbar__user {
+    transition: none;
+  }
+  .topbar__glow {
+    filter: none;
+    box-shadow: 0 0 0 1px #4361EF;
+  }
+}
