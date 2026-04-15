@@ -5,14 +5,14 @@ import type { Project, BannerStatus } from '../../projects.types';
 
 /* Per-status chip: label from messages.ts + color class from status-colors.md */
 const STATUS_CHIP: Record<BannerStatus, { label: string; cls: string }> = {
-  uploaded:        { label: projectMessages.status.uploaded,        cls: 'project-card__tag--pending' },
-  qc_pending:      { label: projectMessages.status.qc_pending,      cls: 'project-card__tag--pending' },
-  qc_approved:     { label: projectMessages.status.qc_approved,     cls: 'project-card__tag--approved' },
-  qc_rejected:     { label: projectMessages.status.qc_rejected,     cls: 'project-card__tag--rejected' },
-  client_review:   { label: projectMessages.status.client_review,   cls: 'project-card__tag--in-review' },
-  client_approved: { label: projectMessages.status.client_approved, cls: 'project-card__tag--client-approved' },
-  delivered:       { label: projectMessages.status.delivered,       cls: 'project-card__tag--delivered' },
-  needs_fix:       { label: projectMessages.status.needs_fix,       cls: 'project-card__tag--warning' },
+  uploaded:          { label: projectMessages.status.uploaded,          cls: 'project-card__tag--pending' },
+  'qc_pending':      { label: projectMessages.status['qc_pending'],     cls: 'project-card__tag--pending' },
+  'qc_approved':     { label: projectMessages.status['qc_approved'],    cls: 'project-card__tag--approved' },
+  'qc_rejected':     { label: projectMessages.status['qc_rejected'],    cls: 'project-card__tag--rejected' },
+  'client_review':   { label: projectMessages.status['client_review'],  cls: 'project-card__tag--in-review' },
+  'client_approved': { label: projectMessages.status['client_approved'],cls: 'project-card__tag--client-approved' },
+  delivered:         { label: projectMessages.status.delivered,         cls: 'project-card__tag--delivered' },
+  'needs_fix':       { label: projectMessages.status['needs_fix'],      cls: 'project-card__tag--warning' },
 };
 
 interface ProjectCardProps {

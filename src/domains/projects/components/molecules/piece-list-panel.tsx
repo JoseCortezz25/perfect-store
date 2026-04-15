@@ -1,6 +1,6 @@
 'use client';
 
-import { Clapperboard, Image, Check, CheckCircle, XCircle } from 'lucide-react';
+import { Clapperboard, Image as ImageIcon, Check, CheckCircle, XCircle } from 'lucide-react';
 import { projectMessages } from '../../messages';
 import type { BannerPiece } from '../../projects.types';
 
@@ -94,7 +94,6 @@ export function PieceListPanel({
       <div className="piece-list__items">
         {pieces.map(piece => {
           const isChecked = checkedIds?.has(piece.id) ?? false;
-          const decision = pieceDecisions?.get(piece.id);
           return (
             <button
               key={piece.id}
@@ -124,7 +123,7 @@ export function PieceListPanel({
                   <span className={`piece-item__anim${piece.hasAnimation ? ' piece-item__anim--yes' : ''}`}>
                     {piece.hasAnimation
                       ? <><Clapperboard size={10} strokeWidth={1.5} aria-hidden="true" />{msgs.animated}</>
-                      : <><Image size={10} strokeWidth={1.5} aria-hidden="true" />{msgs.static}</>
+                      : <><ImageIcon size={10} strokeWidth={1.5} aria-hidden="true" />{msgs.static}</>
                     }
                   </span>
                 </div>

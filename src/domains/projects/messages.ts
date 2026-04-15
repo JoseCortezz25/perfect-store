@@ -74,13 +74,13 @@ export const projectMessages = {
   },
   status: {
     uploaded: 'Subido',
-    qc_pending: 'QC Pendiente',
-    qc_approved: 'QC Aprobado',
-    qc_rejected: 'QC Rechazado',
-    client_review: 'Revisión cliente',
-    client_approved: 'Aprobado por cliente',
+    'qc_pending': 'QC Pendiente',
+    'qc_approved': 'QC Aprobado',
+    'qc_rejected': 'QC Rechazado',
+    'client_review': 'Revisión cliente',
+    'client_approved': 'Aprobado por cliente',
     delivered: 'Entregado',
-    needs_fix: 'Necesita corrección'
+    'needs_fix': 'Necesita corrección'
   },
   detail: {
     breadcrumb: 'Proyectos',
@@ -108,9 +108,9 @@ export const projectMessages = {
         noResult: 'Sube una versión para ver el resultado',
         scoreLabel: (score: number) => `${score}`,
         scoreMax: '/ 100',
-        passCount: (_n: number) => 'aprobados',
-        failCount: (_n: number) => 'fallidos',
-        warningCount: (_n: number) => 'advertencias',
+        passCount: (_: number) => 'aprobados',
+        failCount: (_: number) => 'fallidos',
+        warningCount: (_: number) => 'advertencias',
         groups: {
           weight: 'Peso del archivo',
           dimensions: 'Dimensiones',

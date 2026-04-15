@@ -1,7 +1,6 @@
 'use server';
 
 import { newProjectSchema } from './new-project.schema';
-import { projectMessages } from './messages';
 
 export type NewProjectState = {
   error?: string;

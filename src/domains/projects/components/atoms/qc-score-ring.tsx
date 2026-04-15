@@ -6,12 +6,6 @@ const VIEWBOX_SIZE = 120;
 
 const ARC_COLOR = '#7345FF';
 
-function getScoreColor(score: number): string {
-  if (score >= 80) return '#22c55e';
-  if (score >= 50) return '#f59e0b';
-  return '#ef4444';
-}
-
 function getScoreLabel(score: number): string {
   if (score >= 80) return 'Aprobado';
   if (score >= 50) return 'Con advertencias';
@@ -25,7 +19,6 @@ interface QcScoreRingProps {
 export function QcScoreRing({ score }: QcScoreRingProps) {
   const clampedScore = Math.max(0, Math.min(100, score));
   const dashOffset = CIRCUMFERENCE * (1 - clampedScore / 100);
-  const scoreColor = getScoreColor(clampedScore);
   const label = getScoreLabel(clampedScore);
 
   return (

@@ -3,12 +3,12 @@ import { projectMessages } from '../../messages';
 
 const STATUS_CLASS: Record<BannerStatus, string> = {
   uploaded: 'status-badge--pending',
-  qc_pending: 'status-badge--pending',
-  qc_approved: 'status-badge--approved',
-  qc_rejected: 'status-badge--rejected',
-  needs_fix: 'status-badge--warning',
-  client_review: 'status-badge--in-review',
-  client_approved: 'status-badge--client-approved',
+  'qc_pending': 'status-badge--pending',
+  'qc_approved': 'status-badge--approved',
+  'qc_rejected': 'status-badge--rejected',
+  'needs_fix': 'status-badge--warning',
+  'client_review': 'status-badge--in-review',
+  'client_approved': 'status-badge--client-approved',
   delivered: 'status-badge--delivered'
 };
 

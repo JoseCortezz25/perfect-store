@@ -11,7 +11,7 @@ const FOLDER_DOT_CLS: Record<FolderStatus, string> = {
   approved: 'folder-item__dot--approved',
   rejected: 'folder-item__dot--rejected',
   pending:  'folder-item__dot--pending',
-  in_review:'folder-item__dot--in-review',
+  'in_review': 'folder-item__dot--in-review',
 };
 
 interface FolderListPanelProps {
