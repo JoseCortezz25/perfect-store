@@ -11,7 +11,7 @@ const msgs = projectMessages.modal;
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="modal-form__submit">
+    <button type="submit" disabled={pending} className="btn btn--primary modal-form__submit">
       {pending ? msgs.creatingButton : msgs.createButton}
     </button>
   );
@@ -108,7 +108,7 @@ export function NewProjectModal({ isOpen, onClose }: NewProjectModalProps) {
             <button
               type="button"
               onClick={handleClose}
-              className="btn-secondary"
+              className="btn btn--secondary"
             >
               {msgs.cancelButton}
             </button>

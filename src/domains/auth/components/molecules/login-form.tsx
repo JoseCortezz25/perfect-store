@@ -10,7 +10,7 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button type="submit" disabled={pending} className="login-form__submit">
+    <button type="submit" disabled={pending} className="btn btn--primary login-form__submit">
       {pending
         ? authMessages.login.submittingButton
         : authMessages.login.submitButton}

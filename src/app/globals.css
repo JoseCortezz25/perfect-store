@@ -73,10 +73,10 @@
   --color-op-blue-950: #191a52;
 
   /* CTA Button */
-  --color-cta-gradient-from: var(--color-op-blue-500);
-  --color-cta-gradient-mid:  var(--color-op-blue-600);
-  --color-cta-default:       var(--color-op-blue-700);
-  --color-cta-pressed:       var(--color-op-blue-900);
+  --color-cta-gradient-from: var(--color-op-blue-400);   /* #97b1f9 — bright hover end  */
+  --color-cta-gradient-mid:  var(--color-op-blue-500);   /* #6689f4 — mid sweep        */
+  --color-cta-default:       var(--color-op-blue-600);   /* #4361ef — brand principal  */
+  --color-cta-pressed:       var(--color-op-blue-800);   /* #242dd1 — press state      */
   --color-cta-disabled-bg:   var(--color-surface-5);
   --color-cta-disabled-text: var(--color-contrast-5);
 
@@ -108,6 +108,12 @@
   --color-status-delivered-bg:            rgba(67, 97, 239, 0.15);
   --color-status-delivered-text:          #4361ef;
   --color-status-delivered-border:        rgba(67, 97, 239, 0.3);
+
+  /* Brand Accent — data viz only */
+  --color-accent-secondary-blue: #18AFDF;
+  --color-accent-purple:         #7345FF;
+  --color-accent-lilac:          #B439FF;
+  --color-accent-pink:           #FF2F9C;
 
   /* Legacy neutrals */
   --color-black: #000000;

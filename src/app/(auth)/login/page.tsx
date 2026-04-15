@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { LoginForm } from '@/domains/auth/components/molecules/login-form';
 import { authMessages } from '@/domains/auth/messages';
 import '@/styles/domains/auth/login-form.css';
@@ -7,7 +8,14 @@ export default function LoginPage() {
     <main className="login-page">
       <div className="login-page__card">
         <div className="login-page__brand">
-          <span className="login-page__logo">◎</span>
+          <Image
+            src="/sphere-logo.png"
+            alt="Sphere"
+            width={44}
+            height={44}
+            className="login-page__logo-img"
+            priority
+          />
           <span className="login-page__brand-name">Sphere</span>
         </div>
 

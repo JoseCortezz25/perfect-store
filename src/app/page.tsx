@@ -178,56 +178,61 @@ export default function HomePage() {
       <main className="dashboard__main">
         <div className="dashboard__bg" />
 
-        <div className="welcome-header">
-          <div className="welcome-header__accent">
-            <div className="welcome-header__line" />
-          </div>
-          <h1 className="welcome-header__title">{msgs.welcome}</h1>
-        </div>
-
-        <div className="home-metrics">
-          <div className="metric-item">
-            <div className="metric-item__top">
-              <div className="metric-item__icon">
-                <Layers size={20} strokeWidth={1.5} />
+        {/* ─── Stats Section ─────────────────────────────────── */}
+        <section className="stats-section">
+          <div className="stats-section__content">
+            <div className="stats-card">
+              <div className="section-header">
+                <div className="section-header__accent-line" />
+                <div className="section-header__body">
+                  <h1 className="section-header__title">{msgs.statsTitle}</h1>
+                  <p className="section-header__subtitle">{msgs.statsSubtitle}</p>
+                </div>
               </div>
-              <p className="metric-item__label">{msgs.metrics.activeBanners}</p>
-            </div>
-            <p className="metric-item__value">{activeBanners}</p>
-          </div>
 
-          <div className="metric-item">
-            <div className="metric-item__top">
-              <div className="metric-item__icon">
-                <CheckCircle size={20} strokeWidth={1.5} />
+              <div className="home-metrics">
+                <div className="metric-item">
+                  <div className="metric-item__header">
+                    <Layers size={16} strokeWidth={1.5} className="metric-item__icon" />
+                    <p className="metric-item__label">{msgs.metrics.activeBanners}</p>
+                  </div>
+                  <p className="metric-item__value">{activeBanners}</p>
+                </div>
+
+                <div className="metric-item">
+                  <div className="metric-item__header">
+                    <CheckCircle size={16} strokeWidth={1.5} className="metric-item__icon" />
+                    <p className="metric-item__label">{msgs.metrics.approved}</p>
+                  </div>
+                  <p className="metric-item__value">{approved}</p>
+                </div>
+
+                <div className="metric-item">
+                  <div className="metric-item__header">
+                    <AlertTriangle size={16} strokeWidth={1.5} className="metric-item__icon" />
+                    <p className="metric-item__label">{msgs.metrics.inCorrection}</p>
+                  </div>
+                  <p className="metric-item__value">{inCorrection}</p>
+                </div>
+
+                <div className="metric-item">
+                  <div className="metric-item__header">
+                    <Send size={16} strokeWidth={1.5} className="metric-item__icon" />
+                    <p className="metric-item__label">{msgs.metrics.sentToClient}</p>
+                  </div>
+                  <p className="metric-item__value">{sentToClient}</p>
+                </div>
               </div>
-              <p className="metric-item__label">{msgs.metrics.approved}</p>
             </div>
-            <p className="metric-item__value">{approved}</p>
           </div>
+        </section>
 
-          <div className="metric-item">
-            <div className="metric-item__top">
-              <div className="metric-item__icon">
-                <AlertTriangle size={20} strokeWidth={1.5} />
-              </div>
-              <p className="metric-item__label">{msgs.metrics.inCorrection}</p>
-            </div>
-            <p className="metric-item__value">{inCorrection}</p>
+        {/* ─── Projects Section ──────────────────────────────── */}
+        <section className="projects-section">
+          <div className="projects-section__content">
+            <ProjectsGrid projects={MOCK_PROJECTS} />
           </div>
-
-          <div className="metric-item">
-            <div className="metric-item__top">
-              <div className="metric-item__icon">
-                <Send size={20} strokeWidth={1.5} />
-              </div>
-              <p className="metric-item__label">{msgs.metrics.sentToClient}</p>
-            </div>
-            <p className="metric-item__value">{sentToClient}</p>
-          </div>
-        </div>
-
-        <ProjectsGrid projects={MOCK_PROJECTS} />
+        </section>
       </main>
     </div>
   );

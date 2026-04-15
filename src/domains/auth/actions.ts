@@ -1,5 +1,6 @@
 'use server';
 
+import { redirect } from 'next/navigation';
 import { loginSchema } from './login.schema';
 import { forgotPasswordSchema } from './forgot-password.schema';
 import { authMessages } from './messages';
@@ -33,8 +34,8 @@ export async function loginAction(
   const { username, password } = parsed.data;
 
   // TODO: Replace with real auth logic
-  if (username === 'admin' && password === 'sphere') {
-    return { success: true };
+  if (username === '1' && password === '1') {
+    redirect('/');
   }
 
   return { error: authMessages.login.errors.invalidCredentials };
