@@ -37,11 +37,14 @@ interface PreviewCanvasProps {
   piece: BannerPiece | null;
   background: PreviewBackground;
   reloadKey: number;
+  trueSize?: boolean;
 }
 
-export function PreviewCanvas({ piece, background, reloadKey }: PreviewCanvasProps) {
+export function PreviewCanvas({ piece, background, reloadKey, trueSize }: PreviewCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
+  const [computedScale, setComputedScale] = useState(1);
+
+  const scale = trueSize ? 1 : computedScale;
 
   const dims = piece ? parseBannerSize(piece.size) : null;
 
@@ -56,7 +59,7 @@ export function PreviewCanvas({ piece, background, reloadKey }: PreviewCanvasPro
       if (availableW <= 0 || availableH <= 0) return;
       const scaleX = availableW / dims.width;
       const scaleY = availableH / dims.height;
-      setScale(Math.min(scaleX, scaleY, 1));
+      setComputedScale(Math.min(scaleX, scaleY, 1));
     };
 
     const observer = new ResizeObserver((entries) => {
@@ -92,7 +95,7 @@ export function PreviewCanvas({ piece, background, reloadKey }: PreviewCanvasPro
   return (
     <div
       ref={containerRef}
-      className={`preview-canvas preview-canvas--${background}`}
+      className={`preview-canvas preview-canvas--${background}${trueSize ? ' preview-canvas--true-size' : ''}`}
       style={
         {
           '--preview-scale': scale,

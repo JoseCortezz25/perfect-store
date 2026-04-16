@@ -64,7 +64,7 @@ export function NewProjectModal({ isOpen, onClose }: NewProjectModalProps) {
             className="modal__close"
             aria-label="Close"
           >
-            <X size={18} strokeWidth={1.5} />
+            <X size={14} strokeWidth={2} />
           </button>
         </div>
 

@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Pencil, Trash2, UserPlus, Users, Search, ChevronDown } from 'lucide-react';
-import { RoleBadge } from '../atoms/role-badge';
+import { Trash2, UserPlus, Users, Search, ChevronDown } from 'lucide-react';
+import { RoleChip } from '../atoms/role-chip';
 import { InviteUserModal } from '../molecules/invite-user-modal';
-import { EditRoleModal } from '../molecules/edit-role-modal';
 import { ConfirmDeleteModal } from '../molecules/confirm-delete-modal';
 import { adminMessages } from '../../messages';
 import { MOCK_ADMIN_USERS } from '../../admin.repository';
@@ -13,19 +12,14 @@ import type { UserRole } from '@/domains/auth/stores/user.store';
 
 const msgs = adminMessages.users;
 
-const AVATAR_COLOR: Record<string, string> = {
-  admin:     '#4361EF',
-  diseñador: '#7C3AED',
-  qc:        '#D97706',
-  cliente:   '#0D9488',
-};
+const AVATAR_COLOR = '#4361EF';
 
-type SortKey = 'name' | 'role' | 'status';
+type SortKey = 'name' | 'created' | 'updated';
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: 'name',   label: 'Nombre' },
-  { value: 'role',   label: 'Rol' },
-  { value: 'status', label: 'Estado' },
+  { value: 'name',    label: 'Nombre A-Z' },
+  { value: 'created', label: 'Fecha creación' },
+  { value: 'updated', label: 'Última actualización' },
 ];
 
 export function UsersPanel() {
@@ -33,10 +27,13 @@ export function UsersPanel() {
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState<SortKey>('name');
   const [isSortOpen, setIsSortOpen] = useState(false);
-  const [isInviteOpen, setIsInviteOpen]   = useState(false);
-  const [editingUser, setEditingUser]     = useState<AdminUser | null>(null);
-  const [deletingUser, setDeletingUser]   = useState<AdminUser | null>(null);
-  const [togglingUser, setTogglingUser]   = useState<AdminUser | null>(null);
+  const [isInviteOpen, setIsInviteOpen] = useState(false);
+  const [deletingUser, setDeletingUser] = useState<AdminUser | null>(null);
+  const [togglingUser, setTogglingUser] = useState<AdminUser | null>(null);
+  const [pendingRoleChange, setPendingRoleChange] = useState<{
+    user: AdminUser;
+    newRole: UserRole;
+  } | null>(null);
   const sortRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -58,14 +55,13 @@ export function UsersPanel() {
         u.roleLabel.toLowerCase().includes(q)
       )
       .sort((a, b) => {
-        if (sortBy === 'name')   return a.name.localeCompare(b.name);
-        if (sortBy === 'role')   return a.role.localeCompare(b.role);
-        if (sortBy === 'status') return a.status.localeCompare(b.status);
-        return 0;
+        if (sortBy === 'name') return a.name.localeCompare(b.name);
+        // created / updated: fall back to name order (mock data has no dates)
+        return a.name.localeCompare(b.name);
       });
   }, [users, search, sortBy]);
 
-  const activeSortLabel = SORT_OPTIONS.find(o => o.value === sortBy)?.label ?? 'Nombre';
+  const activeSortLabel = SORT_OPTIONS.find(o => o.value === sortBy)?.label ?? 'Nombre A-Z';
 
   function handleInvite(data: Omit<AdminUser, 'id'>) {
     setUsers(prev => [...prev, { ...data, id: `u${Date.now()}` }]);
@@ -73,12 +69,20 @@ export function UsersPanel() {
   }
 
   function handleEditRole(userId: string, newRole: UserRole) {
+    const user = users.find(u => u.id === userId);
+    if (!user || user.role === newRole) return;
+    setPendingRoleChange({ user, newRole });
+  }
+
+  function handleConfirmRoleChange() {
+    if (!pendingRoleChange) return;
+    const { user, newRole } = pendingRoleChange;
     setUsers(prev => prev.map(u =>
-      u.id === userId
+      u.id === user.id
         ? { ...u, role: newRole, roleLabel: adminMessages.users.roles[newRole] }
         : u
     ));
-    setEditingUser(null);
+    setPendingRoleChange(null);
   }
 
   function handleConfirmToggle() {
@@ -99,79 +103,97 @@ export function UsersPanel() {
   return (
     <>
       <section className="admin-section">
-        <div className="admin-section__top">
-          <div className="admin-section__heading">
-            <div className="admin-section__heading-top">
-              <Users size={13} strokeWidth={1.5} className="admin-section__icon" aria-hidden="true" />
-              <h2 className="admin-section__title">{msgs.sectionTitle}</h2>
-            </div>
-            <span className="admin-section__subtitle">{msgs.sectionSubtitle(users.length)}</span>
-          </div>
 
-          {/* Toolbar — same pattern as home page */}
-          <div className="home-toolbar" style={{ marginLeft: 'auto' }}>
-            <div className="home-search">
-              <Search size={13} strokeWidth={1.5} className="home-search__icon" />
-              <input
-                type="text"
-                className="home-search__input"
-                placeholder="Buscar usuario..."
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-              />
+        {/* ── Single card: title + toolbar + column headers + rows ── */}
+        <div className="admin-section__card admin-users-card">
+          <div className="admin-users-top">
+            <div className="admin-section__heading">
+              <div className="admin-section__heading-top">
+                <div className="admin-section__icon-container">
+                <Users size={24} strokeWidth={1.5} className="admin-section__icon" aria-hidden="true" />
+              </div>
+                <h2 className="admin-section__title">{msgs.sectionTitle}</h2>
+              </div>
             </div>
 
-            <div className="home-sort" ref={sortRef}>
+            <div className="home-toolbar">
+              <div className="home-search">
+                <Search size={13} strokeWidth={1.5} className="home-search__icon" />
+                <input
+                  type="text"
+                  className="home-search__input"
+                  placeholder={msgs.searchPlaceholder}
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                />
+              </div>
+
+              <div className="home-sort" ref={sortRef}>
+                <button
+                  type="button"
+                  className="home-sort__trigger"
+                  data-open={isSortOpen}
+                  onClick={() => setIsSortOpen(o => !o)}
+                >
+                  {activeSortLabel}
+                  <ChevronDown size={13} strokeWidth={1.5} className="home-sort__chevron" data-open={isSortOpen} />
+                </button>
+                {isSortOpen && (
+                  <div className="home-sort__dropdown">
+                    {SORT_OPTIONS.map(option => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        className="home-sort__option"
+                        data-active={sortBy === option.value}
+                        onClick={() => { setSortBy(option.value); setIsSortOpen(false); }}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <button
                 type="button"
-                className="home-sort__trigger"
-                data-open={isSortOpen}
-                onClick={() => setIsSortOpen(o => !o)}
+                className="btn btn--primary projects-container__create-btn"
+                onClick={() => setIsInviteOpen(true)}
               >
-                {activeSortLabel}
-                <ChevronDown size={13} strokeWidth={1.5} className="home-sort__chevron" data-open={isSortOpen} />
+                <UserPlus size={13} strokeWidth={1.5} aria-hidden="true" />
+                {msgs.inviteButton}
               </button>
-              {isSortOpen && (
-                <div className="home-sort__dropdown">
-                  {SORT_OPTIONS.map(option => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      className="home-sort__option"
-                      data-active={sortBy === option.value}
-                      onClick={() => { setSortBy(option.value); setIsSortOpen(false); }}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
-
-            <button
-              type="button"
-              className="btn btn--primary projects-container__create-btn"
-              onClick={() => setIsInviteOpen(true)}
-            >
-              <UserPlus size={13} strokeWidth={1.5} aria-hidden="true" />
-              {msgs.inviteButton}
-            </button>
           </div>
-        </div>
-
-        <div className="admin-section__card">
-          {/* Table header */}
+          {/* Column headers */}
           <div className="admin-table-header admin-users-cols">
-            <span className="admin-table-header__cell">Usuario</span>
-            <span className="admin-table-header__cell">Rol</span>
-            <span className="admin-table-header__cell">Estado</span>
-            <span className="admin-table-header__cell admin-table-header__cell--center">Activar</span>
-            <span className="admin-table-header__cell admin-table-header__cell--right">Acciones</span>
+            <span className="admin-table-header__cell">{msgs.tableHeaders.user}</span>
+            <span className="admin-table-header__cell">{msgs.tableHeaders.email}</span>
+            <span className="admin-table-header__cell">{msgs.tableHeaders.role}</span>
+            <span className="admin-table-header__cell admin-table-header__cell--center">{msgs.tableHeaders.activate}</span>
+            <span className="admin-table-header__cell">{msgs.tableHeaders.delete}</span>
           </div>
 
           {/* Rows */}
-          {filteredUsers.length === 0 ? (
-            <div className="admin-table-empty">Sin resultados para &ldquo;{search}&rdquo;</div>
+          {users.length === 0 ? (
+            <div className="admin-users-empty">
+              <div className="admin-users-empty__icon-wrap" aria-hidden="true">
+                <Users size={44} strokeWidth={1.5} />
+              </div>
+              <div className="admin-users-empty__body">
+                <p className="admin-users-empty__title">{msgs.empty.title}</p>
+                <button
+                  type="button"
+                  className="btn btn--primary projects-container__create-btn"
+                  onClick={() => setIsInviteOpen(true)}
+                >
+                  <UserPlus size={13} strokeWidth={1.5} aria-hidden="true" />
+                  {msgs.empty.cta}
+                </button>
+              </div>
+            </div>
+          ) : filteredUsers.length === 0 ? (
+            <div className="admin-table-empty">{msgs.emptySearch(search)}</div>
           ) : filteredUsers.map((user, idx) => (
             <div
               key={user.id}
@@ -181,26 +203,24 @@ export function UsersPanel() {
               <div className="admin-user-row__identity">
                 <div
                   className="admin-user-avatar"
-                  style={{ backgroundColor: user.status === 'inactive' ? '#2A2A2A' : AVATAR_COLOR[user.role] }}
+                  style={{ backgroundColor: user.status === 'inactive' ? '#2A2A2A' : AVATAR_COLOR }}
                   aria-hidden="true"
                 >
                   {user.initials}
                 </div>
-                <div className="admin-user-row__identity-text">
-                  <span className="admin-user-row__name">{user.name}</span>
-                  <span className="admin-user-row__email">{user.email}</span>
-                </div>
+                <span className="admin-user-row__name">{user.name}</span>
               </div>
+
+              {/* Email */}
+              <span className="admin-user-row__email-col">{user.email}</span>
 
               {/* Rol */}
               <div className="admin-user-row__role">
-                <RoleBadge role={user.role} />
-              </div>
-
-              {/* Estado */}
-              <div className={`admin-status admin-status--${user.status}`}>
-                <span className="admin-status__dot" aria-hidden="true" />
-                <span className="admin-status__label">{msgs.status[user.status]}</span>
+                <RoleChip
+                  role={user.role}
+                  userId={user.id}
+                  onChangeRole={handleEditRole}
+                />
               </div>
 
               {/* Toggle */}
@@ -222,15 +242,6 @@ export function UsersPanel() {
               <div className="admin-user-row__actions">
                 <button
                   type="button"
-                  className="admin-action-btn admin-action-btn--edit"
-                  title={msgs.actions.editRole}
-                  onClick={() => setEditingUser(user)}
-                  aria-label={`${msgs.actions.editRole}: ${user.name}`}
-                >
-                  <Pencil size={13} strokeWidth={1.5} />
-                </button>
-                <button
-                  type="button"
                   className="admin-action-btn admin-action-btn--delete"
                   title={msgs.actions.delete}
                   onClick={() => setDeletingUser(user)}
@@ -246,14 +257,6 @@ export function UsersPanel() {
 
       {isInviteOpen && (
         <InviteUserModal onInvite={handleInvite} onCancel={() => setIsInviteOpen(false)} />
-      )}
-
-      {editingUser && (
-        <EditRoleModal
-          user={editingUser}
-          onSave={handleEditRole}
-          onCancel={() => setEditingUser(null)}
-        />
       )}
 
       {togglingUser && (
@@ -280,6 +283,22 @@ export function UsersPanel() {
           cancelLabel={msgs.deleteUser.cancel}
           onConfirm={() => handleDelete(deletingUser.id)}
           onCancel={() => setDeletingUser(null)}
+        />
+      )}
+
+      {pendingRoleChange && (
+        <ConfirmDeleteModal
+          variant="confirm"
+          title={msgs.editRole.confirmTitle}
+          description={msgs.editRole.confirmDescription(
+            pendingRoleChange.user.name,
+            msgs.roles[pendingRoleChange.user.role],
+            msgs.roles[pendingRoleChange.newRole],
+          )}
+          confirmLabel={msgs.editRole.confirm}
+          cancelLabel={msgs.editRole.cancel}
+          onConfirm={handleConfirmRoleChange}
+          onCancel={() => setPendingRoleChange(null)}
         />
       )}
     </>

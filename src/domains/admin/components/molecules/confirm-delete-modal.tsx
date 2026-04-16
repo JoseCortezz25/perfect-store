@@ -1,12 +1,14 @@
 'use client';
 
 import { X, Trash2 } from 'lucide-react';
+import { adminMessages } from '../../messages';
 
 interface ConfirmDeleteModalProps {
   title: string;
   description: string;
   confirmLabel: string;
   cancelLabel: string;
+  closeLabel?: string;
   variant?: 'destructive' | 'confirm';
   onConfirm: () => void;
   onCancel: () => void;
@@ -17,6 +19,7 @@ export function ConfirmDeleteModal({
   description,
   confirmLabel,
   cancelLabel,
+  closeLabel = adminMessages.nav.close,
   variant = 'destructive',
   onConfirm,
   onCancel,
@@ -32,8 +35,8 @@ export function ConfirmDeleteModal({
       >
         <div className="admin-modal__header">
           <h2 id="confirm-modal-title" className="admin-modal__title">{title}</h2>
-          <button type="button" className="admin-modal__close" onClick={onCancel} aria-label="Cerrar">
-            <X size={16} strokeWidth={1.5} />
+          <button type="button" className="admin-modal__close" onClick={onCancel} aria-label={closeLabel}>
+            <X size={14} strokeWidth={2} />
           </button>
         </div>
 
@@ -46,7 +49,7 @@ export function ConfirmDeleteModal({
           {variant === 'destructive' ? (
             <button
               type="button"
-              className="btn admin-modal__delete-btn admin-modal__btn-half"
+              className="btn btn--primary admin-modal__btn-half"
               onClick={onConfirm}
             >
               <Trash2 size={13} strokeWidth={1.5} aria-hidden="true" />

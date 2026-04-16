@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ProjectCard } from '../molecules/project-card';
 import { NewProjectModal } from '../molecules/new-project-modal';
 import { projectMessages } from '../../messages';
+import { useCurrentUser } from '@/domains/auth/hooks/use-current-user';
 import type { Project, FilterType, BannerStatus } from '../../projects.types';
 
 type ViewMode = 'grid' | 'list';
@@ -82,6 +83,7 @@ interface ProjectsGridProps {
 }
 
 export function ProjectsGrid({ projects }: ProjectsGridProps) {
+  const { canCreateProject } = useCurrentUser();
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<FilterType>('none');
   const [isSortOpen, setIsSortOpen] = useState(false);
@@ -165,33 +167,6 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
           />
         </div>
 
-        <div className="home-sort" ref={sortRef}>
-          <button
-            type="button"
-            className="home-sort__trigger"
-            data-open={isSortOpen}
-            onClick={() => setIsSortOpen(o => !o)}
-          >
-            {activeLabel}
-            <ChevronDown size={13} strokeWidth={1.5} className="home-sort__chevron" data-open={isSortOpen} />
-          </button>
-          {isSortOpen && (
-            <div className="home-sort__dropdown">
-              {SORT_OPTIONS.map(option => (
-                <button
-                  key={option.value}
-                  type="button"
-                  className="home-sort__option"
-                  data-active={sort === option.value}
-                  onClick={() => { setSort(option.value); setIsSortOpen(false); }}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
         <div className="brand-filter" ref={brandRef}>
           <button
             type="button"
@@ -233,6 +208,33 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
           )}
         </div>
 
+        <div className="home-sort" ref={sortRef}>
+          <button
+            type="button"
+            className="home-sort__trigger"
+            data-open={isSortOpen}
+            onClick={() => setIsSortOpen(o => !o)}
+          >
+            {activeLabel}
+            <ChevronDown size={13} strokeWidth={1.5} className="home-sort__chevron" data-open={isSortOpen} />
+          </button>
+          {isSortOpen && (
+            <div className="home-sort__dropdown">
+              {SORT_OPTIONS.map(option => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className="home-sort__option"
+                  data-active={sort === option.value}
+                  onClick={() => { setSort(option.value); setIsSortOpen(false); }}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
         <div className="home-toolbar__actions">
           {/* View toggle */}
           <div className="view-toggle" role="group" aria-label="Vista">
@@ -256,14 +258,16 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
             </button>
           </div>
 
-          <button
-            type="button"
-            className="btn btn--primary projects-container__create-btn"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <Plus size={12} strokeWidth={2.5} aria-hidden="true" />
-            <span>{msgs.newProject}</span>
-          </button>
+          {canCreateProject && (
+            <button
+              type="button"
+              className="btn btn--primary projects-container__create-btn"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <Plus size={12} strokeWidth={2.5} aria-hidden="true" />
+              <span>{msgs.newProject}</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -317,7 +321,9 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
         )
       )}
 
-      <NewProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {canCreateProject && (
+        <NewProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      )}
     </div>
   );
 }

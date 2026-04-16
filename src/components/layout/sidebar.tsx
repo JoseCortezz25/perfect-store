@@ -3,9 +3,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutGrid, MoreHorizontal } from 'lucide-react';
+import { adminMessages } from '@/domains/admin/messages';
 
 const NAV_ITEMS = [
-  { href: '/', label: 'Mis proyectos', icon: LayoutGrid }
+  { href: '/', label: adminMessages.nav.myProjects, icon: LayoutGrid }
 ];
 
 const USER = { name: 'Michaela O', initials: 'MO' };

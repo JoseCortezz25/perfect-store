@@ -1,3 +1,4 @@
 @import './components/atoms/input.css';
 @import './components/atoms/button.css';
 @import './components/layout/sidebar.css';
+@import './domains/auth/profile.css';

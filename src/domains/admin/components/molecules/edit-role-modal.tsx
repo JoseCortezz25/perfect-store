@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { X, ChevronDown } from 'lucide-react';
 import { adminMessages } from '../../messages';
 import { RoleBadge } from '../atoms/role-badge';
@@ -24,6 +24,18 @@ interface EditRoleModalProps {
 export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
   const [role, setRole] = useState<UserRole>(user.role);
   const [confirming, setConfirming] = useState(false);
+  const [isRoleOpen, setIsRoleOpen] = useState(false);
+  const roleRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (roleRef.current && !roleRef.current.contains(e.target as Node)) {
+        setIsRoleOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const newRoleLabel = adminMessages.users.roles[role];
 
@@ -50,8 +62,8 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
           <h2 id="edit-role-modal-title" className="admin-modal__title">
             {confirming ? msgs.confirmTitle : msgs.modalTitle}
           </h2>
-          <button type="button" className="admin-modal__close" onClick={onCancel} aria-label="Cerrar">
-            <X size={16} strokeWidth={1.5} />
+          <button type="button" className="admin-modal__close" onClick={onCancel} aria-label={adminMessages.nav.close}>
+            <X size={14} strokeWidth={2} />
           </button>
         </div>
 
@@ -92,20 +104,40 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
           /* Step 1 — role selector */
           <form className="admin-modal__body" onSubmit={handleSubmit}>
             <div className="admin-modal__field">
-              <label htmlFor="edit-role" className="admin-modal__label">{msgs.roleLabel}</label>
-              <div className="admin-select-wrapper">
-                <select
-                  id="edit-role"
-                  className="admin-select"
-                  value={role}
-                  onChange={e => setRole(e.target.value as UserRole)}
-                  autoFocus
+              <label className="admin-modal__label">{msgs.roleLabel}</label>
+              <div className="admin-custom-select" ref={roleRef}>
+                <button
+                  type="button"
+                  className="admin-custom-select__trigger"
+                  data-open={isRoleOpen}
+                  onClick={() => setIsRoleOpen(o => !o)}
+                  aria-haspopup="listbox"
+                  aria-expanded={isRoleOpen}
                 >
-                  {ROLES.map(r => (
-                    <option key={r.value} value={r.value}>{r.label}</option>
-                  ))}
-                </select>
-                <ChevronDown size={13} strokeWidth={1.5} className="admin-select__chevron" aria-hidden="true" />
+                  {ROLES.find(r => r.value === role)?.label}
+                  <ChevronDown
+                    size={14}
+                    strokeWidth={1.5}
+                    className={`admin-custom-select__chevron${isRoleOpen ? ' admin-custom-select__chevron--open' : ''}`}
+                    aria-hidden="true"
+                  />
+                </button>
+                {isRoleOpen && (
+                  <div className="admin-custom-select__dropdown" role="listbox">
+                    {ROLES.map(r => (
+                      <button
+                        key={r.value}
+                        type="button"
+                        role="option"
+                        aria-selected={role === r.value}
+                        className={`admin-custom-select__option${role === r.value ? ' admin-custom-select__option--active' : ''}`}
+                        onClick={() => { setRole(r.value); setIsRoleOpen(false); }}
+                      >
+                        {r.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 

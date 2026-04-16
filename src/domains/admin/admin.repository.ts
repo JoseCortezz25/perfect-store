@@ -1,15 +1,15 @@
 import type { AdminUser, AdminBrand } from './admin.types';
 
 export const MOCK_ADMIN_USERS: AdminUser[] = [
-  { id: 'u1', name: 'David A',    initials: 'DA', email: 'david.a@sphere.io',          role: 'admin',    roleLabel: 'Admin',      status: 'active'   },
-  { id: 'u2', name: 'Michaela O', initials: 'MO', email: 'michaela.o@studio.co',        role: 'diseñador', roleLabel: 'Diseñadora', status: 'active'   },
-  { id: 'u3', name: 'Carlos M',   initials: 'CM', email: 'carlos.m@studio.co',          role: 'qc',       roleLabel: 'QC',         status: 'active'   },
-  { id: 'u4', name: 'Elena R',    initials: 'ER', email: 'elena.r@pepsico.com',         role: 'cliente',  roleLabel: 'Cliente',    status: 'active'   },
-  { id: 'u5', name: 'Ana G',      initials: 'AG', email: 'ana.g@studio.co',             role: 'diseñador', roleLabel: 'Diseñadora', status: 'active'   },
-  { id: 'u6', name: 'Luis P',     initials: 'LP', email: 'luis.p@studio.co',            role: 'diseñador', roleLabel: 'Diseñador',  status: 'inactive' },
-  { id: 'u7', name: 'Sofia V',    initials: 'SV', email: 'sofia.v@studio.co',           role: 'qc',       roleLabel: 'QC',         status: 'active'   },
-  { id: 'u8', name: 'Marco T',    initials: 'MT', email: 'marco.t@nikeinc.com',         role: 'cliente',  roleLabel: 'Cliente',    status: 'active'   },
-  { id: 'u9', name: 'Daniela S',  initials: 'DS', email: 'daniela.s@studio.co',        role: 'diseñador', roleLabel: 'Diseñadora', status: 'active'   },
+  { id: 'u1', name: 'David Arroyo',      initials: 'DA', email: 'david.a@sphere.io',       role: 'admin',    roleLabel: 'Admin',      status: 'active'   },
+  { id: 'u2', name: 'Michaela Ortega',   initials: 'MO', email: 'michaela.o@studio.co',    role: 'diseñador', roleLabel: 'Diseñadora', status: 'active'   },
+  { id: 'u3', name: 'Carlos Méndez',     initials: 'CM', email: 'carlos.m@studio.co',      role: 'qc',       roleLabel: 'QC',         status: 'active'   },
+  { id: 'u4', name: 'Elena Ríos',        initials: 'ER', email: 'elena.r@pepsico.com',     role: 'cliente',  roleLabel: 'Cliente',    status: 'active'   },
+  { id: 'u5', name: 'Ana González',      initials: 'AG', email: 'ana.g@studio.co',         role: 'diseñador', roleLabel: 'Diseñadora', status: 'active'   },
+  { id: 'u6', name: 'Luis Paredes',      initials: 'LP', email: 'luis.p@studio.co',        role: 'diseñador', roleLabel: 'Diseñador',  status: 'inactive' },
+  { id: 'u7', name: 'Sofia Vargas',      initials: 'SV', email: 'sofia.v@studio.co',       role: 'qc',       roleLabel: 'QC',         status: 'active'   },
+  { id: 'u8', name: 'Marco Torres',      initials: 'MT', email: 'marco.t@nikeinc.com',     role: 'cliente',  roleLabel: 'Cliente',    status: 'active'   },
+  { id: 'u9', name: 'Daniela Salinas',   initials: 'DS', email: 'daniela.s@studio.co',     role: 'diseñador', roleLabel: 'Diseñadora', status: 'active'   },
 ];
 
 export const MOCK_ADMIN_BRANDS: AdminBrand[] = [
