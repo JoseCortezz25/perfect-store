@@ -135,7 +135,9 @@ export const projectMessages = {
         darkBg: 'Oscuro',
         lightBg: 'Claro',
         reload: 'Recargar',
-        selectedCount: (n: number) => `${n} ${n === 1 ? 'pieza' : 'piezas'}`
+        selectedCount: (n: number) => `${n} ${n === 1 ? 'pieza' : 'piezas'}`,
+        fullscreen: 'Pantalla completa',
+        exitFullscreen: 'Salir',
       },
       dimensions: (w: number, h: number) => `${w} × ${h} px`,
       animated: 'Animado',
@@ -154,18 +156,34 @@ export const projectMessages = {
       noPieces: (n: number) => `${n} ${n === 1 ? 'pieza' : 'piezas'}`,
       folderApproved: 'Aprobado',
       folderRejected: 'Rechazado',
+      hide: 'Ocultar carpetas',
+      show: 'Mostrar carpetas',
     },
     qcActions: {
       approve: 'Aprobar',
       reject: 'Rechazar',
       selectAll: 'Seleccionar todo',
       selected: (n: number) => `${n} ${n === 1 ? 'pieza' : 'piezas'}`,
+      rejectComment: {
+        label: 'Motivo del rechazo',
+        optional: '(opcional)',
+        placeholder: 'Describe las correcciones necesarias...',
+        confirm: 'Confirmar rechazo',
+        cancel: 'Cancelar',
+        rejecting: (n: number) => `${n} ${n === 1 ? 'pieza' : 'piezas'} para rechazar`,
+      },
     },
     versionStatus: {
       validating: 'Validando',
       approved: 'Aprobado',
       rejected: 'Rechazado',
       pending: 'Pendiente'
-    }
+    },
+    qcScoreLabels: {
+      approved: 'Aprobado',
+      warnings: 'Con advertencias',
+      rejected: 'Rechazado',
+      ariaLabel: (score: number, label: string) => `Puntuación QC: ${score} de 100. ${label}`,
+    },
   }
 } as const;

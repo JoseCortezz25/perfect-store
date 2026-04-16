@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowUpRight, ChevronDown, CheckCircle, XCircle, Clock, Circle, Check } from 'lucide-react';
+import { ArrowLeft, Share2, ChevronDown, CheckCircle, XCircle, Clock, Circle, Check } from 'lucide-react';
 import { StatusBadge } from '../atoms/status-badge';
 import { projectMessages } from '../../messages';
 import type { ProjectDetail, ProjectVersion, VersionStatus } from '../../projects.types';
@@ -126,7 +126,7 @@ export function ProjectDetailHeader({
             className="btn btn--secondary detail-header__stage-btn"
             onClick={onStageLink}
           >
-            <ArrowUpRight size={13} strokeWidth={1.5} aria-hidden="true" />
+            <Share2 size={13} strokeWidth={1.5} aria-hidden="true" />
             <span>{msgs.stageLinkButton}</span>
           </button>
         )}

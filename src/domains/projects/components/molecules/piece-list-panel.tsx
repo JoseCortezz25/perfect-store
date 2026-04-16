@@ -1,11 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import { Clapperboard, Image as ImageIcon, Check, CheckCircle, XCircle } from 'lucide-react';
 import { projectMessages } from '../../messages';
 import type { BannerPiece } from '../../projects.types';
 
 const msgs = projectMessages.detail.preview;
 const qcMsgs = projectMessages.detail.qcActions;
+const rejectMsgs = projectMessages.detail.qcActions.rejectComment;
 
 interface PieceListPanelProps {
   pieces: BannerPiece[];
@@ -18,7 +20,7 @@ interface PieceListPanelProps {
   onClearAll?: () => void;
   pieceDecisions?: Map<string, 'approved' | 'rejected'>;
   onApprove?: (ids: string[]) => void;
-  onReject?: (ids: string[]) => void;
+  onReject?: (ids: string[], comment: string) => void;
 }
 
 export function PieceListPanel({
@@ -34,9 +36,29 @@ export function PieceListPanel({
   onApprove,
   onReject,
 }: PieceListPanelProps) {
+  const [pendingRejectIds, setPendingRejectIds] = useState<string[] | null>(null);
+  const [rejectComment, setRejectComment] = useState('');
+
   const checkedCount = checkedIds?.size ?? 0;
   const allChecked = pieces.length > 0 && checkedCount === pieces.length;
   const someChecked = checkedCount > 0 && !allChecked;
+
+  function handleRejectClick(ids: string[]) {
+    setPendingRejectIds(ids);
+    setRejectComment('');
+  }
+
+  function handleConfirmReject() {
+    if (!pendingRejectIds) return;
+    onReject?.(pendingRejectIds, rejectComment);
+    setPendingRejectIds(null);
+    setRejectComment('');
+  }
+
+  function handleCancelReject() {
+    setPendingRejectIds(null);
+    setRejectComment('');
+  }
 
   if (pieces.length === 0) {
     return (
@@ -66,8 +88,44 @@ export function PieceListPanel({
         <span className="piece-list__count">{pieces.length}</span>
       </h3>
 
-      {/* Action bar — appears when pieces are selected */}
-      {showCheckboxes && checkedCount > 0 && (
+      {/* Rejection comment form — shown while pending confirmation */}
+      {pendingRejectIds ? (
+        <div className="piece-list__reject-form">
+          <span className="piece-list__reject-count">
+            {rejectMsgs.rejecting(pendingRejectIds.length)}
+          </span>
+          <p className="piece-list__reject-label">
+            {rejectMsgs.label}{' '}
+            <span className="piece-list__reject-optional">{rejectMsgs.optional}</span>
+          </p>
+          <textarea
+            className="piece-list__reject-textarea"
+            placeholder={rejectMsgs.placeholder}
+            value={rejectComment}
+            onChange={e => setRejectComment(e.target.value)}
+            rows={3}
+            autoFocus
+          />
+          <div className="piece-list__reject-actions">
+            <button
+              type="button"
+              className="piece-list__reject-cancel"
+              onClick={handleCancelReject}
+            >
+              {rejectMsgs.cancel}
+            </button>
+            <button
+              type="button"
+              className="piece-list__reject-confirm"
+              onClick={handleConfirmReject}
+            >
+              <XCircle size={11} strokeWidth={2} aria-hidden="true" />
+              {rejectMsgs.confirm}
+            </button>
+          </div>
+        </div>
+      ) : showCheckboxes && checkedCount > 0 ? (
+        /* Bulk action bar */
         <div className="piece-list__action-bar">
           <span className="piece-list__action-count">{qcMsgs.selected(checkedCount)}</span>
           <div className="piece-list__action-btns">
@@ -82,24 +140,27 @@ export function PieceListPanel({
             <button
               type="button"
               className="piece-list__action-btn piece-list__action-btn--reject"
-              onClick={() => onReject?.(Array.from(checkedIds ?? []))}
+              onClick={() => handleRejectClick(Array.from(checkedIds ?? []))}
             >
               <XCircle size={12} strokeWidth={2} aria-hidden="true" />
               {qcMsgs.reject}
             </button>
           </div>
         </div>
-      )}
+      ) : null}
 
       <div className="piece-list__items">
         {pieces.map(piece => {
           const isChecked = checkedIds?.has(piece.id) ?? false;
+          const decision = pieceDecisions?.get(piece.id);
           return (
-            <button
+            <div
               key={piece.id}
-              type="button"
+              role="button"
+              tabIndex={0}
               className={`piece-item${selectedId === piece.id ? ' piece-item--selected' : ''}`}
               onClick={() => onSelect(piece.id)}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(piece.id); } }}
             >
               {showCheckboxes && (
                 <span
@@ -128,7 +189,45 @@ export function PieceListPanel({
                   </span>
                 </div>
               </div>
-            </button>
+
+              {/* Decision icon — shown once a QC decision exists */}
+              {decision ? (
+                <span
+                  className={`piece-item__decision piece-item__decision--${decision}`}
+                  aria-label={decision === 'approved' ? 'Aprobada' : 'Rechazada'}
+                >
+                  {decision === 'approved'
+                    ? <CheckCircle size={14} strokeWidth={2} aria-hidden="true" />
+                    : <XCircle size={14} strokeWidth={2} aria-hidden="true" />
+                  }
+                </span>
+              ) : showCheckboxes ? (
+                /* Inline approve / reject — visible on hover, hidden once decided */
+                <span
+                  className="piece-item__qc-actions"
+                  onClick={e => e.stopPropagation()}
+                >
+                  <button
+                    type="button"
+                    className="piece-item__qc-btn piece-item__qc-btn--approve"
+                    title={qcMsgs.approve}
+                    aria-label={qcMsgs.approve}
+                    onClick={e => { e.stopPropagation(); onApprove?.([piece.id]); }}
+                  >
+                    <CheckCircle size={13} strokeWidth={2} aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    className="piece-item__qc-btn piece-item__qc-btn--reject"
+                    title={qcMsgs.reject}
+                    aria-label={qcMsgs.reject}
+                    onClick={e => { e.stopPropagation(); handleRejectClick([piece.id]); }}
+                  >
+                    <XCircle size={13} strokeWidth={2} aria-hidden="true" />
+                  </button>
+                </span>
+              ) : null}
+            </div>
           );
         })}
       </div>

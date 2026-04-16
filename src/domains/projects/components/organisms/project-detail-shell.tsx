@@ -67,7 +67,7 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
     setCheckedPieceIds(new Set());
   }
 
-  function handleReject(ids: string[]) {
+  function handleReject(ids: string[], _comment: string) {
     setPieceDecisions(prev => {
       const next = new Map(prev);
       ids.forEach(id => next.set(id, 'rejected'));
@@ -82,6 +82,7 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
   );
 
   const [isStageLinkOpen, setIsStageLinkOpen] = useState(false);
+  const [isFolderOpen, setIsFolderOpen] = useState(true);
   const isFirstRender = useRef(true);
 
   /* When version changes, reset folder + piece + decisions (skip on mount) */
@@ -122,13 +123,15 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
       />
 
       {/* ── 3-panel layout ── */}
-      <div className="detail-three-panel">
+      <div className={`detail-three-panel${isFolderOpen ? '' : ' detail-three-panel--folder-hidden'}`}>
 
         {/* Panel 1 — Folders */}
         <FolderListPanel
           folders={selectedVersion?.folders ?? []}
           selectedId={selectedFolderId}
           onSelect={setSelectedFolderId}
+          isCollapsed={!isFolderOpen}
+          onToggleCollapse={() => setIsFolderOpen(prev => !prev)}
         />
 
         {/* Panel 2 — Pieces */}
@@ -141,7 +144,7 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
           onToggleCheck={handleToggleCheck}
           onSelectAll={handleSelectAll}
           onClearAll={handleClearAll}
-          pieceDecisions={canQcReview ? pieceDecisions : undefined}
+          pieceDecisions={pieceDecisions}
           onApprove={handleApprove}
           onReject={handleReject}
         />

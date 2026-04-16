@@ -5,12 +5,37 @@ export const adminMessages = {
   nav: {
     myProjects: 'Mis proyectos',
     admin: 'Admin',
+    changeProfile: 'Cambiar perfil',
+    myProfile: 'Mi perfil',
+    closeSession: 'Cerrar sesión',
+    close: 'Cerrar',
   },
 
   users: {
     sectionTitle: 'Usuarios',
     sectionSubtitle: (count: number) => `${count} ${count === 1 ? 'usuario' : 'usuarios'} registrados`,
     inviteButton: 'Invitar usuario',
+    searchPlaceholder: 'Buscar usuario...',
+    emptySearch: (q: string) => `Sin resultados para "${q}"`,
+
+    tableHeaders: {
+      user: 'Usuario',
+      email: 'Email',
+      role: 'Rol',
+      activate: 'Activar',
+      delete: 'Eliminar',
+    },
+
+    stats: {
+      total: 'Total usuarios',
+      active: 'Usuarios activos',
+      inactive: 'Desactivados',
+    },
+
+    empty: {
+      title: 'Todavía no tienes usuarios',
+      cta: 'Invitar usuario',
+    },
 
     status: {
       active: 'Activo',
@@ -99,6 +124,23 @@ export const adminMessages = {
       confirm: 'Eliminar',
       cancel: 'Cancelar',
     },
+
+    brandStatus: {
+      approved: 'Aprobado',
+      rejected: 'Rechazado',
+      pending: 'Pendiente',
+    },
+
+    tableHeaders: {
+      brand: 'Marca',
+      client: 'Cliente',
+      projects: 'Proyectos',
+      status: 'Estado',
+      pieces: 'Piezas',
+      delete: 'Eliminar',
+    },
+
+    piecesUnit: 'pzs',
   },
 
   unauthorized: {

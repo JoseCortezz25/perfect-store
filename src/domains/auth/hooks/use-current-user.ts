@@ -23,7 +23,7 @@ export function useCurrentUser() {
     isRole: (r: UserRole) => user.role === r,
     canUpload: user.role === 'diseñador' || user.role === 'admin',
     canQcReview: user.role === 'qc' || user.role === 'admin',
-    canClientApprove: user.role === 'cliente',
+    canClientApprove: false,
     canCreateProject: user.role === 'diseñador' || user.role === 'admin',
     canSeeValidador: user.role !== 'cliente',
   };

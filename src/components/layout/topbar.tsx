@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRef, useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { ChevronDown, Check, LogOut } from 'lucide-react';
+import { ChevronDown, Check, LogOut, Layers, ShieldCheck, UserCircle } from 'lucide-react';
 import { useCurrentUser } from '@/domains/auth/hooks/use-current-user';
 import { APP_USERS } from '@/domains/auth/stores/user.store';
 import { adminMessages } from '@/domains/admin/messages';
@@ -56,12 +56,14 @@ export function Topbar() {
                 href="/"
                 className={`topbar__nav-item${pathname === '/' ? ' topbar__nav-item--active' : ''}`}
               >
+                <Layers size={14} strokeWidth={1.5} className="topbar__nav-icon" aria-hidden="true" />
                 {navMsgs.myProjects}
               </Link>
               <Link
                 href="/admin"
                 className={`topbar__nav-item${pathname === '/admin' ? ' topbar__nav-item--active' : ''}`}
               >
+                <ShieldCheck size={14} strokeWidth={1.5} className="topbar__nav-icon" aria-hidden="true" />
                 {navMsgs.admin}
               </Link>
             </div>
@@ -94,7 +96,7 @@ export function Topbar() {
 
           {isDropdownOpen && (
             <div className="topbar__dropdown" role="menu">
-              <p className="topbar__dropdown-label">Cambiar perfil</p>
+              <p className="topbar__dropdown-label">{navMsgs.changeProfile}</p>
               {APP_USERS.map((u) => (
                 <button
                   key={u.id}
@@ -116,6 +118,18 @@ export function Topbar() {
 
               <div className="topbar__dropdown-divider" role="separator" />
 
+              <Link
+                href="/profile"
+                role="menuitem"
+                className="topbar__dropdown-item topbar__dropdown-item--profile"
+                onClick={() => setIsDropdownOpen(false)}
+              >
+                <UserCircle size={14} strokeWidth={1.5} aria-hidden="true" />
+                <span className="topbar__dropdown-logout-label">{navMsgs.myProfile}</span>
+              </Link>
+
+              <div className="topbar__dropdown-divider" role="separator" />
+
               <button
                 type="button"
                 role="menuitem"
@@ -127,7 +141,7 @@ export function Topbar() {
                 }}
               >
                 <LogOut size={14} strokeWidth={1.5} aria-hidden="true" />
-                <span className="topbar__dropdown-logout-label">Cerrar sesión</span>
+                <span className="topbar__dropdown-logout-label">{navMsgs.closeSession}</span>
               </button>
             </div>
           )}

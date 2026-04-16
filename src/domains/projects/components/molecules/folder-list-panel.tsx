@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Folder } from 'lucide-react';
+import { Search, Folder, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { projectMessages } from '../../messages';
 import type { BannerFolder, FolderStatus } from '../../projects.types';
 
@@ -18,17 +18,49 @@ interface FolderListPanelProps {
   folders: BannerFolder[];
   selectedId: string | null;
   onSelect: (id: string) => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export function FolderListPanel({ folders, selectedId, onSelect }: FolderListPanelProps) {
+export function FolderListPanel({ folders, selectedId, onSelect, isCollapsed, onToggleCollapse }: FolderListPanelProps) {
   const [query, setQuery] = useState('');
 
   const filtered = query
     ? folders.filter(f => f.name.toLowerCase().includes(query.toLowerCase()))
     : folders;
 
+  if (isCollapsed) {
+    return (
+      <div className="folder-list folder-list--collapsed">
+        <button
+          type="button"
+          className="folder-list__expand-btn"
+          onClick={onToggleCollapse}
+          title={msgs.show}
+          aria-label={msgs.show}
+        >
+          <PanelLeftOpen size={14} strokeWidth={1.5} aria-hidden="true" />
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="folder-list">
+      {/* Topbar */}
+      <div className="folder-list__topbar">
+        <span className="folder-list__topbar-label">Carpetas</span>
+        <button
+          type="button"
+          className="folder-list__collapse-btn"
+          onClick={onToggleCollapse}
+          title={msgs.hide}
+          aria-label={msgs.hide}
+        >
+          <PanelLeftClose size={13} strokeWidth={1.5} aria-hidden="true" />
+        </button>
+      </div>
+
       {/* Search */}
       <div className="folder-list__search">
         <Search size={12} strokeWidth={1.5} className="folder-list__search-icon" aria-hidden="true" />

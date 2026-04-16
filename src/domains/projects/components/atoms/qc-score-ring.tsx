@@ -1,3 +1,5 @@
+import { projectMessages } from '../../messages';
+
 const RADIUS = 50;
 const STROKE_WIDTH = 8;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
@@ -6,10 +8,12 @@ const VIEWBOX_SIZE = 120;
 
 const ARC_COLOR = '#7345FF';
 
+const scoreLabels = projectMessages.detail.qcScoreLabels;
+
 function getScoreLabel(score: number): string {
-  if (score >= 80) return 'Aprobado';
-  if (score >= 50) return 'Con advertencias';
-  return 'Rechazado';
+  if (score >= 80) return scoreLabels.approved;
+  if (score >= 50) return scoreLabels.warnings;
+  return scoreLabels.rejected;
 }
 
 interface QcScoreRingProps {
@@ -22,7 +26,7 @@ export function QcScoreRing({ score }: QcScoreRingProps) {
   const label = getScoreLabel(clampedScore);
 
   return (
-    <div className="score-ring" role="img" aria-label={`Puntuación QC: ${clampedScore} de 100. ${label}`}>
+    <div className="score-ring" role="img" aria-label={scoreLabels.ariaLabel(clampedScore, label)}>
       <svg
         width={VIEWBOX_SIZE}
         height={VIEWBOX_SIZE}

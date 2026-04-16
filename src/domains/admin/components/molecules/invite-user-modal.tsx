@@ -1,17 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { X, ChevronDown } from 'lucide-react';
 import { adminMessages } from '../../messages';
 import type { AdminUser } from '../../admin.types';
 import type { UserRole } from '@/domains/auth/stores/user.store';
 
 const msgs = adminMessages.users.invite;
+const roleLabels = adminMessages.users.roles;
 const ROLES: { value: UserRole; label: string }[] = [
-  { value: 'diseñador', label: 'Diseñador' },
-  { value: 'qc',        label: 'QC' },
-  { value: 'cliente',   label: 'Cliente' },
-  { value: 'admin',     label: 'Admin' },
+  { value: 'diseñador', label: roleLabels['diseñador'] },
+  { value: 'qc',        label: roleLabels['qc'] },
+  { value: 'cliente',   label: roleLabels['cliente'] },
+  { value: 'admin',     label: roleLabels['admin'] },
 ];
 
 interface InviteUserModalProps {
@@ -22,14 +23,25 @@ interface InviteUserModalProps {
 export function InviteUserModal({ onInvite, onCancel }: InviteUserModalProps) {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<UserRole>('diseñador');
+  const [isRoleOpen, setIsRoleOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const roleRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (roleRef.current && !roleRef.current.contains(e.target as Node)) {
+        setIsRoleOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email.trim()) return;
     setIsSubmitting(true);
 
-    // Simulate async invite
     setTimeout(() => {
       const name = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
       const initials = name.split(' ').slice(0, 2).map((w: string) => w[0]).join('').toUpperCase();
@@ -45,6 +57,8 @@ export function InviteUserModal({ onInvite, onCancel }: InviteUserModalProps) {
     }, 600);
   }
 
+  const selectedLabel = ROLES.find(r => r.value === role)?.label ?? '';
+
   return (
     <div className="admin-modal-overlay" onClick={onCancel}>
       <div
@@ -56,8 +70,8 @@ export function InviteUserModal({ onInvite, onCancel }: InviteUserModalProps) {
       >
         <div className="admin-modal__header">
           <h2 id="invite-modal-title" className="admin-modal__title">{msgs.modalTitle}</h2>
-          <button type="button" className="admin-modal__close" onClick={onCancel} aria-label="Cerrar">
-            <X size={16} strokeWidth={1.5} />
+          <button type="button" className="admin-modal__close" onClick={onCancel} aria-label={adminMessages.nav.close}>
+            <X size={14} strokeWidth={2} />
           </button>
         </div>
 
@@ -77,19 +91,40 @@ export function InviteUserModal({ onInvite, onCancel }: InviteUserModalProps) {
           </div>
 
           <div className="admin-modal__field">
-            <label htmlFor="invite-role" className="admin-modal__label">{msgs.roleLabel}</label>
-            <div className="admin-select-wrapper">
-              <select
-                id="invite-role"
-                className="admin-select"
-                value={role}
-                onChange={e => setRole(e.target.value as UserRole)}
+            <label className="admin-modal__label">{msgs.roleLabel}</label>
+            <div className="admin-custom-select" ref={roleRef}>
+              <button
+                type="button"
+                className="admin-custom-select__trigger"
+                data-open={isRoleOpen}
+                onClick={() => setIsRoleOpen(o => !o)}
+                aria-haspopup="listbox"
+                aria-expanded={isRoleOpen}
               >
-                {ROLES.map(r => (
-                  <option key={r.value} value={r.value}>{r.label}</option>
-                ))}
-              </select>
-              <ChevronDown size={13} strokeWidth={1.5} className="admin-select__chevron" aria-hidden="true" />
+                {selectedLabel}
+                <ChevronDown
+                  size={14}
+                  strokeWidth={1.5}
+                  className={`admin-custom-select__chevron${isRoleOpen ? ' admin-custom-select__chevron--open' : ''}`}
+                  aria-hidden="true"
+                />
+              </button>
+              {isRoleOpen && (
+                <div className="admin-custom-select__dropdown" role="listbox">
+                  {ROLES.map(r => (
+                    <button
+                      key={r.value}
+                      type="button"
+                      role="option"
+                      aria-selected={role === r.value}
+                      className={`admin-custom-select__option${role === r.value ? ' admin-custom-select__option--active' : ''}`}
+                      onClick={() => { setRole(r.value); setIsRoleOpen(false); }}
+                    >
+                      {r.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
