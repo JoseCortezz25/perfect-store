@@ -1,0 +1,204 @@
+/* ─── Login Page ─────────────────────────────────────────────── */
+
+.login-page {
+  @apply min-h-screen w-full flex items-center justify-center;
+  background-color: #080808;
+  padding: 32px;
+}
+
+.login-page__card {
+  @apply w-full flex flex-col;
+  max-width: 400px;
+  background-color: #0d0d0d;
+  border: 1px solid #2A2A2A;
+  border-radius: 16px;
+  padding: 40px;
+  gap: 32px;
+}
+
+/* Brand */
+
+.login-page__brand {
+  @apply flex items-center;
+  gap: 8px;
+}
+
+.login-page__logo-img {
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.login-page__brand-name {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+/* Header */
+
+.login-page__header {
+  @apply flex flex-col;
+  gap: 6px;
+  text-align: center;
+}
+
+.login-page__title {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 34px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.login-page__subtitle {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #8c8c8c;
+  margin: 0;
+}
+
+/* ─── Auth Link ──────────────────────────────────────────────── */
+
+.auth-link {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  color: var(--color-op-blue-500);
+  text-decoration: none;
+  transition: color 300ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.auth-link:hover {
+  color: var(--color-op-blue-600);
+}
+
+.auth-link--right {
+  @apply self-end;
+  margin-top: 2px;
+}
+
+.auth-link--centered {
+  @apply text-center;
+  margin-top: 4px;
+}
+
+.auth-link--block {
+  @apply w-full text-center;
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+/* ─── Login Form ─────────────────────────────────────────────── */
+
+.login-form {
+  @apply flex flex-col w-full;
+  gap: 16px;
+}
+
+.login-form__field {
+  @apply flex flex-col;
+  gap: 8px;
+}
+
+.login-form__label {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #dcdcdc;
+}
+
+.login-form__input {
+  @apply w-full outline-none;
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid #3b3b3b;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #f5f5f5;
+  transition:
+    border-color 200ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.login-form__input::placeholder {
+  color: #545454;
+}
+
+.login-form__input:hover:not(:focus) {
+  border-color: #DCDCDC;
+  box-shadow: 0px 0px 8px 1px rgba(255, 255, 255, 0.15), 0px 0px 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.login-form__input:focus {
+  border-color: #8C8C8C;
+  background-color: rgba(0, 0, 0, 0.45);
+  box-shadow: inset 0px 0px 1px 0px rgba(255, 255, 255, 0.05), inset 1px 1px 1px 0px rgba(255, 255, 255, 0.15);
+}
+
+.login-form__error {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #ef4444;
+  margin: 0;
+}
+
+/* Submit button — size/layout overrides (visual handled by .btn--primary) */
+
+.login-form__submit {
+  @apply w-full;
+  margin-top: 8px;
+  padding: 16px 24px;
+  font-size: 16px;
+  line-height: 18px;
+}
+
+/* ─── Forgot Password — Success State ───────────────────────── */
+
+.forgot-password__success {
+  @apply flex flex-col items-center;
+  gap: 12px;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.forgot-password__success-icon {
+  @apply flex items-center justify-center;
+  width: 56px;
+  height: 56px;
+  border-radius: 9999px;
+  background-color: rgba(67, 97, 239, 0.12);
+  color: var(--color-op-blue-500);
+  margin-bottom: 4px;
+}
+
+.forgot-password__success-title {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 22px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.forgot-password__success-description {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #8c8c8c;
+  margin: 0;
+}
