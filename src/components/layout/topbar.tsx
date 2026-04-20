@@ -12,6 +12,7 @@ import {
   UserCircle,
   Wand2
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { useCurrentUser } from '@/domains/auth/hooks/use-current-user';
 import { APP_USERS } from '@/domains/auth/stores/user.store';
 import { adminMessages } from '@/domains/admin/messages';
@@ -56,7 +57,9 @@ export function Topbar() {
           <div className="topbar__nav-items">
             <Link
               href="/"
-              className={`topbar__nav-item${pathname === '/' ? 'topbar__nav-item--active' : ''}`}
+              className={cn('topbar__nav-item', {
+                'topbar__nav-item--active': pathname === '/'
+              })}
             >
               <Layers
                 size={14}
@@ -68,7 +71,9 @@ export function Topbar() {
             </Link>
             <Link
               href="/generator"
-              className={`topbar__nav-item${pathname?.startsWith('/generator') ? 'topbar__nav-item--active' : ''}`}
+              className={cn('topbar__nav-item', {
+                'topbar__nav-item--active': pathname?.startsWith('/generator')
+              })}
             >
               <Wand2
                 size={14}
@@ -81,7 +86,9 @@ export function Topbar() {
             {isAdmin && (
               <Link
                 href="/admin"
-                className={`topbar__nav-item${pathname === '/admin' ? 'topbar__nav-item--active' : ''}`}
+                className={cn('topbar__nav-item', {
+                  'topbar__nav-item--active': pathname === '/admin'
+                })}
               >
                 <ShieldCheck
                   size={14}
@@ -116,7 +123,9 @@ export function Topbar() {
             <ChevronDown
               size={13}
               strokeWidth={1.5}
-              className={`topbar__user-chevron${isDropdownOpen ? 'topbar__user-chevron--open' : ''}`}
+              className={cn('topbar__user-chevron', {
+                'topbar__user-chevron--open': isDropdownOpen
+              })}
               aria-hidden="true"
             />
           </button>
@@ -129,7 +138,9 @@ export function Topbar() {
                   key={u.id}
                   type="button"
                   role="menuitem"
-                  className={`topbar__dropdown-item${u.id === user.id ? 'topbar__dropdown-item--active' : ''}`}
+                  className={cn('topbar__dropdown-item', {
+                    'topbar__dropdown-item--active': u.id === user.id
+                  })}
                   onClick={() => {
                     setUser(u);
                     setIsDropdownOpen(false);
