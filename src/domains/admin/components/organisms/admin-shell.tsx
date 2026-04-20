@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { cn } from '@/lib/utils';
 import { ShieldOff } from 'lucide-react';
 import { useCurrentUser } from '@/domains/auth/hooks/use-current-user';
 import { UsersPanel } from './users-panel';
@@ -51,7 +52,9 @@ export function AdminShell() {
             type="button"
             role="tab"
             aria-selected={activeTab === tab}
-            className={`admin-tabs__tab${activeTab === tab ? 'admin-tabs__tab--active' : ''}`}
+            className={cn('admin-tabs__tab', {
+              'admin-tabs__tab--active': activeTab === tab
+            })}
             onClick={() => setActiveTab(tab)}
           >
             {msgs.tabs[tab]}
