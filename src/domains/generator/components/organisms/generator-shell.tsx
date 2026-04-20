@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronDown, Upload, X, Wand2, Check, Search } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { StepSlider } from '../atoms/step-slider';
 import { ChipSelector } from '../atoms/chip-selector';
 import { generatorStore } from '../../stores/generator.store';
@@ -240,7 +241,10 @@ export function GeneratorShell() {
                           }
                         >
                           <span
-                            className={`brand-filter__checkbox${isChecked ? 'brand-filter__checkbox--checked' : ''}`}
+                            className={cn(
+                              'brand-filter__checkbox',
+                              isChecked && 'brand-filter__checkbox--checked'
+                            )}
                           >
                             {isChecked && (
                               <Check
@@ -288,7 +292,10 @@ export function GeneratorShell() {
                   }}
                 >
                   <span
-                    className={`gen-drop__value${selectedCount === 0 ? 'gen-drop__value--empty' : ''}`}
+                    className={cn(
+                      'gen-drop__value',
+                      selectedCount === 0 && 'gen-drop__value--empty'
+                    )}
                   >
                     {selectedCount > 0
                       ? `${selectedCount} ${selectedCount === 1 ? 'SKU seleccionado' : 'SKUs seleccionados'}`
@@ -337,7 +344,10 @@ export function GeneratorShell() {
                             onClick={() => toggleSku(sku)}
                           >
                             <span
-                              className={`brand-filter__checkbox${isSelected ? 'brand-filter__checkbox--checked' : ''}`}
+                              className={cn(
+                                'brand-filter__checkbox',
+                                isSelected && 'brand-filter__checkbox--checked'
+                              )}
                             >
                               {isSelected && (
                                 <Check
@@ -428,7 +438,10 @@ export function GeneratorShell() {
                       <button
                         key={angle}
                         type="button"
-                        className={`gen-param__btn${config.angle === angle ? 'gen-param__btn--on' : ''}`}
+                        className={cn(
+                          'gen-param__btn',
+                          config.angle === angle && 'gen-param__btn--on'
+                        )}
                         onClick={() => generatorStore.setConfig({ angle })}
                       >
                         {msgs.angle.options[angle]}
@@ -450,7 +463,11 @@ export function GeneratorShell() {
                         <button
                           key={ratio}
                           type="button"
-                          className={`gen-param__btn gen-param__btn--ratio${config.aspectRatio === ratio ? 'gen-param__btn--on' : ''}`}
+                          className={cn(
+                            'gen-param__btn',
+                            'gen-param__btn--ratio',
+                            config.aspectRatio === ratio && 'gen-param__btn--on'
+                          )}
                           onClick={() =>
                             generatorStore.setConfig({ aspectRatio: ratio })
                           }
@@ -476,7 +493,10 @@ export function GeneratorShell() {
                       <button
                         key={q}
                         type="button"
-                        className={`gen-param__btn${config.quality === q ? 'gen-param__btn--on' : ''}`}
+                        className={cn(
+                          'gen-param__btn',
+                          config.quality === q && 'gen-param__btn--on'
+                        )}
                         onClick={() => generatorStore.setConfig({ quality: q })}
                       >
                         {msgs.quality.options[q]}

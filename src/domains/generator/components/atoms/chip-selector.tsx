@@ -1,5 +1,7 @@
 'use client';
 
+import { cn } from '@/lib/utils';
+
 interface ChipSelectorProps {
   label: string;
   options: readonly string[];
@@ -23,7 +25,10 @@ export function ChipSelector({
             <button
               key={option}
               type="button"
-              className={`chip-selector__chip${isActive ? 'chip-selector__chip--active' : ''}`}
+              className={cn(
+                'chip-selector__chip',
+                isActive && 'chip-selector__chip--active'
+              )}
               onClick={() => onToggle(option)}
               aria-pressed={isActive}
             >
