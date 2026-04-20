@@ -9,10 +9,9 @@ import type { UserRole } from '@/domains/auth/stores/user.store';
 const msgs = adminMessages.users.invite;
 const roleLabels = adminMessages.users.roles;
 const ROLES: { value: UserRole; label: string }[] = [
-  { value: 'diseñador', label: roleLabels['diseñador'] },
-  { value: 'qc',        label: roleLabels['qc'] },
-  { value: 'cliente',   label: roleLabels['cliente'] },
-  { value: 'admin',     label: roleLabels['admin'] },
+  { value: 'agencia', label: roleLabels['agencia'] },
+  { value: 'cliente', label: roleLabels['cliente'] },
+  { value: 'admin', label: roleLabels['admin'] }
 ];
 
 interface InviteUserModalProps {
@@ -22,7 +21,7 @@ interface InviteUserModalProps {
 
 export function InviteUserModal({ onInvite, onCancel }: InviteUserModalProps) {
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState<UserRole>('diseñador');
+  const [role, setRole] = useState<UserRole>('agencia');
   const [isRoleOpen, setIsRoleOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const roleRef = useRef<HTMLDivElement>(null);
@@ -43,15 +42,23 @@ export function InviteUserModal({ onInvite, onCancel }: InviteUserModalProps) {
     setIsSubmitting(true);
 
     setTimeout(() => {
-      const name = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-      const initials = name.split(' ').slice(0, 2).map((w: string) => w[0]).join('').toUpperCase();
+      const name = email
+        .split('@')[0]
+        .replace(/[._]/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+      const initials = name
+        .split(' ')
+        .slice(0, 2)
+        .map((w: string) => w[0])
+        .join('')
+        .toUpperCase();
       onInvite({
         name,
         initials,
         email: email.trim(),
         role,
         roleLabel: adminMessages.users.roles[role],
-        status: 'active',
+        status: 'active'
       });
       setIsSubmitting(false);
     }, 600);
@@ -69,15 +76,24 @@ export function InviteUserModal({ onInvite, onCancel }: InviteUserModalProps) {
         onClick={e => e.stopPropagation()}
       >
         <div className="admin-modal__header">
-          <h2 id="invite-modal-title" className="admin-modal__title">{msgs.modalTitle}</h2>
-          <button type="button" className="admin-modal__close" onClick={onCancel} aria-label={adminMessages.nav.close}>
+          <h2 id="invite-modal-title" className="admin-modal__title">
+            {msgs.modalTitle}
+          </h2>
+          <button
+            type="button"
+            className="admin-modal__close"
+            onClick={onCancel}
+            aria-label={adminMessages.nav.close}
+          >
             <X size={14} strokeWidth={2} />
           </button>
         </div>
 
         <form className="admin-modal__body" onSubmit={handleSubmit}>
           <div className="admin-modal__field">
-            <label htmlFor="invite-email" className="admin-modal__label">{msgs.emailLabel}</label>
+            <label htmlFor="invite-email" className="admin-modal__label">
+              {msgs.emailLabel}
+            </label>
             <input
               id="invite-email"
               type="email"
@@ -105,7 +121,7 @@ export function InviteUserModal({ onInvite, onCancel }: InviteUserModalProps) {
                 <ChevronDown
                   size={14}
                   strokeWidth={1.5}
-                  className={`admin-custom-select__chevron${isRoleOpen ? ' admin-custom-select__chevron--open' : ''}`}
+                  className={`admin-custom-select__chevron${isRoleOpen ? 'admin-custom-select__chevron--open' : ''}`}
                   aria-hidden="true"
                 />
               </button>
@@ -117,8 +133,11 @@ export function InviteUserModal({ onInvite, onCancel }: InviteUserModalProps) {
                       type="button"
                       role="option"
                       aria-selected={role === r.value}
-                      className={`admin-custom-select__option${role === r.value ? ' admin-custom-select__option--active' : ''}`}
-                      onClick={() => { setRole(r.value); setIsRoleOpen(false); }}
+                      className={`admin-custom-select__option${role === r.value ? 'admin-custom-select__option--active' : ''}`}
+                      onClick={() => {
+                        setRole(r.value);
+                        setIsRoleOpen(false);
+                      }}
                     >
                       {r.label}
                     </button>
@@ -129,10 +148,18 @@ export function InviteUserModal({ onInvite, onCancel }: InviteUserModalProps) {
           </div>
 
           <div className="admin-modal__footer admin-modal__footer--full">
-            <button type="button" className="btn btn--secondary admin-modal__btn-half" onClick={onCancel}>
+            <button
+              type="button"
+              className="btn btn--secondary admin-modal__btn-half"
+              onClick={onCancel}
+            >
               {msgs.cancel}
             </button>
-            <button type="submit" className="btn btn--primary admin-modal__btn-half" disabled={isSubmitting || !email.trim()}>
+            <button
+              type="submit"
+              className="btn btn--primary admin-modal__btn-half"
+              disabled={isSubmitting || !email.trim()}
+            >
               {isSubmitting ? msgs.submitting : msgs.submit}
             </button>
           </div>

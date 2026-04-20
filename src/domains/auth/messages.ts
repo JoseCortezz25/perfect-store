@@ -5,7 +5,7 @@ export const authMessages = {
 
     identity: {
       sectionTitle: 'Información de cuenta',
-      emailLabel: 'Email',
+      emailLabel: 'Email'
     },
 
     security: {
@@ -23,7 +23,7 @@ export const authMessages = {
         weak: 'Débil',
         fair: 'Regular',
         good: 'Buena',
-        strong: 'Segura',
+        strong: 'Segura'
       },
       success: 'Contraseña actualizada correctamente',
       errors: {
@@ -33,14 +33,14 @@ export const authMessages = {
         confirmRequired: 'Confirma la nueva contraseña',
         confirmMismatch: 'Las contraseñas no coinciden',
         currentWrong: 'La contraseña actual no es correcta',
-        serverError: 'Error al actualizar la contraseña. Inténtalo de nuevo.',
-      },
-    },
+        serverError: 'Error al actualizar la contraseña. Inténtalo de nuevo.'
+      }
+    }
   },
 
   login: {
     title: 'Welcome back',
-    subtitle: 'Sign in to your Sphere account',
+    subtitle: 'Sign in to your Perfect Store account',
     usernameLabel: 'Username',
     usernamePlaceholder: 'Enter your username',
     passwordLabel: 'Password',

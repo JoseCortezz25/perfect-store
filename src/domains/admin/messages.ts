@@ -1,19 +1,29 @@
 export const adminMessages = {
   pageTitle: 'Administración',
-  pageSubtitle: 'Gestiona usuarios, marcas y proyectos de la plataforma',
+  pageSubtitle:
+    'Gestiona SKUs, el modelo generativo y los usuarios de la plataforma',
+
+  tabs: {
+    skus: 'SKUs',
+    modelo: 'Modelo generativo',
+    usuarios: 'Usuarios',
+    marcas: 'Marcas'
+  },
 
   nav: {
     myProjects: 'Mis proyectos',
+    generator: 'Generador',
     admin: 'Admin',
     changeProfile: 'Cambiar perfil',
     myProfile: 'Mi perfil',
     closeSession: 'Cerrar sesión',
-    close: 'Cerrar',
+    close: 'Cerrar'
   },
 
   users: {
     sectionTitle: 'Usuarios',
-    sectionSubtitle: (count: number) => `${count} ${count === 1 ? 'usuario' : 'usuarios'} registrados`,
+    sectionSubtitle: (count: number) =>
+      `${count} ${count === 1 ? 'usuario' : 'usuarios'} registrados`,
     inviteButton: 'Invitar usuario',
     searchPlaceholder: 'Buscar usuario...',
     emptySearch: (q: string) => `Sin resultados para "${q}"`,
@@ -23,30 +33,30 @@ export const adminMessages = {
       email: 'Email',
       role: 'Rol',
       activate: 'Activar',
-      delete: 'Eliminar',
+      delete: 'Eliminar'
     },
 
     stats: {
       total: 'Total usuarios',
       active: 'Usuarios activos',
-      inactive: 'Desactivados',
+      inactive: 'Desactivados'
     },
 
     empty: {
       title: 'Todavía no tienes usuarios',
-      cta: 'Invitar usuario',
+      cta: 'Invitar usuario'
     },
 
     status: {
       active: 'Activo',
-      inactive: 'Inactivo',
+      inactive: 'Inactivo'
     },
 
     actions: {
       editRole: 'Editar rol',
       deactivate: 'Desactivar',
       reactivate: 'Reactivar',
-      delete: 'Eliminar',
+      delete: 'Eliminar'
     },
 
     invite: {
@@ -56,7 +66,7 @@ export const adminMessages = {
       roleLabel: 'Rol',
       submit: 'Enviar invitación',
       submitting: 'Enviando...',
-      cancel: 'Cancelar',
+      cancel: 'Cancelar'
     },
 
     editRole: {
@@ -68,7 +78,7 @@ export const adminMessages = {
       back: 'Volver',
       cancel: 'Cancelar',
       confirmDescription: (name: string, from: string, to: string) =>
-        `¿Cambiar el rol de ${name} de ${from} a ${to}?`,
+        `¿Cambiar el rol de ${name} de ${from} a ${to}?`
     },
 
     toggleStatus: {
@@ -79,7 +89,7 @@ export const adminMessages = {
       reactivateDescription: (name: string) =>
         `¿Reactivar la cuenta de ${name}? El usuario recuperará acceso a la plataforma.`,
       confirm: 'Confirmar',
-      cancel: 'Cancelar',
+      cancel: 'Cancelar'
     },
 
     deleteUser: {
@@ -87,15 +97,14 @@ export const adminMessages = {
       description: (name: string) =>
         `¿Eliminar permanentemente la cuenta de ${name}? Esta acción no se puede deshacer.`,
       confirm: 'Eliminar',
-      cancel: 'Cancelar',
+      cancel: 'Cancelar'
     },
 
     roles: {
       admin: 'Admin',
-      diseñador: 'Diseñador',
-      qc: 'QC',
-      cliente: 'Cliente',
-    } as Record<string, string>,
+      agencia: 'Agencia',
+      cliente: 'Cliente'
+    } as Record<string, string>
   },
 
   brands: {
@@ -106,7 +115,7 @@ export const adminMessages = {
 
     actions: {
       deleteBrand: 'Eliminar marca',
-      deleteProject: 'Eliminar proyecto',
+      deleteProject: 'Eliminar proyecto'
     },
 
     deleteBrand: {
@@ -114,7 +123,7 @@ export const adminMessages = {
       description: (name: string) =>
         `¿Eliminar la marca "${name}" y todos sus proyectos? Esta acción no se puede deshacer.`,
       confirm: 'Eliminar',
-      cancel: 'Cancelar',
+      cancel: 'Cancelar'
     },
 
     deleteProject: {
@@ -122,29 +131,28 @@ export const adminMessages = {
       description: (name: string) =>
         `¿Eliminar el proyecto "${name}"? Esta acción no se puede deshacer.`,
       confirm: 'Eliminar',
-      cancel: 'Cancelar',
+      cancel: 'Cancelar'
     },
 
     brandStatus: {
       approved: 'Aprobado',
       rejected: 'Rechazado',
-      pending: 'Pendiente',
+      pending: 'Pendiente'
     },
 
     tableHeaders: {
       brand: 'Marca',
       client: 'Cliente',
       projects: 'Proyectos',
-      status: 'Estado',
-      pieces: 'Piezas',
-      delete: 'Eliminar',
+      images: 'Imágenes',
+      delete: 'Eliminar'
     },
 
-    piecesUnit: 'pzs',
+    imagesUnit: 'imgs'
   },
 
   unauthorized: {
     title: 'Acceso restringido',
-    description: 'Esta sección es solo para administradores.',
-  },
+    description: 'Esta sección es solo para administradores.'
+  }
 };

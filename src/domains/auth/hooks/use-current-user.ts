@@ -12,7 +12,7 @@ export function useCurrentUser() {
   const user = useSyncExternalStore(
     userStore.subscribe,
     userStore.getUser,
-    userStore.getUser, // server snapshot — returns default user
+    userStore.getUser // server snapshot — returns default user
   );
 
   return {
@@ -21,11 +21,11 @@ export function useCurrentUser() {
     setUser: userStore.setUser,
     logout: userStore.logout,
     isRole: (r: UserRole) => user.role === r,
-    canUpload: user.role === 'diseñador' || user.role === 'admin',
-    canQcReview: user.role === 'qc' || user.role === 'admin',
-    canClientApprove: false,
-    canCreateProject: user.role === 'diseñador' || user.role === 'admin',
-    canSeeValidador: user.role !== 'cliente',
+    canUpload: user.role === 'agencia' || user.role === 'admin',
+    canQcReview: user.role === 'agencia' || user.role === 'admin',
+    canClientApprove: user.role === 'cliente' || user.role === 'admin',
+    canCreateProject: user.role === 'agencia' || user.role === 'admin',
+    canSeeValidador: user.role !== 'cliente'
   };
 }
 

@@ -2,7 +2,7 @@
 // Module-level singleton store using useSyncExternalStore pattern.
 // Persists selected profile to localStorage so it survives page navigation.
 
-export type UserRole = 'diseñador' | 'qc' | 'cliente' | 'admin';
+export type UserRole = 'agencia' | 'cliente' | 'admin';
 
 export interface AppUser {
   id: string;
@@ -15,32 +15,25 @@ export interface AppUser {
 export const APP_USERS: AppUser[] = [
   {
     id: '1',
-    name: 'Michaela O',
-    initials: 'MO',
-    role: 'diseñador',
-    roleLabel: 'Diseñadora',
+    name: 'Valentina Ríos',
+    initials: 'VR',
+    role: 'agencia',
+    roleLabel: 'Agencia'
   },
   {
     id: '2',
-    name: 'Carlos M',
+    name: 'Carlos Méndez',
     initials: 'CM',
-    role: 'qc',
-    roleLabel: 'QC',
+    role: 'cliente',
+    roleLabel: 'Cliente'
   },
   {
     id: '3',
-    name: 'Elena R',
-    initials: 'ER',
-    role: 'cliente',
-    roleLabel: 'Cliente',
-  },
-  {
-    id: '4',
-    name: 'David A',
-    initials: 'DA',
+    name: 'Laura Torres',
+    initials: 'LT',
     role: 'admin',
-    roleLabel: 'Admin',
-  },
+    roleLabel: 'Admin'
+  }
 ];
 
 const STORAGE_KEY = 'sphere_active_user_id';
@@ -50,7 +43,7 @@ function getInitialUser(): AppUser {
   try {
     const savedId = window.localStorage.getItem(STORAGE_KEY);
     if (savedId) {
-      const found = APP_USERS.find((u) => u.id === savedId);
+      const found = APP_USERS.find(u => u.id === savedId);
       if (found) return found;
     }
   } catch {
@@ -74,7 +67,7 @@ export const userStore = {
     } catch {
       // ignore
     }
-    _listeners.forEach((l) => l());
+    _listeners.forEach(l => l());
   },
 
   subscribe: (listener: Listener): (() => void) => {
@@ -91,7 +84,7 @@ export const userStore = {
       // ignore
     }
     _currentUser = APP_USERS[0];
-    _listeners.forEach((l) => l());
+    _listeners.forEach(l => l());
   },
 
   /** Call once on the client to hydrate from localStorage */
@@ -99,7 +92,7 @@ export const userStore = {
     const user = getInitialUser();
     if (user.id !== _currentUser.id) {
       _currentUser = user;
-      _listeners.forEach((l) => l());
+      _listeners.forEach(l => l());
     }
-  },
+  }
 };

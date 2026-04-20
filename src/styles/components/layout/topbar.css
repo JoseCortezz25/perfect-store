@@ -38,6 +38,15 @@
   object-fit: contain;
 }
 
+.topbar__logo-placeholder {
+  display: block;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background-color: var(--color-op-blue-600, #4361EF);
+}
+
 .topbar__brand {
   font-family: var(--font-mulish), sans-serif;
   font-size: 16px;

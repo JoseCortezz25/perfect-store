@@ -9,10 +9,9 @@ import type { UserRole } from '@/domains/auth/stores/user.store';
 
 const msgs = adminMessages.users.editRole;
 const ROLES: { value: UserRole; label: string }[] = [
-  { value: 'diseñador', label: 'Diseñador' },
-  { value: 'qc',        label: 'QC' },
-  { value: 'cliente',   label: 'Cliente' },
-  { value: 'admin',     label: 'Admin' },
+  { value: 'agencia', label: 'Agencia' },
+  { value: 'cliente', label: 'Cliente' },
+  { value: 'admin', label: 'Admin' }
 ];
 
 interface EditRoleModalProps {
@@ -41,7 +40,10 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (role === user.role) { onCancel(); return; }
+    if (role === user.role) {
+      onCancel();
+      return;
+    }
     setConfirming(true);
   }
 
@@ -62,14 +64,21 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
           <h2 id="edit-role-modal-title" className="admin-modal__title">
             {confirming ? msgs.confirmTitle : msgs.modalTitle}
           </h2>
-          <button type="button" className="admin-modal__close" onClick={onCancel} aria-label={adminMessages.nav.close}>
+          <button
+            type="button"
+            className="admin-modal__close"
+            onClick={onCancel}
+            aria-label={adminMessages.nav.close}
+          >
             <X size={14} strokeWidth={2} />
           </button>
         </div>
 
         {/* User preview */}
         <div className="admin-modal__user-preview">
-          <div className="admin-user-avatar admin-user-avatar--modal">{user.initials}</div>
+          <div className="admin-user-avatar admin-user-avatar--modal">
+            {user.initials}
+          </div>
           <div className="admin-modal__user-info">
             <span className="admin-modal__user-name">{user.name}</span>
             <span className="admin-modal__user-email">{user.email}</span>
@@ -81,7 +90,11 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
           /* Step 2 — confirmation */
           <>
             <p className="admin-modal__description">
-              {msgs.confirmDescription(user.name, adminMessages.users.roles[user.role], newRoleLabel)}
+              {msgs.confirmDescription(
+                user.name,
+                adminMessages.users.roles[user.role],
+                newRoleLabel
+              )}
             </p>
             <div className="admin-modal__footer admin-modal__footer--full">
               <button
@@ -118,7 +131,7 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
                   <ChevronDown
                     size={14}
                     strokeWidth={1.5}
-                    className={`admin-custom-select__chevron${isRoleOpen ? ' admin-custom-select__chevron--open' : ''}`}
+                    className={`admin-custom-select__chevron${isRoleOpen ? 'admin-custom-select__chevron--open' : ''}`}
                     aria-hidden="true"
                   />
                 </button>
@@ -130,8 +143,11 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
                         type="button"
                         role="option"
                         aria-selected={role === r.value}
-                        className={`admin-custom-select__option${role === r.value ? ' admin-custom-select__option--active' : ''}`}
-                        onClick={() => { setRole(r.value); setIsRoleOpen(false); }}
+                        className={`admin-custom-select__option${role === r.value ? 'admin-custom-select__option--active' : ''}`}
+                        onClick={() => {
+                          setRole(r.value);
+                          setIsRoleOpen(false);
+                        }}
                       >
                         {r.label}
                       </button>
@@ -149,7 +165,10 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
               >
                 {msgs.cancel}
               </button>
-              <button type="submit" className="btn btn--primary admin-modal__btn-half">
+              <button
+                type="submit"
+                className="btn btn--primary admin-modal__btn-half"
+              >
                 {msgs.submit}
               </button>
             </div>

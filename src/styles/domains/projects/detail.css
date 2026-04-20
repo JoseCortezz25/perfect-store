@@ -1,3 +1,270 @@
+/* ═══════════════════════════════════════════════════════════════
+   PS PROJECT DETAIL — flat chronological feed
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Outer page shell — matches generator-page margin pattern */
+.pd-page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 52px);
+  background: #000000;
+  padding: 36px 8% 64px;
+  gap: 24px;
+}
+
+/* ── Header row: title on left, CTA on right ──────────────────── */
+
+.pd-header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* ── Back link ────────────────────────────────────────────────── */
+
+.pd-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #545454;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 4px;
+  transition: color 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.pd-back-btn:hover { color: #DCDCDC; }
+
+/* ── Meta row: brand · skus · date ───────────────────────────── */
+
+.pd-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pd-meta__item {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #6E6E6E;
+}
+
+.pd-meta__sep {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 13px;
+  color: #3B3B3B;
+  user-select: none;
+}
+
+/* ── Image feed ───────────────────────────────────────────────── */
+
+.pd-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+}
+
+/* ── Session divider: "15 de abril · 4 imágenes" ─────────────── */
+
+.pd-session-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pd-session-divider__label {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #3B3B3B;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pd-session-divider__line {
+  flex: 1;
+  height: 1px;
+  background: #1A1A1A;
+}
+
+/* ── Session block: divider + grid ───────────────────────────── */
+
+.pd-session {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── 3-column grid override for the detail feed ──────────────── */
+
+.pd-feed .results-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PS DETAIL MODAL — wide, two-column, 80vh
+   ═══════════════════════════════════════════════════════════════ */
+
+.gen-modal.gen-modal--ps-detail {
+  max-width: 80vw;
+  width: 80vw;
+  max-height: 80vh;
+  height: 80vh;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+}
+
+/* Two-pane layout */
+.pd-modal-layout {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Left: image fills the pane */
+.pd-modal-image {
+  flex: 0 0 58%;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  border-radius: 18px 0 0 18px;
+}
+
+.pd-modal-image__preview {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Right: info panel */
+.pd-modal-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-left: 1px solid #1A1A1A;
+}
+
+.pd-modal-info__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 22px 18px;
+  border-bottom: 1px solid #1A1A1A;
+  flex-shrink: 0;
+}
+
+.pd-modal-info__title {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #DCDCDC;
+  margin: 0;
+}
+
+/* Scrollable body */
+.pd-modal-info__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  scrollbar-width: thin;
+  scrollbar-color: #2A2A2A transparent;
+}
+
+.pd-modal-info__body::-webkit-scrollbar       { width: 4px; }
+.pd-modal-info__body::-webkit-scrollbar-track  { background: transparent; }
+.pd-modal-info__body::-webkit-scrollbar-thumb  { background: #2A2A2A; border-radius: 4px; }
+
+/* Prompt block — shown prominently */
+.pd-modal-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pd-modal-prompt__label {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #3B3B3B;
+}
+
+.pd-modal-prompt__text {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  color: #8C8C8C;
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* Divider between prompt and params */
+.pd-modal-sep {
+  height: 1px;
+  background: #1A1A1A;
+  flex-shrink: 0;
+}
+
+/* Flat param list — no boxes */
+.pd-modal-params {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pd-modal-param {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pd-modal-param__key {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3B3B3B;
+}
+
+.pd-modal-param__val {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #DCDCDC;
+  line-height: 1.5;
+}
+
+/* Footer with action buttons */
+.pd-modal-info__footer {
+  padding: 14px 22px;
+  border-top: 1px solid #1A1A1A;
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pd-modal-info__footer .btn { flex: 1; }
+
+/* ─── Back button (legacy) ───────────────────────────────────── */
+
 /* ─── Back button ───────────────────────────────────────────── */
 
 .detail-back-btn {

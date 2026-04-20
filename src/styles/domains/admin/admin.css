@@ -8,6 +8,63 @@
   width: 100%;
 }
 
+/* ─── Admin Tabs ────────────────────────────────────────────── */
+
+.admin-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-bottom: 1px solid #2A2A2A;
+  margin-top: -16px;
+}
+
+.admin-tabs__tab {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #545454;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 16px;
+  margin-bottom: -1px;
+  cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.admin-tabs__tab:hover {
+  color: #DCDCDC;
+}
+
+.admin-tabs__tab--active {
+  color: #ffffff;
+  border-bottom-color: #4361EF;
+}
+
+/* ─── Admin Placeholder ─────────────────────────────────────── */
+
+.admin-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 80px 24px;
+  text-align: center;
+}
+
+.admin-placeholder__icon {
+  color: #3B3B3B;
+}
+
+.admin-placeholder__text {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #545454;
+  margin: 0;
+}
+
 .admin-page-header {
   display: flex;
   align-items: flex-start;
@@ -221,6 +278,12 @@
   border-color: rgba(67, 97, 239, 0.3);
 }
 
+.role-chip--agencia {
+  background-color: rgba(124, 58, 237, 0.15);
+  color: #A78BFA;
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
 .role-chip--disenador {
   background-color: rgba(124, 58, 237, 0.15);
   color: #A78BFA;
@@ -299,6 +362,7 @@
 }
 
 .role-chip__option-dot--admin     { background-color: #6689F4; }
+.role-chip__option-dot--agencia   { background-color: #A78BFA; }
 .role-chip__option-dot--disenador { background-color: #A78BFA; }
 .role-chip__option-dot--qc        { background-color: #FBB024; }
 .role-chip__option-dot--cliente   { background-color: #2DD4BF; }
@@ -554,6 +618,13 @@
 
 .admin-brand-item__header:hover {
   background-color: #080808;
+}
+
+.admin-brand-item__info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
 }
 
 .admin-brand-item__expand-btn {
@@ -1205,7 +1276,7 @@
 
 .admin-brands-cols {
   display: grid;
-  grid-template-columns: 2fr 1.4fr 120px 130px 80px 80px;
+  grid-template-columns: 2fr 1.4fr 120px 80px 80px;
   align-items: center;
   column-gap: 16px;
 }

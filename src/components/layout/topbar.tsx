@@ -1,10 +1,17 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRef, useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { ChevronDown, Check, LogOut, Layers, ShieldCheck, UserCircle } from 'lucide-react';
+import {
+  ChevronDown,
+  Check,
+  LogOut,
+  Layers,
+  ShieldCheck,
+  UserCircle,
+  Wand2
+} from 'lucide-react';
 import { useCurrentUser } from '@/domains/auth/hooks/use-current-user';
 import { APP_USERS } from '@/domains/auth/stores/user.store';
 import { adminMessages } from '@/domains/admin/messages';
@@ -20,7 +27,10 @@ export function Topbar() {
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     }
@@ -32,43 +42,58 @@ export function Topbar() {
 
   return (
     <header className="topbar">
-      {/* Left: Sphere brand → home */}
+      {/* Left: Perfect Store brand → home */}
       <div className="topbar__left">
         <Link href="/" className="topbar__brand-link">
-          <Image
-            src="/sphere-logo.png"
-            alt="Sphere"
-            width={28}
-            height={28}
-            className="topbar__logo-img"
-            priority
-          />
-          <span className="topbar__brand">Sphere</span>
+          <div className="topbar__logo-placeholder" aria-hidden="true" />
+          <span className="topbar__brand">Perfect Store</span>
         </Link>
       </div>
 
-      {/* Center: admin nav pill */}
+      {/* Center: nav */}
       <div className="topbar__center">
-        {isAdmin && (
-          <nav className="topbar__navbar" aria-label="Navegación principal">
-            <div className="topbar__nav-items">
-              <Link
-                href="/"
-                className={`topbar__nav-item${pathname === '/' ? ' topbar__nav-item--active' : ''}`}
-              >
-                <Layers size={14} strokeWidth={1.5} className="topbar__nav-icon" aria-hidden="true" />
-                {navMsgs.myProjects}
-              </Link>
+        <nav className="topbar__navbar" aria-label="Navegación principal">
+          <div className="topbar__nav-items">
+            <Link
+              href="/"
+              className={`topbar__nav-item${pathname === '/' ? 'topbar__nav-item--active' : ''}`}
+            >
+              <Layers
+                size={14}
+                strokeWidth={1.5}
+                className="topbar__nav-icon"
+                aria-hidden="true"
+              />
+              {navMsgs.myProjects}
+            </Link>
+            <Link
+              href="/generator"
+              className={`topbar__nav-item${pathname?.startsWith('/generator') ? 'topbar__nav-item--active' : ''}`}
+            >
+              <Wand2
+                size={14}
+                strokeWidth={1.5}
+                className="topbar__nav-icon"
+                aria-hidden="true"
+              />
+              {navMsgs.generator}
+            </Link>
+            {isAdmin && (
               <Link
                 href="/admin"
-                className={`topbar__nav-item${pathname === '/admin' ? ' topbar__nav-item--active' : ''}`}
+                className={`topbar__nav-item${pathname === '/admin' ? 'topbar__nav-item--active' : ''}`}
               >
-                <ShieldCheck size={14} strokeWidth={1.5} className="topbar__nav-icon" aria-hidden="true" />
+                <ShieldCheck
+                  size={14}
+                  strokeWidth={1.5}
+                  className="topbar__nav-icon"
+                  aria-hidden="true"
+                />
                 {navMsgs.admin}
               </Link>
-            </div>
-          </nav>
-        )}
+            )}
+          </div>
+        </nav>
       </div>
 
       {/* Right: user profile + dropdown */}
@@ -81,7 +106,9 @@ export function Topbar() {
             aria-label="Menú de usuario"
             aria-expanded={isDropdownOpen}
           >
-            <div className="topbar__user-avatar" aria-hidden="true">{user.initials}</div>
+            <div className="topbar__user-avatar" aria-hidden="true">
+              {user.initials}
+            </div>
             <div className="topbar__user-info">
               <span className="topbar__user-name">{user.name}</span>
               <span className="topbar__user-role">({user.roleLabel})</span>
@@ -89,7 +116,7 @@ export function Topbar() {
             <ChevronDown
               size={13}
               strokeWidth={1.5}
-              className={`topbar__user-chevron${isDropdownOpen ? ' topbar__user-chevron--open' : ''}`}
+              className={`topbar__user-chevron${isDropdownOpen ? 'topbar__user-chevron--open' : ''}`}
               aria-hidden="true"
             />
           </button>
@@ -97,13 +124,16 @@ export function Topbar() {
           {isDropdownOpen && (
             <div className="topbar__dropdown" role="menu">
               <p className="topbar__dropdown-label">{navMsgs.changeProfile}</p>
-              {APP_USERS.map((u) => (
+              {APP_USERS.map(u => (
                 <button
                   key={u.id}
                   type="button"
                   role="menuitem"
-                  className={`topbar__dropdown-item${u.id === user.id ? ' topbar__dropdown-item--active' : ''}`}
-                  onClick={() => { setUser(u); setIsDropdownOpen(false); }}
+                  className={`topbar__dropdown-item${u.id === user.id ? 'topbar__dropdown-item--active' : ''}`}
+                  onClick={() => {
+                    setUser(u);
+                    setIsDropdownOpen(false);
+                  }}
                 >
                   <div className="topbar__dropdown-avatar">{u.initials}</div>
                   <div className="topbar__dropdown-user-info">
@@ -111,7 +141,12 @@ export function Topbar() {
                     <span className="topbar__dropdown-role">{u.roleLabel}</span>
                   </div>
                   {u.id === user.id && (
-                    <Check size={13} strokeWidth={2} className="topbar__dropdown-check" aria-hidden="true" />
+                    <Check
+                      size={13}
+                      strokeWidth={2}
+                      className="topbar__dropdown-check"
+                      aria-hidden="true"
+                    />
                   )}
                 </button>
               ))}
@@ -125,7 +160,9 @@ export function Topbar() {
                 onClick={() => setIsDropdownOpen(false)}
               >
                 <UserCircle size={14} strokeWidth={1.5} aria-hidden="true" />
-                <span className="topbar__dropdown-logout-label">{navMsgs.myProfile}</span>
+                <span className="topbar__dropdown-logout-label">
+                  {navMsgs.myProfile}
+                </span>
               </Link>
 
               <div className="topbar__dropdown-divider" role="separator" />
@@ -141,7 +178,9 @@ export function Topbar() {
                 }}
               >
                 <LogOut size={14} strokeWidth={1.5} aria-hidden="true" />
-                <span className="topbar__dropdown-logout-label">{navMsgs.closeSession}</span>
+                <span className="topbar__dropdown-logout-label">
+                  {navMsgs.closeSession}
+                </span>
               </button>
             </div>
           )}

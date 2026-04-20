@@ -1,44 +1,35 @@
 export const projectMessages = {
   home: {
-    welcome: 'Bienvenido a Sphere',
-    newProject: 'Crear nuevo proyecto',
+    newProject: 'Nuevo proyecto',
     searchPlaceholder: 'Buscar proyectos...',
-    sortBy: 'Ordenar por',
     metrics: {
-      activeBanners: 'Banners activos',
-      approved: 'Aprobados',
-      inCorrection: 'En corrección',
-      sentToClient: 'Enviados a cliente'
+      totalProjects: 'Total proyectos',
+      totalImages: 'Imágenes generadas',
+      totalSkus: 'SKUs registrados',
+      imagesThisWeek: 'Imágenes esta semana'
     },
     filters: {
       sortLabel: 'Ordenar',
       alphabetical: 'Nombre A → Z',
       recent: 'Más reciente',
       oldest: 'Más antiguo',
-      created: 'Fecha de creación',
+      created: 'Fecha de creación'
     },
     brandFilter: 'Marcas',
     clearBrands: 'Limpiar',
-    projectsSection: 'Proyectos',
-    noProjects: 'Aún no hay proyectos',
     noProjectsInGroup: 'Ningún proyecto coincide con este filtro',
-    statsTitle: 'Estadísticas',
-    statsSubtitle: 'Métricas activas del flujo de producción',
+    statsTitle: 'Resumen',
+    statsSubtitle: 'Métricas generales de la plataforma',
     projectsTitle: 'Proyectos',
-    projectsSubtitle: 'Gestiona y valida las piezas digitales del equipo',
+    projectsSubtitle: 'Genera y gestiona imágenes de producto para Postobón',
     viewGrid: 'Vista cuadrícula',
     viewList: 'Vista lista',
-    cardTags: {
-      done: 'Listo',
-      inProgress: 'En progreso',
-      pending: 'Pendiente',
-    },
     listHeaders: {
       name: 'Nombre',
-      status: 'Estado',
-      designer: 'Diseñador',
-      lastModified: 'Última modificación',
-    },
+      brand: 'Marca',
+      images: 'Imágenes',
+      lastModified: 'Última modificación'
+    }
   },
   modal: {
     title: 'Nuevo proyecto',
@@ -55,11 +46,13 @@ export const projectMessages = {
     }
   },
   card: {
-    pieces: (n: number) => `${n} ${n === 1 ? 'pieza' : 'piezas'}`,
-    version: (n: number) => `V${n}`,
-    daysLeft: (n: number) => `${n}d restantes`,
-    expiringSoon: 'Vence pronto',
-    date: (d: Date) => d.toLocaleDateString('es-MX', { month: '2-digit', day: '2-digit', year: 'numeric' })
+    images: (n: number) => `${n} ${n === 1 ? 'imagen' : 'imágenes'}`,
+    date: (d: Date) =>
+      d.toLocaleDateString('es-CO', {
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric'
+      })
   },
   table: {
     columns: {
@@ -74,14 +67,37 @@ export const projectMessages = {
   },
   status: {
     uploaded: 'Subido',
-    'qc_pending': 'QC Pendiente',
-    'qc_approved': 'QC Aprobado',
-    'qc_rejected': 'QC Rechazado',
-    'client_review': 'Revisión cliente',
-    'client_approved': 'Aprobado por cliente',
+    qc_pending: 'QC Pendiente',
+    qc_approved: 'QC Aprobado',
+    qc_rejected: 'QC Rechazado',
+    client_review: 'Revisión cliente',
+    client_approved: 'Aprobado por cliente',
     delivered: 'Entregado',
-    'needs_fix': 'Necesita corrección'
+    needs_fix: 'Necesita corrección'
   },
+  psDetail: {
+    backButton: 'Proyectos',
+    generateMore: 'Generar más',
+    metaSeparator: '·',
+    sessionDivider: (dateLabel: string, count: number) =>
+      `${dateLabel} · ${count} ${count === 1 ? 'imagen' : 'imágenes'}`,
+    regenerate: 'Regenerar',
+    download: 'Descargar',
+    imageAlt: (n: number) => `Imagen generada ${n}`,
+    modal: {
+      title: 'Detalle de imagen',
+      close: 'Cerrar',
+      params: {
+        skus: 'SKUs',
+        type: 'Tipo',
+        angle: 'Ángulo',
+        aspect: 'Aspecto',
+        quality: 'Calidad',
+        prompt: 'Prompt'
+      }
+    }
+  },
+
   detail: {
     breadcrumb: 'Proyectos',
     backButton: 'Proyectos',
@@ -108,9 +124,9 @@ export const projectMessages = {
         noResult: 'Sube una versión para ver el resultado',
         scoreLabel: (score: number) => `${score}`,
         scoreMax: '/ 100',
-        passCount: (_: number) => 'aprobados',
-        failCount: (_: number) => 'fallidos',
-        warningCount: (_: number) => 'advertencias',
+        passCount: () => 'aprobados',
+        failCount: () => 'fallidos',
+        warningCount: () => 'advertencias',
         groups: {
           weight: 'Peso del archivo',
           dimensions: 'Dimensiones',
@@ -137,7 +153,7 @@ export const projectMessages = {
         reload: 'Recargar',
         selectedCount: (n: number) => `${n} ${n === 1 ? 'pieza' : 'piezas'}`,
         fullscreen: 'Pantalla completa',
-        exitFullscreen: 'Salir',
+        exitFullscreen: 'Salir'
       },
       dimensions: (w: number, h: number) => `${w} × ${h} px`,
       animated: 'Animado',
@@ -157,7 +173,7 @@ export const projectMessages = {
       folderApproved: 'Aprobado',
       folderRejected: 'Rechazado',
       hide: 'Ocultar carpetas',
-      show: 'Mostrar carpetas',
+      show: 'Mostrar carpetas'
     },
     qcActions: {
       approve: 'Aprobar',
@@ -170,8 +186,9 @@ export const projectMessages = {
         placeholder: 'Describe las correcciones necesarias...',
         confirm: 'Confirmar rechazo',
         cancel: 'Cancelar',
-        rejecting: (n: number) => `${n} ${n === 1 ? 'pieza' : 'piezas'} para rechazar`,
-      },
+        rejecting: (n: number) =>
+          `${n} ${n === 1 ? 'pieza' : 'piezas'} para rechazar`
+      }
     },
     versionStatus: {
       validating: 'Validando',
@@ -183,7 +200,8 @@ export const projectMessages = {
       approved: 'Aprobado',
       warnings: 'Con advertencias',
       rejected: 'Rechazado',
-      ariaLabel: (score: number, label: string) => `Puntuación QC: ${score} de 100. ${label}`,
-    },
+      ariaLabel: (score: number, label: string) =>
+        `Puntuación QC: ${score} de 100. ${label}`
+    }
   }
 } as const;

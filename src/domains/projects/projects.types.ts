@@ -12,21 +12,22 @@ export interface Project {
   id: string;
   name: string;
   brand: string;
-  client: string;
-  designer: string;
-  status: BannerStatus;
-  totalPieces: number;
-  latestVersion: number;
+  totalImages: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface ClientGroup {
-  client: string;
+export interface BrandGroup {
+  brand: string;
   projects: Project[];
 }
 
-export type FilterType = 'none' | 'alphabetical' | 'recent' | 'oldest' | 'created';
+export type FilterType =
+  | 'none'
+  | 'alphabetical'
+  | 'recent'
+  | 'oldest'
+  | 'created';
 
 export type FolderStatus = 'approved' | 'rejected' | 'pending' | 'in_review';
 
@@ -54,7 +55,7 @@ export type BannerSize =
 export interface BannerPiece {
   id: string;
   name: string;
-  size: BannerSize;
+  size: BannerSize | string;
   fileName: string;
   hasAnimation: boolean;
   animationDurationMs?: number;
@@ -102,9 +103,51 @@ export interface ProjectVersion {
   zipFileName: string;
 }
 
-/* ─── Project Detail ────────────────────────────────────────── */
+/* ─── PS Project Detail (Perfect Store image generation) ──────── */
 
-export interface ProjectDetail extends Project {
+export interface PsGeneratedImage {
+  id: string;
+  accentColor: string;
+}
+
+export interface SessionParams {
+  skus: string[];
+  imageType: string;
+  angle: string;
+  aspectRatio: string;
+  quality: string;
+  freeText?: string;
+}
+
+export interface GenerationSession {
+  id: string;
+  generatedAt: Date;
+  images: PsGeneratedImage[];
+  params: SessionParams;
+}
+
+export interface PsProjectDetail {
+  id: string;
+  name: string;
+  brand: string;
+  skus: string[];
+  createdAt: Date;
+  sessions: GenerationSession[];
+}
+
+/* ─── Project Detail (self-contained — migrated separately) ─── */
+
+export interface ProjectDetail {
+  id: string;
+  name: string;
+  brand: string;
+  client: string;
+  designer: string;
+  status: BannerStatus;
+  totalPieces: number;
+  latestVersion: number;
+  createdAt: Date;
+  updatedAt: Date;
   versions: ProjectVersion[];
   stageUrl?: string;
 }

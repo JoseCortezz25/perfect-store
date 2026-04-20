@@ -2,10 +2,9 @@ import type { UserRole } from '@/domains/auth/stores/user.store';
 import { adminMessages } from '../../messages';
 
 const ROLE_CLS: Record<UserRole, string> = {
-  admin:     'role-badge--admin',
-  diseñador: 'role-badge--disenador',
-  qc:        'role-badge--qc',
-  cliente:   'role-badge--cliente',
+  admin: 'role-badge--admin',
+  agencia: 'role-badge--agencia',
+  cliente: 'role-badge--cliente'
 };
 
 interface RoleBadgeProps {

@@ -6,20 +6,18 @@ import { adminMessages } from '../../messages';
 import type { UserRole } from '@/domains/auth/stores/user.store';
 
 const ROLE_CLS: Record<UserRole, string> = {
-  admin:     'role-chip--admin',
-  diseñador: 'role-chip--disenador',
-  qc:        'role-chip--qc',
-  cliente:   'role-chip--cliente',
+  admin: 'role-chip--admin',
+  agencia: 'role-chip--agencia',
+  cliente: 'role-chip--cliente'
 };
 
 const DOT_CLS: Record<UserRole, string> = {
-  admin:     'role-chip__option-dot--admin',
-  diseñador: 'role-chip__option-dot--disenador',
-  qc:        'role-chip__option-dot--qc',
-  cliente:   'role-chip__option-dot--cliente',
+  admin: 'role-chip__option-dot--admin',
+  agencia: 'role-chip__option-dot--agencia',
+  cliente: 'role-chip__option-dot--cliente'
 };
 
-const ALL_ROLES: UserRole[] = ['admin', 'diseñador', 'qc', 'cliente'];
+const ALL_ROLES: UserRole[] = ['admin', 'agencia', 'cliente'];
 
 interface RoleChipProps {
   role: UserRole;
@@ -61,7 +59,7 @@ export function RoleChip({ role, userId, onChangeRole }: RoleChipProps) {
         <ChevronDown
           size={12}
           strokeWidth={1.5}
-          className={`role-chip__chevron${isOpen ? ' role-chip__chevron--open' : ''}`}
+          className={`role-chip__chevron${isOpen ? 'role-chip__chevron--open' : ''}`}
           aria-hidden="true"
         />
       </button>
@@ -74,10 +72,13 @@ export function RoleChip({ role, userId, onChangeRole }: RoleChipProps) {
               type="button"
               role="option"
               aria-selected={r === role}
-              className={`role-chip__option${r === role ? ' role-chip__option--active' : ''}`}
+              className={`role-chip__option${r === role ? 'role-chip__option--active' : ''}`}
               onClick={() => handleSelect(r)}
             >
-              <span className={`role-chip__option-dot ${DOT_CLS[r]}`} aria-hidden="true" />
+              <span
+                className={`role-chip__option-dot ${DOT_CLS[r]}`}
+                aria-hidden="true"
+              />
               {adminMessages.users.roles[r]}
             </button>
           ))}

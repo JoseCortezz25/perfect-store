@@ -503,7 +503,7 @@
 .projects-grid__cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  gap: 20px;
 }
 
 /* ─── Project Card ───────────────────────────────────────────── */
@@ -694,11 +694,12 @@
   flex-shrink: 0;
 }
 
-.project-card__pieces {
+.project-card__pieces,
+.project-card__images {
   font-family: var(--font-mulish), sans-serif;
-  font-size: 11px;
-  font-weight: 300;
-  color: #545454;
+  font-size: 12px;
+  font-weight: 400;
+  color: #6E6E6E;
 }
 
 .project-card__sep {
@@ -744,7 +745,7 @@
 .projects-list__group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 /* List view client name — plain text, no separator line */
@@ -816,7 +817,8 @@
   gap: 8px;
 }
 
-.project-list-row__brand {
+.project-list-row__brand,
+.project-list-row__images {
   font-family: var(--font-mulish), sans-serif;
   font-size: 12px;
   font-weight: 400;
