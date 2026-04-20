@@ -7,7 +7,9 @@ import type { PreviewBackground } from '../molecules/preview-toolbar';
 
 const msgs = projectMessages.detail.preview;
 
-function parseBannerSize(size: string): { width: number; height: number } | null {
+function parseBannerSize(
+  size: string
+): { width: number; height: number } | null {
   const parts = size.split('x');
   if (parts.length !== 2) return null;
   const width = parseInt(parts[0], 10);
@@ -16,7 +18,10 @@ function parseBannerSize(size: string): { width: number; height: number } | null
   return { width, height };
 }
 
-function buildMockHtml(piece: BannerPiece, dims: { width: number; height: number }): string {
+function buildMockHtml(
+  piece: BannerPiece,
+  dims: { width: number; height: number }
+): string {
   const accent = piece.accentColor ?? '#1e3a8a';
   const animStyle = piece.hasAnimation
     ? `@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} } .inner{animation:pulse ${(piece.animationDurationMs ?? 8000) / 1000}s ease-in-out infinite}`
@@ -40,7 +45,12 @@ interface PreviewCanvasProps {
   trueSize?: boolean;
 }
 
-export function PreviewCanvas({ piece, background, reloadKey, trueSize }: PreviewCanvasProps) {
+export function PreviewCanvas({
+  piece,
+  background,
+  reloadKey,
+  trueSize
+}: PreviewCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [computedScale, setComputedScale] = useState(1);
 
@@ -62,13 +72,14 @@ export function PreviewCanvas({ piece, background, reloadKey, trueSize }: Previe
       setComputedScale(Math.min(scaleX, scaleY, 1));
     };
 
-    const observer = new ResizeObserver((entries) => {
+    const observer = new ResizeObserver(entries => {
       const entry = entries[0];
       if (entry) compute(entry);
     });
 
     observer.observe(containerRef.current);
     return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dims?.width, dims?.height]);
 
   if (!piece || !dims) {
@@ -77,10 +88,42 @@ export function PreviewCanvas({ piece, background, reloadKey, trueSize }: Previe
         <div className="preview-canvas__empty">
           <div className="preview-canvas__empty-icon" aria-hidden="true">
             <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <rect x="4" y="8" width="32" height="24" rx="3" stroke="currentColor" strokeWidth="1.5" />
-              <rect x="12" y="14" width="6" height="6" rx="1" stroke="currentColor" strokeWidth="1.2" />
-              <line x1="12" y1="24" x2="28" y2="24" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-              <circle cx="30" cy="10" r="4" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="1.2" />
+              <rect
+                x="4"
+                y="8"
+                width="32"
+                height="24"
+                rx="3"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+              <rect
+                x="12"
+                y="14"
+                width="6"
+                height="6"
+                rx="1"
+                stroke="currentColor"
+                strokeWidth="1.2"
+              />
+              <line
+                x1="12"
+                y1="24"
+                x2="28"
+                y2="24"
+                stroke="currentColor"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+              />
+              <circle
+                cx="30"
+                cy="10"
+                r="4"
+                fill="currentColor"
+                fillOpacity="0.15"
+                stroke="currentColor"
+                strokeWidth="1.2"
+              />
             </svg>
           </div>
           <p className="preview-canvas__empty-text">{msgs.noSelection}</p>
@@ -95,12 +138,12 @@ export function PreviewCanvas({ piece, background, reloadKey, trueSize }: Previe
   return (
     <div
       ref={containerRef}
-      className={`preview-canvas preview-canvas--${background}${trueSize ? ' preview-canvas--true-size' : ''}`}
+      className={`preview-canvas preview-canvas--${background}${trueSize ? 'preview-canvas--true-size' : ''}`}
       style={
         {
           '--preview-scale': scale,
           '--banner-w': dims.width,
-          '--banner-h': dims.height,
+          '--banner-h': dims.height
         } as React.CSSProperties
       }
     >
@@ -117,7 +160,10 @@ export function PreviewCanvas({ piece, background, reloadKey, trueSize }: Previe
               sandbox="allow-scripts"
               scrolling="no"
             />
-            <div className="preview-canvas__dimensions" aria-label="Dimensiones">
+            <div
+              className="preview-canvas__dimensions"
+              aria-label="Dimensiones"
+            >
               {msgs.dimensions(dims.width, dims.height)}
             </div>
           </div>

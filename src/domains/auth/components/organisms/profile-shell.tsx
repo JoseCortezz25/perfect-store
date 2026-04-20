@@ -31,14 +31,14 @@ const STRENGTH_FILLED: Record<StrengthLevel, number> = {
   weak: 1,
   fair: 2,
   good: 3,
-  strong: 4,
+  strong: 4
 };
 
 const STRENGTH_LABEL: Record<Exclude<StrengthLevel, 'empty'>, string> = {
   weak: msgs.security.strengthLabels.weak,
   fair: msgs.security.strengthLabels.fair,
   good: msgs.security.strengthLabels.good,
-  strong: msgs.security.strengthLabels.strong,
+  strong: msgs.security.strengthLabels.strong
 };
 
 // ─── Password field ──────────────────────────────────────────
@@ -60,7 +60,7 @@ function PasswordField({
   value,
   onChange,
   error,
-  showStrength = false,
+  showStrength = false
 }: PasswordFieldProps) {
   const [isVisible, setIsVisible] = useState(false);
   const strength = showStrength ? computeStrength(value) : 'empty';
@@ -78,15 +78,15 @@ function PasswordField({
           type={isVisible ? 'text' : 'password'}
           placeholder={placeholder}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={e => onChange(e.target.value)}
           autoComplete="off"
-          className={`profile-security__input${error ? ' profile-security__input--error' : ''}`}
+          className={`profile-security__input${error ? 'profile-security__input--error' : ''}`}
         />
         <button
           type="button"
           className="profile-security__eye-btn"
           aria-label={isVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-          onClick={() => setIsVisible((v) => !v)}
+          onClick={() => setIsVisible(v => !v)}
         >
           {isVisible ? (
             <EyeOff size={16} strokeWidth={1.5} aria-hidden="true" />
@@ -99,14 +99,16 @@ function PasswordField({
       {showStrength && strength !== 'empty' && (
         <div className="profile-strength" aria-live="polite">
           <div className="profile-strength__segments" aria-hidden="true">
-            {[0, 1, 2, 3].map((i) => (
+            {[0, 1, 2, 3].map(i => (
               <div
                 key={i}
                 className={`profile-strength__segment${i < filled ? ` profile-strength__segment--${strength}` : ''}`}
               />
             ))}
           </div>
-          <span className={`profile-strength__label profile-strength__label--${strength}`}>
+          <span
+            className={`profile-strength__label profile-strength__label--${strength}`}
+          >
             {STRENGTH_LABEL[strength]}
           </span>
         </div>
@@ -185,7 +187,7 @@ export function ProfileShell() {
     setIsSubmitting(true);
 
     // Simulate async password update (replace with real Server Action call)
-    await new Promise<void>((resolve) => setTimeout(resolve, 800));
+    await new Promise<void>(resolve => setTimeout(resolve, 800));
 
     setIsSubmitting(false);
     setIsSuccess(true);
@@ -213,7 +215,12 @@ export function ProfileShell() {
       <div className="profile-card">
         <div className="profile-card__heading">
           <div className="admin-section__icon-container">
-            <User size={18} strokeWidth={1.5} className="admin-section__icon" aria-hidden="true" />
+            <User
+              size={18}
+              strokeWidth={1.5}
+              className="admin-section__icon"
+              aria-hidden="true"
+            />
           </div>
           <h2 className="admin-section__title">{msgs.identity.sectionTitle}</h2>
         </div>
@@ -224,7 +231,9 @@ export function ProfileShell() {
           </div>
           <div className="profile-identity__info">
             <p className="profile-identity__name">{user.name}</p>
-            <p className="profile-identity__email">{user.name.toLowerCase().replace(' ', '.')}@sphere.app</p>
+            <p className="profile-identity__email">
+              {user.name.toLowerCase().replace(' ', '.')}@sphere.app
+            </p>
           </div>
           <RoleBadge role={user.role} />
         </div>
@@ -234,12 +243,21 @@ export function ProfileShell() {
       <div className="profile-card">
         <div className="profile-card__heading">
           <div className="admin-section__icon-container">
-            <Lock size={18} strokeWidth={1.5} className="admin-section__icon" aria-hidden="true" />
+            <Lock
+              size={18}
+              strokeWidth={1.5}
+              className="admin-section__icon"
+              aria-hidden="true"
+            />
           </div>
           <h2 className="admin-section__title">{msgs.security.sectionTitle}</h2>
         </div>
 
-        <form className="profile-security__form" onSubmit={handleSubmit} noValidate>
+        <form
+          className="profile-security__form"
+          onSubmit={handleSubmit}
+          noValidate
+        >
           <div className="profile-security__fields">
             <PasswordField
               id="profile-current-password"
@@ -295,7 +313,9 @@ export function ProfileShell() {
                 className="btn btn--primary"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? msgs.security.savingButton : msgs.security.saveButton}
+                {isSubmitting
+                  ? msgs.security.savingButton
+                  : msgs.security.saveButton}
               </button>
             </div>
           )}

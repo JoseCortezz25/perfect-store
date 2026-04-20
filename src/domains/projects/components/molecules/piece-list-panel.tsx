@@ -1,7 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Clapperboard, Image as ImageIcon, Check, CheckCircle, XCircle } from 'lucide-react';
+import {
+  Clapperboard,
+  Image as ImageIcon,
+  Check,
+  CheckCircle,
+  XCircle
+} from 'lucide-react';
 import { projectMessages } from '../../messages';
 import type { BannerPiece } from '../../projects.types';
 
@@ -34,9 +40,11 @@ export function PieceListPanel({
   onClearAll,
   pieceDecisions,
   onApprove,
-  onReject,
+  onReject
 }: PieceListPanelProps) {
-  const [pendingRejectIds, setPendingRejectIds] = useState<string[] | null>(null);
+  const [pendingRejectIds, setPendingRejectIds] = useState<string[] | null>(
+    null
+  );
   const [rejectComment, setRejectComment] = useState('');
 
   const checkedCount = checkedIds?.size ?? 0;
@@ -77,11 +85,15 @@ export function PieceListPanel({
             role="checkbox"
             aria-checked={allChecked ? true : someChecked ? 'mixed' : false}
             aria-label={qcMsgs.selectAll}
-            className={`piece-item__checkbox${allChecked ? ' piece-item__checkbox--checked' : someChecked ? ' piece-item__checkbox--partial' : ''}`}
-            onClick={() => allChecked ? onClearAll?.() : onSelectAll?.()}
+            className={`piece-item__checkbox${allChecked ? 'piece-item__checkbox--checked' : someChecked ? 'piece-item__checkbox--partial' : ''}`}
+            onClick={() => (allChecked ? onClearAll?.() : onSelectAll?.())}
           >
-            {allChecked && <Check size={9} strokeWidth={3} aria-hidden="true" />}
-            {someChecked && <span className="piece-item__checkbox-dash" aria-hidden="true" />}
+            {allChecked && (
+              <Check size={9} strokeWidth={3} aria-hidden="true" />
+            )}
+            {someChecked && (
+              <span className="piece-item__checkbox-dash" aria-hidden="true" />
+            )}
           </span>
         )}
         {msgs.piecesTitle}
@@ -96,7 +108,9 @@ export function PieceListPanel({
           </span>
           <p className="piece-list__reject-label">
             {rejectMsgs.label}{' '}
-            <span className="piece-list__reject-optional">{rejectMsgs.optional}</span>
+            <span className="piece-list__reject-optional">
+              {rejectMsgs.optional}
+            </span>
           </p>
           <textarea
             className="piece-list__reject-textarea"
@@ -127,7 +141,9 @@ export function PieceListPanel({
       ) : showCheckboxes && checkedCount > 0 ? (
         /* Bulk action bar */
         <div className="piece-list__action-bar">
-          <span className="piece-list__action-count">{qcMsgs.selected(checkedCount)}</span>
+          <span className="piece-list__action-count">
+            {qcMsgs.selected(checkedCount)}
+          </span>
           <div className="piece-list__action-btns">
             <button
               type="button"
@@ -158,18 +174,28 @@ export function PieceListPanel({
               key={piece.id}
               role="button"
               tabIndex={0}
-              className={`piece-item${selectedId === piece.id ? ' piece-item--selected' : ''}`}
+              className={`piece-item${selectedId === piece.id ? 'piece-item--selected' : ''}`}
               onClick={() => onSelect(piece.id)}
-              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(piece.id); } }}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onSelect(piece.id);
+                }
+              }}
             >
               {showCheckboxes && (
                 <span
                   role="checkbox"
                   aria-checked={isChecked}
-                  className={`piece-item__checkbox${isChecked ? ' piece-item__checkbox--checked' : ''}`}
-                  onClick={e => { e.stopPropagation(); onToggleCheck?.(piece.id); }}
+                  className={`piece-item__checkbox${isChecked ? 'piece-item__checkbox--checked' : ''}`}
+                  onClick={e => {
+                    e.stopPropagation();
+                    onToggleCheck?.(piece.id);
+                  }}
                 >
-                  {isChecked && <Check size={9} strokeWidth={3} aria-hidden="true" />}
+                  {isChecked && (
+                    <Check size={9} strokeWidth={3} aria-hidden="true" />
+                  )}
                 </span>
               )}
               <div
@@ -181,11 +207,28 @@ export function PieceListPanel({
                 <p className="piece-item__name">{piece.name}</p>
                 <div className="piece-item__meta">
                   <span className="piece-item__size">{piece.size}</span>
-                  <span className={`piece-item__anim${piece.hasAnimation ? ' piece-item__anim--yes' : ''}`}>
-                    {piece.hasAnimation
-                      ? <><Clapperboard size={10} strokeWidth={1.5} aria-hidden="true" />{msgs.animated}</>
-                      : <><ImageIcon size={10} strokeWidth={1.5} aria-hidden="true" />{msgs.static}</>
-                    }
+                  <span
+                    className={`piece-item__anim${piece.hasAnimation ? 'piece-item__anim--yes' : ''}`}
+                  >
+                    {piece.hasAnimation ? (
+                      <>
+                        <Clapperboard
+                          size={10}
+                          strokeWidth={1.5}
+                          aria-hidden="true"
+                        />
+                        {msgs.animated}
+                      </>
+                    ) : (
+                      <>
+                        <ImageIcon
+                          size={10}
+                          strokeWidth={1.5}
+                          aria-hidden="true"
+                        />
+                        {msgs.static}
+                      </>
+                    )}
                   </span>
                 </div>
               </div>
@@ -194,12 +237,15 @@ export function PieceListPanel({
               {decision ? (
                 <span
                   className={`piece-item__decision piece-item__decision--${decision}`}
-                  aria-label={decision === 'approved' ? 'Aprobada' : 'Rechazada'}
-                >
-                  {decision === 'approved'
-                    ? <CheckCircle size={14} strokeWidth={2} aria-hidden="true" />
-                    : <XCircle size={14} strokeWidth={2} aria-hidden="true" />
+                  aria-label={
+                    decision === 'approved' ? 'Aprobada' : 'Rechazada'
                   }
+                >
+                  {decision === 'approved' ? (
+                    <CheckCircle size={14} strokeWidth={2} aria-hidden="true" />
+                  ) : (
+                    <XCircle size={14} strokeWidth={2} aria-hidden="true" />
+                  )}
                 </span>
               ) : showCheckboxes ? (
                 /* Inline approve / reject — visible on hover, hidden once decided */
@@ -212,7 +258,10 @@ export function PieceListPanel({
                     className="piece-item__qc-btn piece-item__qc-btn--approve"
                     title={qcMsgs.approve}
                     aria-label={qcMsgs.approve}
-                    onClick={e => { e.stopPropagation(); onApprove?.([piece.id]); }}
+                    onClick={e => {
+                      e.stopPropagation();
+                      onApprove?.([piece.id]);
+                    }}
                   >
                     <CheckCircle size={13} strokeWidth={2} aria-hidden="true" />
                   </button>
@@ -221,7 +270,10 @@ export function PieceListPanel({
                     className="piece-item__qc-btn piece-item__qc-btn--reject"
                     title={qcMsgs.reject}
                     aria-label={qcMsgs.reject}
-                    onClick={e => { e.stopPropagation(); handleRejectClick([piece.id]); }}
+                    onClick={e => {
+                      e.stopPropagation();
+                      handleRejectClick([piece.id]);
+                    }}
                   >
                     <XCircle size={13} strokeWidth={2} aria-hidden="true" />
                   </button>

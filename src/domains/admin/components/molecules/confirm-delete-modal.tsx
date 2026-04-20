@@ -22,7 +22,7 @@ export function ConfirmDeleteModal({
   closeLabel = adminMessages.nav.close,
   variant = 'destructive',
   onConfirm,
-  onCancel,
+  onCancel
 }: ConfirmDeleteModalProps) {
   return (
     <div className="admin-modal-overlay" onClick={onCancel}>
@@ -34,8 +34,15 @@ export function ConfirmDeleteModal({
         onClick={e => e.stopPropagation()}
       >
         <div className="admin-modal__header">
-          <h2 id="confirm-modal-title" className="admin-modal__title">{title}</h2>
-          <button type="button" className="admin-modal__close" onClick={onCancel} aria-label={closeLabel}>
+          <h2 id="confirm-modal-title" className="admin-modal__title">
+            {title}
+          </h2>
+          <button
+            type="button"
+            className="admin-modal__close"
+            onClick={onCancel}
+            aria-label={closeLabel}
+          >
             <X size={14} strokeWidth={2} />
           </button>
         </div>
@@ -43,7 +50,11 @@ export function ConfirmDeleteModal({
         <p className="admin-modal__description">{description}</p>
 
         <div className="admin-modal__footer admin-modal__footer--full">
-          <button type="button" className="btn btn--secondary admin-modal__cancel admin-modal__btn-half" onClick={onCancel}>
+          <button
+            type="button"
+            className="btn btn--secondary admin-modal__cancel admin-modal__btn-half"
+            onClick={onCancel}
+          >
             {cancelLabel}
           </button>
           {variant === 'destructive' ? (

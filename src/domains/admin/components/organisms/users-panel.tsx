@@ -17,9 +17,9 @@ const AVATAR_COLOR = '#4361EF';
 type SortKey = 'name' | 'created' | 'updated';
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: 'name',    label: 'Nombre A-Z' },
+  { value: 'name', label: 'Nombre A-Z' },
   { value: 'created', label: 'Fecha creación' },
-  { value: 'updated', label: 'Última actualización' },
+  { value: 'updated', label: 'Última actualización' }
 ];
 
 export function UsersPanel() {
@@ -49,10 +49,11 @@ export function UsersPanel() {
   const filteredUsers = useMemo(() => {
     const q = search.toLowerCase();
     return users
-      .filter(u =>
-        u.name.toLowerCase().includes(q) ||
-        u.email.toLowerCase().includes(q) ||
-        u.roleLabel.toLowerCase().includes(q)
+      .filter(
+        u =>
+          u.name.toLowerCase().includes(q) ||
+          u.email.toLowerCase().includes(q) ||
+          u.roleLabel.toLowerCase().includes(q)
       )
       .sort((a, b) => {
         if (sortBy === 'name') return a.name.localeCompare(b.name);
@@ -61,7 +62,8 @@ export function UsersPanel() {
       });
   }, [users, search, sortBy]);
 
-  const activeSortLabel = SORT_OPTIONS.find(o => o.value === sortBy)?.label ?? 'Nombre A-Z';
+  const activeSortLabel =
+    SORT_OPTIONS.find(o => o.value === sortBy)?.label ?? 'Nombre A-Z';
 
   function handleInvite(data: Omit<AdminUser, 'id'>) {
     setUsers(prev => [...prev, { ...data, id: `u${Date.now()}` }]);
@@ -77,21 +79,29 @@ export function UsersPanel() {
   function handleConfirmRoleChange() {
     if (!pendingRoleChange) return;
     const { user, newRole } = pendingRoleChange;
-    setUsers(prev => prev.map(u =>
-      u.id === user.id
-        ? { ...u, role: newRole, roleLabel: adminMessages.users.roles[newRole] }
-        : u
-    ));
+    setUsers(prev =>
+      prev.map(u =>
+        u.id === user.id
+          ? {
+              ...u,
+              role: newRole,
+              roleLabel: adminMessages.users.roles[newRole]
+            }
+          : u
+      )
+    );
     setPendingRoleChange(null);
   }
 
   function handleConfirmToggle() {
     if (!togglingUser) return;
-    setUsers(prev => prev.map(u =>
-      u.id === togglingUser.id
-        ? { ...u, status: u.status === 'active' ? 'inactive' : 'active' }
-        : u
-    ));
+    setUsers(prev =>
+      prev.map(u =>
+        u.id === togglingUser.id
+          ? { ...u, status: u.status === 'active' ? 'inactive' : 'active' }
+          : u
+      )
+    );
     setTogglingUser(null);
   }
 
@@ -103,22 +113,30 @@ export function UsersPanel() {
   return (
     <>
       <section className="admin-section">
-
         {/* ── Single card: title + toolbar + column headers + rows ── */}
         <div className="admin-section__card admin-users-card">
           <div className="admin-users-top">
             <div className="admin-section__heading">
               <div className="admin-section__heading-top">
                 <div className="admin-section__icon-container">
-                <Users size={24} strokeWidth={1.5} className="admin-section__icon" aria-hidden="true" />
-              </div>
+                  <Users
+                    size={24}
+                    strokeWidth={1.5}
+                    className="admin-section__icon"
+                    aria-hidden="true"
+                  />
+                </div>
                 <h2 className="admin-section__title">{msgs.sectionTitle}</h2>
               </div>
             </div>
 
             <div className="home-toolbar">
               <div className="home-search">
-                <Search size={13} strokeWidth={1.5} className="home-search__icon" />
+                <Search
+                  size={13}
+                  strokeWidth={1.5}
+                  className="home-search__icon"
+                />
                 <input
                   type="text"
                   className="home-search__input"
@@ -136,7 +154,12 @@ export function UsersPanel() {
                   onClick={() => setIsSortOpen(o => !o)}
                 >
                   {activeSortLabel}
-                  <ChevronDown size={13} strokeWidth={1.5} className="home-sort__chevron" data-open={isSortOpen} />
+                  <ChevronDown
+                    size={13}
+                    strokeWidth={1.5}
+                    className="home-sort__chevron"
+                    data-open={isSortOpen}
+                  />
                 </button>
                 {isSortOpen && (
                   <div className="home-sort__dropdown">
@@ -146,7 +169,10 @@ export function UsersPanel() {
                         type="button"
                         className="home-sort__option"
                         data-active={sortBy === option.value}
-                        onClick={() => { setSortBy(option.value); setIsSortOpen(false); }}
+                        onClick={() => {
+                          setSortBy(option.value);
+                          setIsSortOpen(false);
+                        }}
                       >
                         {option.label}
                       </button>
@@ -167,11 +193,21 @@ export function UsersPanel() {
           </div>
           {/* Column headers */}
           <div className="admin-table-header admin-users-cols">
-            <span className="admin-table-header__cell">{msgs.tableHeaders.user}</span>
-            <span className="admin-table-header__cell">{msgs.tableHeaders.email}</span>
-            <span className="admin-table-header__cell">{msgs.tableHeaders.role}</span>
-            <span className="admin-table-header__cell admin-table-header__cell--center">{msgs.tableHeaders.activate}</span>
-            <span className="admin-table-header__cell">{msgs.tableHeaders.delete}</span>
+            <span className="admin-table-header__cell">
+              {msgs.tableHeaders.user}
+            </span>
+            <span className="admin-table-header__cell">
+              {msgs.tableHeaders.email}
+            </span>
+            <span className="admin-table-header__cell">
+              {msgs.tableHeaders.role}
+            </span>
+            <span className="admin-table-header__cell admin-table-header__cell--center">
+              {msgs.tableHeaders.activate}
+            </span>
+            <span className="admin-table-header__cell">
+              {msgs.tableHeaders.delete}
+            </span>
           </div>
 
           {/* Rows */}
@@ -194,80 +230,96 @@ export function UsersPanel() {
             </div>
           ) : filteredUsers.length === 0 ? (
             <div className="admin-table-empty">{msgs.emptySearch(search)}</div>
-          ) : filteredUsers.map((user, idx) => (
-            <div
-              key={user.id}
-              className={`admin-user-row admin-users-cols${user.status === 'inactive' ? ' admin-user-row--inactive' : ''}${idx < filteredUsers.length - 1 ? ' admin-user-row--bordered' : ''}`}
-            >
-              {/* Usuario */}
-              <div className="admin-user-row__identity">
-                <div
-                  className="admin-user-avatar"
-                  style={{ backgroundColor: user.status === 'inactive' ? '#2A2A2A' : AVATAR_COLOR }}
-                  aria-hidden="true"
-                >
-                  {user.initials}
+          ) : (
+            filteredUsers.map((user, idx) => (
+              <div
+                key={user.id}
+                className={`admin-user-row admin-users-cols${user.status === 'inactive' ? 'admin-user-row--inactive' : ''}${idx < filteredUsers.length - 1 ? 'admin-user-row--bordered' : ''}`}
+              >
+                {/* Usuario */}
+                <div className="admin-user-row__identity">
+                  <div
+                    className="admin-user-avatar"
+                    style={{
+                      backgroundColor:
+                        user.status === 'inactive' ? '#2A2A2A' : AVATAR_COLOR
+                    }}
+                    aria-hidden="true"
+                  >
+                    {user.initials}
+                  </div>
+                  <span className="admin-user-row__name">{user.name}</span>
                 </div>
-                <span className="admin-user-row__name">{user.name}</span>
-              </div>
 
-              {/* Email */}
-              <span className="admin-user-row__email-col">{user.email}</span>
+                {/* Email */}
+                <span className="admin-user-row__email-col">{user.email}</span>
 
-              {/* Rol */}
-              <div className="admin-user-row__role">
-                <RoleChip
-                  role={user.role}
-                  userId={user.id}
-                  onChangeRole={handleEditRole}
-                />
-              </div>
+                {/* Rol */}
+                <div className="admin-user-row__role">
+                  <RoleChip
+                    role={user.role}
+                    userId={user.id}
+                    onChangeRole={handleEditRole}
+                  />
+                </div>
 
-              {/* Toggle */}
-              <div className="admin-user-row__toggle-cell">
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={user.status === 'active'}
-                  className={`admin-toggle${user.status === 'active' ? ' admin-toggle--active' : ''}`}
-                  onClick={() => setTogglingUser(user)}
-                  aria-label={user.status === 'active' ? msgs.actions.deactivate : msgs.actions.reactivate}
-                >
-                  <span className="admin-toggle__track" aria-hidden="true" />
-                  <span className="admin-toggle__thumb" aria-hidden="true" />
-                </button>
-              </div>
+                {/* Toggle */}
+                <div className="admin-user-row__toggle-cell">
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={user.status === 'active'}
+                    className={`admin-toggle${user.status === 'active' ? 'admin-toggle--active' : ''}`}
+                    onClick={() => setTogglingUser(user)}
+                    aria-label={
+                      user.status === 'active'
+                        ? msgs.actions.deactivate
+                        : msgs.actions.reactivate
+                    }
+                  >
+                    <span className="admin-toggle__track" aria-hidden="true" />
+                    <span className="admin-toggle__thumb" aria-hidden="true" />
+                  </button>
+                </div>
 
-              {/* Acciones */}
-              <div className="admin-user-row__actions">
-                <button
-                  type="button"
-                  className="admin-action-btn admin-action-btn--delete"
-                  title={msgs.actions.delete}
-                  onClick={() => setDeletingUser(user)}
-                  aria-label={`${msgs.actions.delete}: ${user.name}`}
-                >
-                  <Trash2 size={13} strokeWidth={1.5} />
-                </button>
+                {/* Acciones */}
+                <div className="admin-user-row__actions">
+                  <button
+                    type="button"
+                    className="admin-action-btn admin-action-btn--delete"
+                    title={msgs.actions.delete}
+                    onClick={() => setDeletingUser(user)}
+                    aria-label={`${msgs.actions.delete}: ${user.name}`}
+                  >
+                    <Trash2 size={13} strokeWidth={1.5} />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </section>
 
       {isInviteOpen && (
-        <InviteUserModal onInvite={handleInvite} onCancel={() => setIsInviteOpen(false)} />
+        <InviteUserModal
+          onInvite={handleInvite}
+          onCancel={() => setIsInviteOpen(false)}
+        />
       )}
 
       {togglingUser && (
         <ConfirmDeleteModal
           variant="confirm"
-          title={togglingUser.status === 'active'
-            ? msgs.toggleStatus.deactivateTitle
-            : msgs.toggleStatus.reactivateTitle}
-          description={togglingUser.status === 'active'
-            ? msgs.toggleStatus.deactivateDescription(togglingUser.name)
-            : msgs.toggleStatus.reactivateDescription(togglingUser.name)}
+          title={
+            togglingUser.status === 'active'
+              ? msgs.toggleStatus.deactivateTitle
+              : msgs.toggleStatus.reactivateTitle
+          }
+          description={
+            togglingUser.status === 'active'
+              ? msgs.toggleStatus.deactivateDescription(togglingUser.name)
+              : msgs.toggleStatus.reactivateDescription(togglingUser.name)
+          }
           confirmLabel={msgs.toggleStatus.confirm}
           cancelLabel={msgs.toggleStatus.cancel}
           onConfirm={handleConfirmToggle}
@@ -293,7 +345,7 @@ export function UsersPanel() {
           description={msgs.editRole.confirmDescription(
             pendingRoleChange.user.name,
             msgs.roles[pendingRoleChange.user.role],
-            msgs.roles[pendingRoleChange.newRole],
+            msgs.roles[pendingRoleChange.newRole]
           )}
           confirmLabel={msgs.editRole.confirm}
           cancelLabel={msgs.editRole.cancel}

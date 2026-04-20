@@ -37,7 +37,8 @@ const eslintConfig = [
             'qc_rejected',
             'client_review',
             'client_approved',
-            'needs_fix'
+            'needs_fix',
+            'in_review'
           ]
         }
       ],
