@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import { adminMessages } from '../../messages';
 import type { UserRole } from '@/domains/auth/stores/user.store';
@@ -59,7 +60,9 @@ export function RoleChip({ role, userId, onChangeRole }: RoleChipProps) {
         <ChevronDown
           size={12}
           strokeWidth={1.5}
-          className={`role-chip__chevron${isOpen ? 'role-chip__chevron--open' : ''}`}
+          className={cn('role-chip__chevron', {
+            'role-chip__chevron--open': isOpen
+          })}
           aria-hidden="true"
         />
       </button>
@@ -72,7 +75,9 @@ export function RoleChip({ role, userId, onChangeRole }: RoleChipProps) {
               type="button"
               role="option"
               aria-selected={r === role}
-              className={`role-chip__option${r === role ? 'role-chip__option--active' : ''}`}
+              className={cn('role-chip__option', {
+                'role-chip__option--active': r === role
+              })}
               onClick={() => handleSelect(r)}
             >
               <span

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 import { Trash2, UserPlus, Users, Search, ChevronDown } from 'lucide-react';
 import { RoleChip } from '../atoms/role-chip';
 import { InviteUserModal } from '../molecules/invite-user-modal';
@@ -234,7 +235,10 @@ export function UsersPanel() {
             filteredUsers.map((user, idx) => (
               <div
                 key={user.id}
-                className={`admin-user-row admin-users-cols${user.status === 'inactive' ? 'admin-user-row--inactive' : ''}${idx < filteredUsers.length - 1 ? 'admin-user-row--bordered' : ''}`}
+                className={cn('admin-user-row admin-users-cols', {
+                  'admin-user-row--inactive': user.status === 'inactive',
+                  'admin-user-row--bordered': idx < filteredUsers.length - 1
+                })}
               >
                 {/* Usuario */}
                 <div className="admin-user-row__identity">
@@ -269,7 +273,9 @@ export function UsersPanel() {
                     type="button"
                     role="switch"
                     aria-checked={user.status === 'active'}
-                    className={`admin-toggle${user.status === 'active' ? 'admin-toggle--active' : ''}`}
+                    className={cn('admin-toggle', {
+                      'admin-toggle--active': user.status === 'active'
+                    })}
                     onClick={() => setTogglingUser(user)}
                     aria-label={
                       user.status === 'active'
