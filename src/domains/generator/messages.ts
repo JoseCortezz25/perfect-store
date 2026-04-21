@@ -87,6 +87,7 @@ export const generatorMessages = {
 
     context: {
       label: 'Descripción de contexto',
+      toolbarLabel: 'Contexto',
       freeText: {
         label: 'Texto libre',
         placeholder: 'Describe el contexto de la imagen...'

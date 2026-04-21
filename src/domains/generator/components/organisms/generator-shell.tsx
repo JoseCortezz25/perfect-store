@@ -4,16 +4,14 @@ import { useState, useRef, useEffect, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   ChevronDown,
-  Upload,
   X,
   Wand2,
   Check,
   Search,
-  SlidersHorizontal
+  Image as ImageIcon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { StepSlider } from '../atoms/step-slider';
-import { ChipSelector } from '../atoms/chip-selector';
 import { generatorStore } from '../../stores/generator.store';
 import { generatorMessages } from '../../messages';
 import { MOCK_SKUS, SKU_BRANDS } from '../../generator.repository';
@@ -133,9 +131,7 @@ const ILLUMINATION_REFS: RefItem[] = [
   }
 ];
 
-/* ── Default advanced values (for dot indicator on Más) ─────────── */
-const DEFAULT_ASPECT: AspectRatio = '1:1';
-const DEFAULT_QUALITY: ImageQuality = 'medio';
+/* ── Defaults ────────────────────────────────────────────────────── */
 const DEFAULT_DAY_MOMENT = 2;
 const DEFAULT_PROMINENCE = 2;
 
@@ -144,7 +140,7 @@ type ToolbarPanel =
   | 'illumination'
   | 'aspect'
   | 'quality'
-  | 'advanced'
+  | 'context'
   | null;
 
 function buildPrompt(
@@ -307,11 +303,15 @@ export function GeneratorShell() {
   const canGenerate = config.selectedSkus.length > 0 && !isGenerating;
   const selectedCount = config.selectedSkus.length;
 
-  const hasAdvancedChanges =
-    config.aspectRatio !== DEFAULT_ASPECT ||
-    config.quality !== DEFAULT_QUALITY ||
+  /* Indicator dots */
+  const hasContextChanges =
+    config.elementChips.length > 0 ||
+    config.atmosphericChips.length > 0 ||
     config.dayMoment !== DEFAULT_DAY_MOMENT ||
     config.prominence !== DEFAULT_PROMINENCE;
+
+  const contextPreview =
+    config.elementChips[0] ?? config.atmosphericChips[0] ?? null;
 
   const refItems = refPanel === 'angle' ? ANGLE_REFS : ILLUMINATION_REFS;
   const refTitle =
@@ -334,7 +334,7 @@ export function GeneratorShell() {
 
       {/* ════════════════ PANELS ════════════════ */}
       <div className="gen-panels">
-        {/* ════════════════ LEFT PANEL — SKUs only ════════════════ */}
+        {/* ════════════════ LEFT PANEL — SKUs ════════════════ */}
         <aside className="gen-left">
           <div className="gen-left__body">
             <div className="gen-left__section">
@@ -386,7 +386,6 @@ export function GeneratorShell() {
                         autoFocus
                       />
                     </div>
-
                     {visibleBrands.map(brand => {
                       const isChecked = activeBrands.includes(brand);
                       return (
@@ -420,11 +419,9 @@ export function GeneratorShell() {
                         </button>
                       );
                     })}
-
                     {visibleBrands.length === 0 && (
                       <p className="gen-drop__empty">Sin resultados</p>
                     )}
-
                     {activeBrands.length > 0 && !brandSearch && (
                       <button
                         type="button"
@@ -441,7 +438,7 @@ export function GeneratorShell() {
                 )}
               </div>
 
-              {/* SKU multi-select dropdown */}
+              {/* SKU dropdown */}
               <div className="gen-drop" ref={skuDropRef}>
                 <button
                   type="button"
@@ -490,7 +487,6 @@ export function GeneratorShell() {
                         autoFocus
                       />
                     </div>
-
                     {filteredSkus.length === 0 ? (
                       <p className="gen-drop__empty">Sin resultados</p>
                     ) : (
@@ -540,7 +536,6 @@ export function GeneratorShell() {
                         );
                       })
                     )}
-
                     {selectedCount > 0 && (
                       <button
                         type="button"
@@ -590,7 +585,7 @@ export function GeneratorShell() {
 
         {/* ════════════════ RIGHT PANEL ════════════════ */}
         <div className="gen-right">
-          {/* ── Visual reference panel (overlay) ── */}
+          {/* ── Visual reference panel overlay ── */}
           {refPanel && (
             <div className="gen-ref-panel">
               <div className="gen-ref-panel__header">
@@ -604,11 +599,9 @@ export function GeneratorShell() {
                   <X size={14} strokeWidth={2} aria-hidden="true" />
                 </button>
               </div>
-
               <p className="gen-ref-panel__hint">
                 Selecciona una referencia visual para aplicarla
               </p>
-
               <div className="gen-ref-grid">
                 {refItems.map(item => {
                   const isSelected =
@@ -646,97 +639,61 @@ export function GeneratorShell() {
             </div>
           )}
 
-          {/* ── Main content ── */}
+          {/* ── Main content: hero textarea ── */}
           <div className="gen-right__inner">
-            <h2 className="gen-right__title">{msgs.context.label}</h2>
-
-            <textarea
-              className="gen-textarea"
-              placeholder={ctxMsgs.freeText.placeholder}
-              value={config.freeText}
-              rows={3}
-              onChange={e =>
-                generatorStore.setConfig({ freeText: e.target.value })
-              }
-              aria-label={ctxMsgs.freeText.label}
-            />
-
-            {/* Reference image */}
-            <div className="gen-ref">
-              <div className="gen-ref__header">
-                <span className="gen-ref__label">
-                  {msgs.referenceImage.label}
-                </span>
-                <span className="gen-ref__hint">
-                  {msgs.referenceImage.hint}
-                </span>
-              </div>
-              <input
-                ref={fileRef}
-                type="file"
-                accept="image/*"
-                className="gen-hidden-input"
-                onChange={handleFile}
+            {/* Hero textarea with embedded image upload */}
+            <div className="gen-textarea-wrap">
+              <textarea
+                className="gen-textarea"
+                placeholder={ctxMsgs.freeText.placeholder}
+                value={config.freeText}
+                rows={8}
+                onChange={e =>
+                  generatorStore.setConfig({ freeText: e.target.value })
+                }
+                aria-label={ctxMsgs.freeText.label}
               />
-              {config.referenceImageName ? (
-                <div className="gen-file-preview">
-                  <span className="gen-file-preview__name">
-                    {config.referenceImageName}
-                  </span>
+              <div className="gen-textarea-footer">
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept="image/*"
+                  className="gen-hidden-input"
+                  onChange={handleFile}
+                />
+                {config.referenceImageName ? (
+                  <div className="gen-img-badge">
+                    <ImageIcon size={10} strokeWidth={1.5} aria-hidden="true" />
+                    <span className="gen-img-badge__name">
+                      {config.referenceImageName}
+                    </span>
+                    <button
+                      type="button"
+                      className="gen-img-badge__rm"
+                      onClick={() =>
+                        generatorStore.setConfig({ referenceImageName: null })
+                      }
+                      aria-label={msgs.referenceImage.remove}
+                    >
+                      <X size={9} strokeWidth={2} />
+                    </button>
+                  </div>
+                ) : (
                   <button
                     type="button"
-                    className="gen-file-preview__remove"
-                    onClick={() =>
-                      generatorStore.setConfig({ referenceImageName: null })
-                    }
-                    aria-label={msgs.referenceImage.remove}
+                    className="gen-img-btn"
+                    onClick={() => fileRef.current?.click()}
+                    aria-label={msgs.referenceImage.label}
+                    title={msgs.referenceImage.label}
                   >
-                    <X size={12} strokeWidth={2} />
-                    {msgs.referenceImage.remove}
+                    <ImageIcon size={14} strokeWidth={1.5} aria-hidden="true" />
                   </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  className="gen-upload-btn"
-                  onClick={() => fileRef.current?.click()}
-                >
-                  <Upload size={14} strokeWidth={1.5} aria-hidden="true" />
-                  {msgs.referenceImage.cta}
-                </button>
-              )}
+                )}
+              </div>
             </div>
 
-            <div className="gen-right__sep" />
-
-            {/* Chips */}
-            <div className="gen-two-col">
-              <ChipSelector
-                label={ctxMsgs.elements.label}
-                options={ctxMsgs.elements.chips}
-                selected={config.elementChips}
-                onToggle={v => toggleChip('elementChips', v)}
-              />
-              <ChipSelector
-                label={ctxMsgs.atmospheric.label}
-                options={ctxMsgs.atmospheric.chips}
-                selected={config.atmosphericChips}
-                onToggle={v => toggleChip('atmosphericChips', v)}
-              />
-            </div>
-
-            {/* Prompt preview */}
-            <div className="gen-prompt-preview">
-              <span className="gen-prompt-preview__label">
-                {ctxMsgs.promptPreview.label}
-              </span>
-              <p className="gen-prompt-preview__text">
-                {promptText || ctxMsgs.promptPreview.empty}
-              </p>
-              <p className="gen-prompt-preview__disclaimer">
-                {ctxMsgs.promptPreview.disclaimer}
-              </p>
-            </div>
+            {/* Subtle prompt preview — only shown when there's something to show */}
+            {promptText && <p className="gen-prompt-subtle">{promptText}</p>}
           </div>
 
           {/* ════════════ TOOLBAR ════════════ */}
@@ -975,32 +932,82 @@ export function GeneratorShell() {
 
             <span className="gen-toolbar__sep" aria-hidden="true" />
 
-            {/* ── Más (sliders) ── */}
+            {/* ── Contexto (chips + sliders) ── */}
             <div className="gen-toolbar__item">
               <button
                 type="button"
                 className={cn(
                   'gen-toolbar__btn',
-                  'gen-toolbar__btn--icon',
-                  toolbarPanel === 'advanced' && 'gen-toolbar__btn--active'
+                  toolbarPanel === 'context' && 'gen-toolbar__btn--active'
                 )}
                 onClick={() =>
-                  setToolbarPanel(p => (p === 'advanced' ? null : 'advanced'))
+                  setToolbarPanel(p => (p === 'context' ? null : 'context'))
                 }
               >
-                <SlidersHorizontal
-                  size={13}
-                  strokeWidth={1.5}
-                  aria-hidden="true"
-                />
-                <span className="gen-toolbar__btn-label">Más</span>
-                {hasAdvancedChanges && (
-                  <span className="gen-adv-dot" aria-hidden="true" />
-                )}
+                <span className="gen-toolbar__btn-label">
+                  {ctxMsgs.toolbarLabel}
+                </span>
+                <span
+                  className={cn(
+                    'gen-toolbar__btn-value',
+                    !hasContextChanges && 'gen-toolbar__btn-value--empty'
+                  )}
+                >
+                  {contextPreview ?? '—'}
+                </span>
               </button>
 
-              {toolbarPanel === 'advanced' && (
-                <div className="gen-toolbar__popover gen-toolbar__popover--advanced">
+              {toolbarPanel === 'context' && (
+                <div className="gen-toolbar__popover gen-toolbar__popover--context">
+                  {/* Elementos */}
+                  <div className="gen-popover-section">
+                    <span className="gen-popover-section__label">
+                      {ctxMsgs.elements.label}
+                    </span>
+                    <div className="gen-param__opts">
+                      {ctxMsgs.elements.chips.map(chip => (
+                        <button
+                          key={chip}
+                          type="button"
+                          className={cn(
+                            'gen-param__btn',
+                            config.elementChips.includes(chip) &&
+                              'gen-param__btn--on'
+                          )}
+                          onClick={() => toggleChip('elementChips', chip)}
+                        >
+                          {chip}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Atmósfera */}
+                  <div className="gen-popover-section">
+                    <span className="gen-popover-section__label">
+                      {ctxMsgs.atmospheric.label}
+                    </span>
+                    <div className="gen-param__opts">
+                      {ctxMsgs.atmospheric.chips.map(chip => (
+                        <button
+                          key={chip}
+                          type="button"
+                          className={cn(
+                            'gen-param__btn',
+                            config.atmosphericChips.includes(chip) &&
+                              'gen-param__btn--on'
+                          )}
+                          onClick={() => toggleChip('atmosphericChips', chip)}
+                        >
+                          {chip}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="gen-popover-sep" aria-hidden="true" />
+
+                  {/* Sliders */}
                   <StepSlider
                     label={ctxMsgs.dayMoment.label}
                     steps={ctxMsgs.dayMoment.steps}
@@ -1049,7 +1056,6 @@ export function GeneratorShell() {
         </div>
         {/* end .gen-right */}
       </div>
-      {/* end .gen-panels */}
     </div>
   );
 }

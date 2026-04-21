@@ -540,10 +540,10 @@
 
 .gen-right__inner {
   flex: 1;
-  padding: 36px 44px 28px;
+  padding: 36px 44px 20px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 16px;
 }
 
 /* ── Right panel inline section title ───────────────────────────── */
@@ -651,6 +651,113 @@
 
 .gen-textarea::placeholder { color: #545454; }
 .gen-textarea:focus        { border-color: #8C8C8C; }
+
+/* ─── Textarea wrap + embedded footer ──────────────────────────── */
+
+.gen-textarea-wrap {
+  position: relative;
+}
+
+/* Footer row absolutely anchored to bottom-left of textarea */
+.gen-textarea-footer {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none; /* children re-enable */
+}
+
+.gen-textarea-footer > * { pointer-events: auto; }
+
+/* Bump textarea bottom padding so text never hides under the footer */
+.gen-textarea-wrap .gen-textarea {
+  padding-bottom: 44px;
+}
+
+/* ─── Image upload icon button ──────────────────────────────────── */
+
+.gen-img-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: transparent;
+  border: 1px solid #2A2A2A;
+  color: #545454;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 150ms cubic-bezier(0.2, 0, 0, 1),
+              color 150ms cubic-bezier(0.2, 0, 0, 1),
+              background 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.gen-img-btn:hover {
+  border-color: #3B3B3B;
+  color: #8C8C8C;
+  background: #131313;
+}
+
+/* ─── Image badge (filename pill shown after upload) ────────────── */
+
+.gen-img-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px 4px 7px;
+  background: #131313;
+  border: 1px solid #2A2A2A;
+  border-radius: 9999px;
+  color: #545454;
+  flex-shrink: 0;
+  max-width: 200px;
+}
+
+.gen-img-badge__name {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: #8C8C8C;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.gen-img-badge__rm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #545454;
+  cursor: pointer;
+  padding: 1px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  transition: color 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.gen-img-badge__rm:hover { color: #DCDCDC; }
+
+/* ─── Subtle prompt preview ─────────────────────────────────────── */
+
+.gen-prompt-subtle {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  font-style: italic;
+  color: #3B3B3B;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* ─── Two-column grid ───────────────────────────────────────────── */
 
@@ -1765,4 +1872,38 @@
   align-items: center;
   justify-content: center;
   color: #ffffff;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTEXT POPOVER — sections, separator, wide width
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Wider popover for Contexto (chips + sliders) */
+.gen-toolbar__popover--context {
+  min-width: 340px;
+  gap: 16px;
+}
+
+/* Section wrapper inside popover (label + chips) */
+.gen-popover-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gen-popover-section__label {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3B3B3B;
+}
+
+/* Thin horizontal rule separating chips from sliders */
+.gen-popover-sep {
+  height: 1px;
+  background: #1A1A1A;
+  flex-shrink: 0;
+  margin: 2px 0;
 }
