@@ -1,4 +1,13 @@
 export type ImageType = 'aislado' | 'lifestyle' | 'perfect_store';
+export type ImageIllumination =
+  | 'natural'
+  | 'estudio'
+  | 'golden_hour'
+  | 'rembrandt'
+  | 'contraluz'
+  | 'cenital'
+  | 'dramatica'
+  | 'suave';
 export type ImageAngle =
   | 'frontal'
   | 'tres_cuartos'
@@ -26,6 +35,7 @@ export interface GeneratorConfig {
   referenceImageName: string | null;
   imageType: ImageType | null;
   angle: ImageAngle | null;
+  illumination: ImageIllumination | null;
   aspectRatio: AspectRatio | null;
   freeText: string;
   elementChips: string[];

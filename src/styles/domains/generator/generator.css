@@ -1375,3 +1375,238 @@
 }
 
 .gen-modal--add-project { max-width: 420px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   PARAM HEADER — label + "Ver ejemplos" trigger in one row
+   ═══════════════════════════════════════════════════════════════ */
+
+.gen-param__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* ── "Ver ejemplos" trigger ─────────────────────────────────────── */
+
+.gen-ref-trigger {
+  background: none;
+  border: none;
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #4361EF;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: color 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.gen-ref-trigger:hover  { color: #6689F4; }
+.gen-ref-trigger--active { color: #6689F4; }
+
+/* ═══════════════════════════════════════════════════════════════
+   ADVANCED ACCORDION
+   ═══════════════════════════════════════════════════════════════ */
+
+.gen-accordion {
+  display: flex;
+  flex-direction: column;
+}
+
+.gen-accordion__trigger {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #AAAAAA;
+  text-align: left;
+  width: 100%;
+  transition: color 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.gen-accordion__trigger:hover { color: #DCDCDC; }
+
+/* Dot indicator — advanced has non-default values */
+.gen-adv-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4361EF;
+  flex-shrink: 0;
+}
+
+.gen-accordion__chevron {
+  margin-left: auto;
+  color: #545454;
+  flex-shrink: 0;
+  transition: transform 200ms cubic-bezier(0.2, 0, 0, 1),
+              color 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.gen-accordion__trigger:hover .gen-accordion__chevron { color: #8C8C8C; }
+
+.gen-accordion__chevron--open { transform: rotate(180deg); }
+
+.gen-accordion__body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 18px;
+  animation: gen-accordion-open 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+@keyframes gen-accordion-open {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VISUAL REFERENCE PANEL — overlays the right panel
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Make right panel a positioning context */
+.gen-right { position: relative; }
+
+.gen-ref-panel {
+  position: absolute;
+  inset: 0;
+  background: #0D0D0D;
+  border-radius: inherit;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  padding: 36px 44px 44px;
+  gap: 20px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #2A2A2A transparent;
+  animation: gen-ref-panel-in 200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+@keyframes gen-ref-panel-in {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.gen-ref-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.gen-ref-panel__title {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #AAAAAA;
+}
+
+.gen-ref-panel__close {
+  background: none;
+  border: none;
+  color: #3B3B3B;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  transition: color 120ms cubic-bezier(0.2, 0, 0, 1),
+              background-color 120ms cubic-bezier(0.2, 0, 0, 1);
+  flex-shrink: 0;
+}
+
+.gen-ref-panel__close:hover {
+  color: #DCDCDC;
+  background-color: #1A1A1A;
+}
+
+.gen-ref-panel__hint {
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+  color: #545454;
+  margin: -8px 0 0;
+}
+
+/* ── Reference tile grid ────────────────────────────────────────── */
+
+.gen-ref-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+/* ── Single reference tile ──────────────────────────────────────── */
+
+.gen-ref-tile {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #2A2A2A;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  transition: border-color 150ms cubic-bezier(0.2, 0, 0, 1),
+              transform 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.gen-ref-tile:hover {
+  border-color: #3B3B3B;
+  transform: translateY(-1px);
+}
+
+.gen-ref-tile--selected { border-color: rgba(67, 97, 239, 0.65); }
+
+.gen-ref-tile__img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.gen-ref-tile__label {
+  display: block;
+  font-family: var(--font-mulish), sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #8C8C8C;
+  padding: 7px 9px;
+  background: #131313;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.gen-ref-tile--selected .gen-ref-tile__label { color: #6689F4; }
+
+/* Check badge — top-right corner of selected tile */
+.gen-ref-tile__check {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  background: rgba(67, 97, 239, 0.92);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}

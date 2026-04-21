@@ -11,6 +11,7 @@ import { generatorMessages } from '../../messages';
 import { MOCK_SKUS, SKU_BRANDS } from '../../generator.repository';
 import type {
   ImageAngle,
+  ImageIllumination,
   AspectRatio,
   ImageQuality,
   GeneratedImage,
@@ -29,7 +30,110 @@ const ASPECT_SHAPES: Record<AspectRatio, { w: number; h: number }> = {
   '9:16': { w: 13, h: 22 }
 };
 
+/* ── Reference tile data ─────────────────────────────────────────── */
+
+interface RefItem {
+  key: string;
+  label: string;
+  gradient: string;
+}
+
+const ANGLE_REFS: RefItem[] = [
+  {
+    key: 'frontal',
+    label: 'Frontal',
+    gradient: 'linear-gradient(180deg, #1A1A2E 0%, #0D0D1A 100%)'
+  },
+  {
+    key: 'tres_cuartos',
+    label: '3/4',
+    gradient: 'linear-gradient(120deg, #1A2030 0%, #0D1020 100%)'
+  },
+  {
+    key: 'lateral',
+    label: 'Lateral',
+    gradient: 'linear-gradient(90deg, #0D0D0D 0%, #1A1A1A 50%, #0D0D0D 100%)'
+  },
+  {
+    key: 'cenital',
+    label: 'Cenital',
+    gradient: 'radial-gradient(ellipse at 50% 10%, #2A2A3A 0%, #0D0D0D 70%)'
+  },
+  {
+    key: 'bajo',
+    label: 'Contrapicado',
+    gradient: 'radial-gradient(ellipse at 50% 90%, #1E1E30 0%, #0D0D0D 70%)'
+  },
+  {
+    key: 'isometrico',
+    label: 'Isométrico',
+    gradient: 'linear-gradient(145deg, #1A1A2A 0%, #0D1525 100%)'
+  },
+  {
+    key: 'detalle',
+    label: 'Detalle',
+    gradient: 'radial-gradient(ellipse at center, #2A2A2A 0%, #0D0D0D 70%)'
+  },
+  {
+    key: 'trasero',
+    label: 'Trasero',
+    gradient: 'linear-gradient(0deg, #1A1A1A 0%, #0D0D0D 100%)'
+  }
+];
+
+const ILLUMINATION_REFS: RefItem[] = [
+  {
+    key: 'natural',
+    label: 'Natural',
+    gradient: 'linear-gradient(180deg, #1A3A5C 0%, #0D1E30 60%, #0A0A0A 100%)'
+  },
+  {
+    key: 'estudio',
+    label: 'Estudio',
+    gradient: 'linear-gradient(180deg, #2A2A2A 0%, #141414 100%)'
+  },
+  {
+    key: 'golden_hour',
+    label: 'Golden Hour',
+    gradient: 'linear-gradient(180deg, #FF8C00 0%, #C44B00 60%, #1A0A00 100%)'
+  },
+  {
+    key: 'rembrandt',
+    label: 'Rembrandt',
+    gradient:
+      'radial-gradient(ellipse at 30% 40%, #C87A2A 0%, #4A2800 40%, #0D0800 100%)'
+  },
+  {
+    key: 'contraluz',
+    label: 'Contraluz',
+    gradient: 'radial-gradient(ellipse at center, #3A3A3A 0%, #000000 65%)'
+  },
+  {
+    key: 'cenital',
+    label: 'Cenital',
+    gradient: 'linear-gradient(180deg, #3A3A3A 0%, #0D0D0D 55%, #000000 100%)'
+  },
+  {
+    key: 'dramatica',
+    label: 'Dramática',
+    gradient: 'linear-gradient(135deg, #1A0020 0%, #000000 60%, #200010 100%)'
+  },
+  {
+    key: 'suave',
+    label: 'Suave',
+    gradient: 'linear-gradient(135deg, #2A2040 0%, #1A1A2A 50%, #202030 100%)'
+  }
+];
+
+/* ── Default advanced values (for dot indicator) ─────────────────── */
+const DEFAULT_ASPECT: AspectRatio = '1:1';
+const DEFAULT_QUALITY: ImageQuality = 'medio';
+const DEFAULT_DAY_MOMENT = 2;
+const DEFAULT_PROMINENCE = 2;
+
 function buildPrompt(
+  angle: string | null,
+  illumination: string | null,
   freeText: string,
   elements: string[],
   atmospheric: string[],
@@ -37,6 +141,8 @@ function buildPrompt(
   prominenceStep: string
 ): string {
   const parts: string[] = [];
+  if (angle) parts.push(angle.toLowerCase());
+  if (illumination) parts.push(illumination.toLowerCase());
   if (elements.length > 0) parts.push(elements.join(', ').toLowerCase());
   if (atmospheric.length > 0) parts.push(atmospheric.join(', ').toLowerCase());
   if (dayStep) parts.push(dayStep.toLowerCase());
@@ -67,6 +173,10 @@ export function GeneratorShell() {
   const [skuOpen, setSkuOpen] = useState(false);
   const [brandSearch, setBrandSearch] = useState('');
   const [skuSearch, setSkuSearch] = useState('');
+  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
+  const [refPanel, setRefPanel] = useState<'angle' | 'illumination' | null>(
+    null
+  );
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -130,6 +240,18 @@ export function GeneratorShell() {
     if (file) generatorStore.setConfig({ referenceImageName: file.name });
   }
 
+  function handleRefTileClick(type: 'angle' | 'illumination', key: string) {
+    if (type === 'angle') {
+      const next = config.angle === key ? null : (key as ImageAngle);
+      generatorStore.setConfig({ angle: next });
+    } else {
+      const next =
+        config.illumination === key ? null : (key as ImageIllumination);
+      generatorStore.setConfig({ illumination: next });
+    }
+    setTimeout(() => setRefPanel(null), 220);
+  }
+
   function handleGenerate() {
     if (config.selectedSkus.length === 0) return;
     generatorStore.setIsGenerating(true);
@@ -144,15 +266,33 @@ export function GeneratorShell() {
     }, 1800);
   }
 
+  const angleLabel = config.angle ? msgs.angle.options[config.angle] : null;
+  const illuminationLabel = config.illumination
+    ? msgs.illumination.options[config.illumination]
+    : null;
+
   const promptText = buildPrompt(
+    angleLabel,
+    illuminationLabel,
     config.freeText,
     config.elementChips,
     config.atmosphericChips,
     ctxMsgs.dayMoment.steps[config.dayMoment] ?? '',
     ctxMsgs.prominence.steps[config.prominence] ?? ''
   );
+
   const canGenerate = config.selectedSkus.length > 0 && !isGenerating;
   const selectedCount = config.selectedSkus.length;
+
+  const hasAdvancedChanges =
+    config.aspectRatio !== DEFAULT_ASPECT ||
+    config.quality !== DEFAULT_QUALITY ||
+    config.dayMoment !== DEFAULT_DAY_MOMENT ||
+    config.prominence !== DEFAULT_PROMINENCE;
+
+  const refItems = refPanel === 'angle' ? ANGLE_REFS : ILLUMINATION_REFS;
+  const refTitle =
+    refPanel === 'angle' ? msgs.angle.label : msgs.illumination.label;
 
   return (
     <div className="generator-page">
@@ -174,7 +314,7 @@ export function GeneratorShell() {
         {/* ════════════════ LEFT PANEL ════════════════ */}
         <aside className="gen-left">
           <div className="gen-left__body">
-            {/* ── Productos ── */}
+            {/* ── Block 1: Productos ── */}
             <div className="gen-left__section">
               <p className="gen-left__section-label">Productos</p>
 
@@ -426,12 +566,25 @@ export function GeneratorShell() {
 
             <div className="gen-left__sep" />
 
-            {/* ── Formato ── */}
+            {/* ── Block 2: Ángulo + Iluminación ── */}
             <div className="gen-left__section">
-              <p className="gen-left__section-label">Formato</p>
-
+              {/* Ángulo */}
               <div className="gen-param">
-                <span className="gen-param__label">{msgs.angle.label}</span>
+                <div className="gen-param__header">
+                  <span className="gen-param__label">{msgs.angle.label}</span>
+                  <button
+                    type="button"
+                    className={cn(
+                      'gen-ref-trigger',
+                      refPanel === 'angle' && 'gen-ref-trigger--active'
+                    )}
+                    onClick={() =>
+                      setRefPanel(p => (p === 'angle' ? null : 'angle'))
+                    }
+                  >
+                    {msgs.angle.viewExamples}
+                  </button>
+                </div>
                 <div className="gen-param__opts">
                   {(Object.keys(msgs.angle.options) as ImageAngle[]).map(
                     angle => (
@@ -442,7 +595,11 @@ export function GeneratorShell() {
                           'gen-param__btn',
                           config.angle === angle && 'gen-param__btn--on'
                         )}
-                        onClick={() => generatorStore.setConfig({ angle })}
+                        onClick={() =>
+                          generatorStore.setConfig({
+                            angle: config.angle === angle ? null : angle
+                          })
+                        }
                       >
                         {msgs.angle.options[angle]}
                       </button>
@@ -451,66 +608,219 @@ export function GeneratorShell() {
                 </div>
               </div>
 
+              {/* Iluminación */}
               <div className="gen-param">
-                <span className="gen-param__label">
-                  {msgs.aspectRatio.label}
-                </span>
+                <div className="gen-param__header">
+                  <span className="gen-param__label">
+                    {msgs.illumination.label}
+                  </span>
+                  <button
+                    type="button"
+                    className={cn(
+                      'gen-ref-trigger',
+                      refPanel === 'illumination' && 'gen-ref-trigger--active'
+                    )}
+                    onClick={() =>
+                      setRefPanel(p =>
+                        p === 'illumination' ? null : 'illumination'
+                      )
+                    }
+                  >
+                    {msgs.illumination.viewExamples}
+                  </button>
+                </div>
                 <div className="gen-param__opts">
-                  {(['16:9', '4:3', '1:1', '3:4', '9:16'] as AspectRatio[]).map(
-                    ratio => {
-                      const shape = ASPECT_SHAPES[ratio];
-                      return (
+                  {(
+                    Object.keys(
+                      msgs.illumination.options
+                    ) as ImageIllumination[]
+                  ).map(ill => (
+                    <button
+                      key={ill}
+                      type="button"
+                      className={cn(
+                        'gen-param__btn',
+                        config.illumination === ill && 'gen-param__btn--on'
+                      )}
+                      onClick={() =>
+                        generatorStore.setConfig({
+                          illumination: config.illumination === ill ? null : ill
+                        })
+                      }
+                    >
+                      {msgs.illumination.options[ill]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="gen-left__sep" />
+
+            {/* ── Block 3: Avanzado accordion ── */}
+            <div className="gen-accordion">
+              <button
+                type="button"
+                className="gen-accordion__trigger"
+                onClick={() => setIsAdvancedOpen(o => !o)}
+                aria-expanded={isAdvancedOpen}
+              >
+                <span>{msgs.advanced}</span>
+                {hasAdvancedChanges && (
+                  <span className="gen-adv-dot" aria-hidden="true" />
+                )}
+                <ChevronDown
+                  size={12}
+                  strokeWidth={1.5}
+                  className={cn(
+                    'gen-accordion__chevron',
+                    isAdvancedOpen && 'gen-accordion__chevron--open'
+                  )}
+                  aria-hidden="true"
+                />
+              </button>
+
+              {isAdvancedOpen && (
+                <div className="gen-accordion__body">
+                  {/* Relación de aspecto */}
+                  <div className="gen-param">
+                    <span className="gen-param__label">
+                      {msgs.aspectRatio.label}
+                    </span>
+                    <div className="gen-param__opts">
+                      {(
+                        ['16:9', '4:3', '1:1', '3:4', '9:16'] as AspectRatio[]
+                      ).map(ratio => {
+                        const shape = ASPECT_SHAPES[ratio];
+                        return (
+                          <button
+                            key={ratio}
+                            type="button"
+                            className={cn(
+                              'gen-param__btn',
+                              'gen-param__btn--ratio',
+                              config.aspectRatio === ratio &&
+                                'gen-param__btn--on'
+                            )}
+                            onClick={() =>
+                              generatorStore.setConfig({ aspectRatio: ratio })
+                            }
+                          >
+                            <span
+                              className="gen-ratio-icon"
+                              style={{ width: shape.w, height: shape.h }}
+                              aria-hidden="true"
+                            />
+                            {ratio}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Calidad */}
+                  <div className="gen-param">
+                    <span className="gen-param__label">
+                      {msgs.quality.label}
+                    </span>
+                    <div className="gen-param__opts">
+                      {(
+                        Object.keys(msgs.quality.options) as ImageQuality[]
+                      ).map(q => (
                         <button
-                          key={ratio}
+                          key={q}
                           type="button"
                           className={cn(
                             'gen-param__btn',
-                            'gen-param__btn--ratio',
-                            config.aspectRatio === ratio && 'gen-param__btn--on'
+                            config.quality === q && 'gen-param__btn--on'
                           )}
                           onClick={() =>
-                            generatorStore.setConfig({ aspectRatio: ratio })
+                            generatorStore.setConfig({ quality: q })
                           }
                         >
-                          <span
-                            className="gen-ratio-icon"
-                            style={{ width: shape.w, height: shape.h }}
-                            aria-hidden="true"
-                          />
-                          {ratio}
+                          {msgs.quality.options[q]}
                         </button>
-                      );
-                    }
-                  )}
-                </div>
-              </div>
+                      ))}
+                    </div>
+                  </div>
 
-              <div className="gen-param">
-                <span className="gen-param__label">{msgs.quality.label}</span>
-                <div className="gen-param__opts">
-                  {(Object.keys(msgs.quality.options) as ImageQuality[]).map(
-                    q => (
-                      <button
-                        key={q}
-                        type="button"
-                        className={cn(
-                          'gen-param__btn',
-                          config.quality === q && 'gen-param__btn--on'
-                        )}
-                        onClick={() => generatorStore.setConfig({ quality: q })}
-                      >
-                        {msgs.quality.options[q]}
-                      </button>
-                    )
-                  )}
+                  {/* Sliders */}
+                  <StepSlider
+                    label={ctxMsgs.dayMoment.label}
+                    steps={ctxMsgs.dayMoment.steps}
+                    value={config.dayMoment}
+                    onChange={v => generatorStore.setConfig({ dayMoment: v })}
+                  />
+                  <StepSlider
+                    label={ctxMsgs.prominence.label}
+                    steps={ctxMsgs.prominence.steps}
+                    value={config.prominence}
+                    onChange={v => generatorStore.setConfig({ prominence: v })}
+                  />
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </aside>
 
         {/* ════════════════ RIGHT PANEL ════════════════ */}
         <div className="gen-right">
+          {/* ── Visual reference panel (overlay) ── */}
+          {refPanel && (
+            <div className="gen-ref-panel">
+              <div className="gen-ref-panel__header">
+                <span className="gen-ref-panel__title">{refTitle}</span>
+                <button
+                  type="button"
+                  className="gen-ref-panel__close"
+                  onClick={() => setRefPanel(null)}
+                  aria-label="Cerrar panel de referencias"
+                >
+                  <X size={14} strokeWidth={2} aria-hidden="true" />
+                </button>
+              </div>
+
+              <p className="gen-ref-panel__hint">
+                Selecciona una referencia visual para aplicarla
+              </p>
+
+              <div className="gen-ref-grid">
+                {refItems.map(item => {
+                  const isSelected =
+                    refPanel === 'angle'
+                      ? config.angle === item.key
+                      : config.illumination === item.key;
+                  return (
+                    <button
+                      key={item.key}
+                      type="button"
+                      className={cn(
+                        'gen-ref-tile',
+                        isSelected && 'gen-ref-tile--selected'
+                      )}
+                      onClick={() => handleRefTileClick(refPanel, item.key)}
+                    >
+                      <span
+                        className="gen-ref-tile__img"
+                        style={{ background: item.gradient }}
+                        aria-hidden="true"
+                      />
+                      <span className="gen-ref-tile__label">{item.label}</span>
+                      {isSelected && (
+                        <span
+                          className="gen-ref-tile__check"
+                          aria-hidden="true"
+                        >
+                          <Check size={10} strokeWidth={2.5} />
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           <div className="gen-right__inner">
             {/* Section label */}
             <h2 className="gen-right__title">{msgs.context.label}</h2>
@@ -527,7 +837,7 @@ export function GeneratorShell() {
               aria-label={ctxMsgs.freeText.label}
             />
 
-            {/* Reference image — directly after description */}
+            {/* Reference image */}
             <div className="gen-ref">
               <div className="gen-ref__header">
                 <span className="gen-ref__label">
@@ -588,22 +898,6 @@ export function GeneratorShell() {
                 options={ctxMsgs.atmospheric.chips}
                 selected={config.atmosphericChips}
                 onToggle={v => toggleChip('atmosphericChips', v)}
-              />
-            </div>
-
-            {/* Sliders */}
-            <div className="gen-two-col">
-              <StepSlider
-                label={ctxMsgs.dayMoment.label}
-                steps={ctxMsgs.dayMoment.steps}
-                value={config.dayMoment}
-                onChange={v => generatorStore.setConfig({ dayMoment: v })}
-              />
-              <StepSlider
-                label={ctxMsgs.prominence.label}
-                steps={ctxMsgs.prominence.steps}
-                value={config.prominence}
-                onChange={v => generatorStore.setConfig({ prominence: v })}
               />
             </div>
 

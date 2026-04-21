@@ -11,6 +11,7 @@ const DEFAULT_CONFIG: GeneratorConfig = {
   referenceImageName: null,
   imageType: null,
   angle: null,
+  illumination: null,
   aspectRatio: '1:1',
   freeText: '',
   elementChips: [],

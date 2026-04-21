@@ -51,6 +51,7 @@ export const generatorMessages = {
 
     angle: {
       label: 'Ángulo',
+      viewExamples: 'Ver ejemplos',
       options: {
         frontal: 'Frontal',
         tres_cuartos: '3/4',
@@ -62,6 +63,23 @@ export const generatorMessages = {
         trasero: 'Trasero'
       }
     },
+
+    illumination: {
+      label: 'Iluminación',
+      viewExamples: 'Ver ejemplos',
+      options: {
+        natural: 'Natural',
+        estudio: 'Estudio',
+        golden_hour: 'Golden Hour',
+        rembrandt: 'Rembrandt',
+        contraluz: 'Contraluz',
+        cenital: 'Cenital',
+        dramatica: 'Dramática',
+        suave: 'Suave'
+      }
+    },
+
+    advanced: 'Avanzado',
 
     aspectRatio: {
       label: 'Relación de aspecto'
