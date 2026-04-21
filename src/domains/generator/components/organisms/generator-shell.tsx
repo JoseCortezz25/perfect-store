@@ -2,7 +2,15 @@
 
 import { useState, useRef, useEffect, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronDown, Upload, X, Wand2, Check, Search } from 'lucide-react';
+import {
+  ChevronDown,
+  Upload,
+  X,
+  Wand2,
+  Check,
+  Search,
+  SlidersHorizontal
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { StepSlider } from '../atoms/step-slider';
 import { ChipSelector } from '../atoms/chip-selector';
@@ -125,11 +133,19 @@ const ILLUMINATION_REFS: RefItem[] = [
   }
 ];
 
-/* ── Default advanced values (for dot indicator) ─────────────────── */
+/* ── Default advanced values (for dot indicator on Más) ─────────── */
 const DEFAULT_ASPECT: AspectRatio = '1:1';
 const DEFAULT_QUALITY: ImageQuality = 'medio';
 const DEFAULT_DAY_MOMENT = 2;
 const DEFAULT_PROMINENCE = 2;
+
+type ToolbarPanel =
+  | 'angle'
+  | 'illumination'
+  | 'aspect'
+  | 'quality'
+  | 'advanced'
+  | null;
 
 function buildPrompt(
   angle: string | null,
@@ -156,6 +172,7 @@ export function GeneratorShell() {
   const fileRef = useRef<HTMLInputElement>(null);
   const brandDropRef = useRef<HTMLDivElement>(null);
   const skuDropRef = useRef<HTMLDivElement>(null);
+  const toolbarRef = useRef<HTMLDivElement>(null);
 
   const config = useSyncExternalStore(
     generatorStore.subscribe,
@@ -173,7 +190,7 @@ export function GeneratorShell() {
   const [skuOpen, setSkuOpen] = useState(false);
   const [brandSearch, setBrandSearch] = useState('');
   const [skuSearch, setSkuSearch] = useState('');
-  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
+  const [toolbarPanel, setToolbarPanel] = useState<ToolbarPanel>(null);
   const [refPanel, setRefPanel] = useState<'angle' | 'illumination' | null>(
     null
   );
@@ -193,6 +210,12 @@ export function GeneratorShell() {
       ) {
         setSkuOpen(false);
         setSkuSearch('');
+      }
+      if (
+        toolbarRef.current &&
+        !toolbarRef.current.contains(e.target as Node)
+      ) {
+        setToolbarPanel(null);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -311,10 +334,9 @@ export function GeneratorShell() {
 
       {/* ════════════════ PANELS ════════════════ */}
       <div className="gen-panels">
-        {/* ════════════════ LEFT PANEL ════════════════ */}
+        {/* ════════════════ LEFT PANEL — SKUs only ════════════════ */}
         <aside className="gen-left">
           <div className="gen-left__body">
-            {/* ── Block 1: Productos ── */}
             <div className="gen-left__section">
               <p className="gen-left__section-label">Productos</p>
 
@@ -534,7 +556,7 @@ export function GeneratorShell() {
                 )}
               </div>
 
-              {/* Selected chips */}
+              {/* Selected SKU chips */}
               {selectedCount > 0 && (
                 <div className="gen-sel-chips">
                   {config.selectedSkus.map(sku => (
@@ -560,203 +582,6 @@ export function GeneratorShell() {
                       </button>
                     </div>
                   ))}
-                </div>
-              )}
-            </div>
-
-            <div className="gen-left__sep" />
-
-            {/* ── Block 2: Ángulo + Iluminación ── */}
-            <div className="gen-left__section">
-              {/* Ángulo */}
-              <div className="gen-param">
-                <div className="gen-param__header">
-                  <span className="gen-param__label">{msgs.angle.label}</span>
-                  <button
-                    type="button"
-                    className={cn(
-                      'gen-ref-trigger',
-                      refPanel === 'angle' && 'gen-ref-trigger--active'
-                    )}
-                    onClick={() =>
-                      setRefPanel(p => (p === 'angle' ? null : 'angle'))
-                    }
-                  >
-                    {msgs.angle.viewExamples}
-                  </button>
-                </div>
-                <div className="gen-param__opts">
-                  {(Object.keys(msgs.angle.options) as ImageAngle[]).map(
-                    angle => (
-                      <button
-                        key={angle}
-                        type="button"
-                        className={cn(
-                          'gen-param__btn',
-                          config.angle === angle && 'gen-param__btn--on'
-                        )}
-                        onClick={() =>
-                          generatorStore.setConfig({
-                            angle: config.angle === angle ? null : angle
-                          })
-                        }
-                      >
-                        {msgs.angle.options[angle]}
-                      </button>
-                    )
-                  )}
-                </div>
-              </div>
-
-              {/* Iluminación */}
-              <div className="gen-param">
-                <div className="gen-param__header">
-                  <span className="gen-param__label">
-                    {msgs.illumination.label}
-                  </span>
-                  <button
-                    type="button"
-                    className={cn(
-                      'gen-ref-trigger',
-                      refPanel === 'illumination' && 'gen-ref-trigger--active'
-                    )}
-                    onClick={() =>
-                      setRefPanel(p =>
-                        p === 'illumination' ? null : 'illumination'
-                      )
-                    }
-                  >
-                    {msgs.illumination.viewExamples}
-                  </button>
-                </div>
-                <div className="gen-param__opts">
-                  {(
-                    Object.keys(
-                      msgs.illumination.options
-                    ) as ImageIllumination[]
-                  ).map(ill => (
-                    <button
-                      key={ill}
-                      type="button"
-                      className={cn(
-                        'gen-param__btn',
-                        config.illumination === ill && 'gen-param__btn--on'
-                      )}
-                      onClick={() =>
-                        generatorStore.setConfig({
-                          illumination: config.illumination === ill ? null : ill
-                        })
-                      }
-                    >
-                      {msgs.illumination.options[ill]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="gen-left__sep" />
-
-            {/* ── Block 3: Avanzado accordion ── */}
-            <div className="gen-accordion">
-              <button
-                type="button"
-                className="gen-accordion__trigger"
-                onClick={() => setIsAdvancedOpen(o => !o)}
-                aria-expanded={isAdvancedOpen}
-              >
-                <span>{msgs.advanced}</span>
-                {hasAdvancedChanges && (
-                  <span className="gen-adv-dot" aria-hidden="true" />
-                )}
-                <ChevronDown
-                  size={12}
-                  strokeWidth={1.5}
-                  className={cn(
-                    'gen-accordion__chevron',
-                    isAdvancedOpen && 'gen-accordion__chevron--open'
-                  )}
-                  aria-hidden="true"
-                />
-              </button>
-
-              {isAdvancedOpen && (
-                <div className="gen-accordion__body">
-                  {/* Relación de aspecto */}
-                  <div className="gen-param">
-                    <span className="gen-param__label">
-                      {msgs.aspectRatio.label}
-                    </span>
-                    <div className="gen-param__opts">
-                      {(
-                        ['16:9', '4:3', '1:1', '3:4', '9:16'] as AspectRatio[]
-                      ).map(ratio => {
-                        const shape = ASPECT_SHAPES[ratio];
-                        return (
-                          <button
-                            key={ratio}
-                            type="button"
-                            className={cn(
-                              'gen-param__btn',
-                              'gen-param__btn--ratio',
-                              config.aspectRatio === ratio &&
-                                'gen-param__btn--on'
-                            )}
-                            onClick={() =>
-                              generatorStore.setConfig({ aspectRatio: ratio })
-                            }
-                          >
-                            <span
-                              className="gen-ratio-icon"
-                              style={{ width: shape.w, height: shape.h }}
-                              aria-hidden="true"
-                            />
-                            {ratio}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Calidad */}
-                  <div className="gen-param">
-                    <span className="gen-param__label">
-                      {msgs.quality.label}
-                    </span>
-                    <div className="gen-param__opts">
-                      {(
-                        Object.keys(msgs.quality.options) as ImageQuality[]
-                      ).map(q => (
-                        <button
-                          key={q}
-                          type="button"
-                          className={cn(
-                            'gen-param__btn',
-                            config.quality === q && 'gen-param__btn--on'
-                          )}
-                          onClick={() =>
-                            generatorStore.setConfig({ quality: q })
-                          }
-                        >
-                          {msgs.quality.options[q]}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Sliders */}
-                  <StepSlider
-                    label={ctxMsgs.dayMoment.label}
-                    steps={ctxMsgs.dayMoment.steps}
-                    value={config.dayMoment}
-                    onChange={v => generatorStore.setConfig({ dayMoment: v })}
-                  />
-                  <StepSlider
-                    label={ctxMsgs.prominence.label}
-                    steps={ctxMsgs.prominence.steps}
-                    value={config.prominence}
-                    onChange={v => generatorStore.setConfig({ prominence: v })}
-                  />
                 </div>
               )}
             </div>
@@ -821,11 +646,10 @@ export function GeneratorShell() {
             </div>
           )}
 
+          {/* ── Main content ── */}
           <div className="gen-right__inner">
-            {/* Section label */}
             <h2 className="gen-right__title">{msgs.context.label}</h2>
 
-            {/* Free text */}
             <textarea
               className="gen-textarea"
               placeholder={ctxMsgs.freeText.placeholder}
@@ -913,9 +737,291 @@ export function GeneratorShell() {
                 {ctxMsgs.promptPreview.disclaimer}
               </p>
             </div>
+          </div>
 
-            {/* Generate CTA */}
-            <div className="gen-cta">
+          {/* ════════════ TOOLBAR ════════════ */}
+          <div className="gen-toolbar" ref={toolbarRef}>
+            {/* ── Ángulo ── */}
+            <div className="gen-toolbar__item">
+              <button
+                type="button"
+                className={cn(
+                  'gen-toolbar__btn',
+                  toolbarPanel === 'angle' && 'gen-toolbar__btn--active'
+                )}
+                onClick={() =>
+                  setToolbarPanel(p => (p === 'angle' ? null : 'angle'))
+                }
+              >
+                <span className="gen-toolbar__btn-label">
+                  {msgs.angle.label}
+                </span>
+                <span
+                  className={cn(
+                    'gen-toolbar__btn-value',
+                    !config.angle && 'gen-toolbar__btn-value--empty'
+                  )}
+                >
+                  {angleLabel ?? '—'}
+                </span>
+              </button>
+
+              {toolbarPanel === 'angle' && (
+                <div className="gen-toolbar__popover">
+                  <div className="gen-param__opts">
+                    {(Object.keys(msgs.angle.options) as ImageAngle[]).map(
+                      angle => (
+                        <button
+                          key={angle}
+                          type="button"
+                          className={cn(
+                            'gen-param__btn',
+                            config.angle === angle && 'gen-param__btn--on'
+                          )}
+                          onClick={() =>
+                            generatorStore.setConfig({
+                              angle: config.angle === angle ? null : angle
+                            })
+                          }
+                        >
+                          {msgs.angle.options[angle]}
+                        </button>
+                      )
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    className="gen-ref-trigger gen-ref-trigger--in-popover"
+                    onClick={() => {
+                      setToolbarPanel(null);
+                      setRefPanel('angle');
+                    }}
+                  >
+                    {msgs.angle.viewExamples} →
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* ── Iluminación ── */}
+            <div className="gen-toolbar__item">
+              <button
+                type="button"
+                className={cn(
+                  'gen-toolbar__btn',
+                  toolbarPanel === 'illumination' && 'gen-toolbar__btn--active'
+                )}
+                onClick={() =>
+                  setToolbarPanel(p =>
+                    p === 'illumination' ? null : 'illumination'
+                  )
+                }
+              >
+                <span className="gen-toolbar__btn-label">
+                  {msgs.illumination.label}
+                </span>
+                <span
+                  className={cn(
+                    'gen-toolbar__btn-value',
+                    !config.illumination && 'gen-toolbar__btn-value--empty'
+                  )}
+                >
+                  {illuminationLabel ?? '—'}
+                </span>
+              </button>
+
+              {toolbarPanel === 'illumination' && (
+                <div className="gen-toolbar__popover">
+                  <div className="gen-param__opts">
+                    {(
+                      Object.keys(
+                        msgs.illumination.options
+                      ) as ImageIllumination[]
+                    ).map(ill => (
+                      <button
+                        key={ill}
+                        type="button"
+                        className={cn(
+                          'gen-param__btn',
+                          config.illumination === ill && 'gen-param__btn--on'
+                        )}
+                        onClick={() =>
+                          generatorStore.setConfig({
+                            illumination:
+                              config.illumination === ill ? null : ill
+                          })
+                        }
+                      >
+                        {msgs.illumination.options[ill]}
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    className="gen-ref-trigger gen-ref-trigger--in-popover"
+                    onClick={() => {
+                      setToolbarPanel(null);
+                      setRefPanel('illumination');
+                    }}
+                  >
+                    {msgs.illumination.viewExamples} →
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <span className="gen-toolbar__sep" aria-hidden="true" />
+
+            {/* ── Relación de aspecto ── */}
+            <div className="gen-toolbar__item">
+              <button
+                type="button"
+                className={cn(
+                  'gen-toolbar__btn',
+                  toolbarPanel === 'aspect' && 'gen-toolbar__btn--active'
+                )}
+                onClick={() =>
+                  setToolbarPanel(p => (p === 'aspect' ? null : 'aspect'))
+                }
+              >
+                <span className="gen-toolbar__btn-label">
+                  {msgs.aspectRatio.label}
+                </span>
+                <span className="gen-toolbar__btn-value">
+                  {config.aspectRatio}
+                </span>
+              </button>
+
+              {toolbarPanel === 'aspect' && (
+                <div className="gen-toolbar__popover">
+                  <div className="gen-param__opts">
+                    {(
+                      ['16:9', '4:3', '1:1', '3:4', '9:16'] as AspectRatio[]
+                    ).map(ratio => {
+                      const shape = ASPECT_SHAPES[ratio];
+                      return (
+                        <button
+                          key={ratio}
+                          type="button"
+                          className={cn(
+                            'gen-param__btn',
+                            'gen-param__btn--ratio',
+                            config.aspectRatio === ratio && 'gen-param__btn--on'
+                          )}
+                          onClick={() => {
+                            generatorStore.setConfig({ aspectRatio: ratio });
+                            setToolbarPanel(null);
+                          }}
+                        >
+                          <span
+                            className="gen-ratio-icon"
+                            style={{ width: shape.w, height: shape.h }}
+                            aria-hidden="true"
+                          />
+                          {ratio}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ── Calidad ── */}
+            <div className="gen-toolbar__item">
+              <button
+                type="button"
+                className={cn(
+                  'gen-toolbar__btn',
+                  toolbarPanel === 'quality' && 'gen-toolbar__btn--active'
+                )}
+                onClick={() =>
+                  setToolbarPanel(p => (p === 'quality' ? null : 'quality'))
+                }
+              >
+                <span className="gen-toolbar__btn-label">
+                  {msgs.quality.label}
+                </span>
+                <span className="gen-toolbar__btn-value">
+                  {msgs.quality.options[config.quality]}
+                </span>
+              </button>
+
+              {toolbarPanel === 'quality' && (
+                <div className="gen-toolbar__popover gen-toolbar__popover--sm">
+                  <div className="gen-param__opts">
+                    {(Object.keys(msgs.quality.options) as ImageQuality[]).map(
+                      q => (
+                        <button
+                          key={q}
+                          type="button"
+                          className={cn(
+                            'gen-param__btn',
+                            config.quality === q && 'gen-param__btn--on'
+                          )}
+                          onClick={() => {
+                            generatorStore.setConfig({ quality: q });
+                            setToolbarPanel(null);
+                          }}
+                        >
+                          {msgs.quality.options[q]}
+                        </button>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <span className="gen-toolbar__sep" aria-hidden="true" />
+
+            {/* ── Más (sliders) ── */}
+            <div className="gen-toolbar__item">
+              <button
+                type="button"
+                className={cn(
+                  'gen-toolbar__btn',
+                  'gen-toolbar__btn--icon',
+                  toolbarPanel === 'advanced' && 'gen-toolbar__btn--active'
+                )}
+                onClick={() =>
+                  setToolbarPanel(p => (p === 'advanced' ? null : 'advanced'))
+                }
+              >
+                <SlidersHorizontal
+                  size={13}
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+                />
+                <span className="gen-toolbar__btn-label">Más</span>
+                {hasAdvancedChanges && (
+                  <span className="gen-adv-dot" aria-hidden="true" />
+                )}
+              </button>
+
+              {toolbarPanel === 'advanced' && (
+                <div className="gen-toolbar__popover gen-toolbar__popover--advanced">
+                  <StepSlider
+                    label={ctxMsgs.dayMoment.label}
+                    steps={ctxMsgs.dayMoment.steps}
+                    value={config.dayMoment}
+                    onChange={v => generatorStore.setConfig({ dayMoment: v })}
+                  />
+                  <StepSlider
+                    label={ctxMsgs.prominence.label}
+                    steps={ctxMsgs.prominence.steps}
+                    value={config.prominence}
+                    onChange={v => generatorStore.setConfig({ prominence: v })}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Spacer */}
+            <div className="gen-toolbar__spacer" aria-hidden="true" />
+
+            {/* ── Generate ── */}
+            <div className="gen-toolbar__generate">
               {selectedCount === 0 && (
                 <p className="gen-cta__hint">{msgs.validationSkus}</p>
               )}
@@ -939,7 +1045,9 @@ export function GeneratorShell() {
               </button>
             </div>
           </div>
+          {/* end .gen-toolbar */}
         </div>
+        {/* end .gen-right */}
       </div>
       {/* end .gen-panels */}
     </div>
