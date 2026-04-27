@@ -70,7 +70,7 @@
 .app-sidebar__logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
   min-width: 0;
   overflow: hidden;
   text-decoration: none;
@@ -179,13 +179,13 @@
   justify-content: center;
   align-items: center;
   gap: 4px;
-  padding: 7px 4px;
+  padding: 7px 6px;
   height: auto;
-  /* 76px sidebar − 8px × 2 padding = 60px available */
   width: 60px;
   align-self: center;
   white-space: normal;
   overflow: visible;
+  border-radius: 14px;
 }
 
 .app-sidebar__item--col .app-sidebar__item-label {

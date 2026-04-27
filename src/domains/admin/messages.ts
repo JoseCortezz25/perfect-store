@@ -11,7 +11,7 @@ export const adminMessages = {
   },
 
   nav: {
-    myProjects: 'Mis proyectos',
+    myProjects: 'Home',
     generator: 'Generador',
     admin: 'Admin',
     settings: 'Ajustes',

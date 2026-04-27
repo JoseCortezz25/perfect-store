@@ -12,6 +12,7 @@ import {
 import Link from 'next/link';
 import { ProjectCard } from '../molecules/project-card';
 import { NewProjectModal } from '../molecules/new-project-modal';
+import { NewBrandModal } from '../molecules/new-brand-modal';
 import { projectMessages } from '../../messages';
 import { useCurrentUser } from '@/domains/auth/hooks/use-current-user';
 import type { Project, FilterType } from '../../projects.types';
@@ -85,6 +86,7 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
   const [selectedBrands, setSelectedBrands] = useState<Set<string>>(new Set());
   const [isBrandOpen, setIsBrandOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const sortRef = useRef<HTMLDivElement>(null);
   const brandRef = useRef<HTMLDivElement>(null);
@@ -282,14 +284,24 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
           </div>
 
           {canCreateProject && (
-            <button
-              type="button"
-              className="btn btn--primary projects-container__create-btn"
-              onClick={() => setIsModalOpen(true)}
-            >
-              <Plus size={12} strokeWidth={2.5} aria-hidden="true" />
-              <span>{msgs.newProject}</span>
-            </button>
+            <>
+              <button
+                type="button"
+                className="btn btn--secondary projects-container__create-btn"
+                onClick={() => setIsBrandModalOpen(true)}
+              >
+                <Plus size={12} strokeWidth={2.5} aria-hidden="true" />
+                <span>{msgs.newBrand}</span>
+              </button>
+              <button
+                type="button"
+                className="btn btn--primary projects-container__create-btn"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <Plus size={12} strokeWidth={2.5} aria-hidden="true" />
+                <span>{msgs.newProject}</span>
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -353,6 +365,12 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
         <NewProjectModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+        />
+      )}
+      {canCreateProject && (
+        <NewBrandModal
+          isOpen={isBrandModalOpen}
+          onClose={() => setIsBrandModalOpen(false)}
         />
       )}
     </div>

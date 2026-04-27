@@ -15,8 +15,14 @@
   gap: 10px;
 }
 
-.projects-section .section-header__accent-line {
-  display: none;
+.projects-section .section-header__accent-line,
+.stats-section__header .section-header__accent-line {
+  width: 3px;
+  min-height: 28px;
+  background-color: #095EAA;
+  border-radius: 9999px;
+  align-self: flex-start;
+  margin-top: 6px;
 }
 
 .section-header__body {
@@ -66,7 +72,7 @@
   color: #1A1A1A;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin: 0 0 4px;
+  margin: 0;
 }
 
 .stats-section__subtitle {
@@ -74,7 +80,11 @@
   font-size: 13px;
   font-weight: 400;
   color: #666666;
-  margin: 0 0 20px;
+  margin: 0;
+}
+
+.stats-section__header {
+  margin-bottom: 20px;
 }
 
 /* ─── Stats Row ──────────────────────────────────────────────── */
@@ -991,22 +1001,17 @@
 
 /* ─── Modal ──────────────────────────────────────────────────── */
 
-.modal {
-  padding: 0;
-  border: none;
-  background: transparent;
-  max-width: 520px;
-  width: 90vw;
+.modal-overlay {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
-}
-
-.modal::backdrop {
-  background-color: rgba(9, 94, 170, 0.12);
-  backdrop-filter: blur(2px);
+  inset: 0;
+  background-color: rgba(9, 30, 60, 0.30);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
 }
 
 .modal__card {
@@ -1016,14 +1021,14 @@
   background: #FFFFFF;
   border: 1px solid #D4E8F5;
   border-radius: 12px;
-  padding: 48px 56px 44px;
+  padding: 32px 40px 32px;
   gap: 8px;
   box-shadow: 0 16px 48px rgba(9, 94, 170, 0.12);
 }
 
 .modal__header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 4px;
 }
@@ -1047,24 +1052,28 @@
 }
 
 .modal__close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
   border: none;
-  border-radius: 6px;
-  background-color: #EBF4FC;
-  color: #777777;
-  transition: background-color 120ms cubic-bezier(0.2, 0, 0, 1);
+  border-radius: 9999px;
+  background: #095EAA;
+  color: #FFFFFF;
+  transition: background 200ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform  200ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .modal__close:hover {
-  background-color: #D4E8F5;
+  background: #1888CA;
+}
+
+.modal__close:active {
+  background: #00B3E6;
+  transform: scale(0.96);
 }
 
 /* ─── Modal Form ─────────────────────────────────────────────── */

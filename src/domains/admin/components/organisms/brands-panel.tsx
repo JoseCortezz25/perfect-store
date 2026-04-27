@@ -65,13 +65,13 @@ export function BrandsPanel() {
             <span className="admin-table-header__cell">
               {msgs.tableHeaders.client}
             </span>
-            <span className="admin-table-header__cell">
+            <span className="admin-table-header__cell admin-table-header__cell--center">
               {msgs.tableHeaders.projects}
             </span>
-            <span className="admin-table-header__cell">
+            <span className="admin-table-header__cell admin-table-header__cell--center">
               {msgs.tableHeaders.images}
             </span>
-            <span className="admin-table-header__cell">
+            <span className="admin-table-header__cell admin-table-header__cell--right">
               {msgs.tableHeaders.delete}
             </span>
           </div>

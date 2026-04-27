@@ -1,33 +1,48 @@
 'use client';
 
+import type { ReactNode } from 'react';
+
 interface StepSliderProps {
   label: string;
+  icons?: readonly ReactNode[];
   steps: readonly string[];
   value: number;
   onChange: (value: number) => void;
 }
 
-export function StepSlider({ label, steps, value, onChange }: StepSliderProps) {
+export function StepSlider({
+  label,
+  icons,
+  steps,
+  value,
+  onChange
+}: StepSliderProps) {
   return (
     <div className="step-slider">
-      <div className="step-slider__header">
-        <span className="step-slider__label">{label}</span>
-        <span className="step-slider__current">{steps[value]}</span>
-      </div>
-      <input
-        type="range"
-        className="step-slider__input"
-        min={0}
-        max={steps.length - 1}
-        step={1}
-        value={value}
-        onChange={e => onChange(Number(e.target.value))}
-        aria-label={label}
-        aria-valuetext={steps[value]}
-      />
-      <div className="step-slider__labels">
-        <span>{steps[0]}</span>
-        <span>{steps[steps.length - 1]}</span>
+      <span className="step-slider__label">{label}</span>
+      <div className="step-slider__body">
+        <div className="step-slider__track" aria-hidden="true" />
+        <div className="step-slider__ticks">
+          {steps.map((step, i) => (
+            <button
+              key={step}
+              type="button"
+              className={`step-slider__tick${i === value ? 'step-slider__tick--active' : ''}`}
+              onClick={() => onChange(i)}
+              aria-label={step}
+              aria-pressed={i === value}
+            >
+              {icons?.[i] ? (
+                <span className="step-slider__icon" aria-hidden="true">
+                  {icons[i]}
+                </span>
+              ) : (
+                <span className="step-slider__dot" aria-hidden="true" />
+              )}
+              <span className="step-slider__tick-label">{step}</span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

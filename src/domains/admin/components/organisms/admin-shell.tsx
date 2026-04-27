@@ -1,13 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { ShieldOff } from 'lucide-react';
+import { ShieldOff, Users, Layers } from 'lucide-react';
 import { useCurrentUser } from '@/domains/auth/hooks/use-current-user';
 import { UsersPanel } from './users-panel';
 import { BrandsPanel } from './brands-panel';
 import { adminMessages } from '../../messages';
 
 type AdminTab = 'usuarios' | 'marcas';
+
+const TAB_ICONS: Record<AdminTab, React.ReactNode> = {
+  usuarios: <Users size={14} strokeWidth={1.5} aria-hidden="true" />,
+  marcas: <Layers size={14} strokeWidth={1.5} aria-hidden="true" />
+};
 
 const msgs = adminMessages;
 
@@ -54,6 +59,7 @@ export function AdminShell() {
             className={`admin-tabs__tab${activeTab === tab ? 'admin-tabs__tab--active' : ''}`}
             onClick={() => setActiveTab(tab)}
           >
+            {TAB_ICONS[tab]}
             {msgs.tabs[tab]}
           </button>
         ))}

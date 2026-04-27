@@ -9,7 +9,7 @@ import {
   ShieldCheck,
   PanelLeft,
   LogOut,
-  Check,
+  Check
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSidebar } from '@/hooks/use-sidebar';
@@ -29,9 +29,9 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { icon: Layers,      label: navMsgs.myProjects, href: '/' },
-  { icon: Wand2,       label: navMsgs.generator,  href: '/generator' },
-  { icon: ShieldCheck, label: navMsgs.admin,       href: '/admin', adminOnly: true },
+  { icon: Layers, label: navMsgs.myProjects, href: '/' },
+  { icon: Wand2, label: navMsgs.generator, href: '/generator' },
+  { icon: ShieldCheck, label: navMsgs.admin, href: '/admin', adminOnly: true }
 ];
 
 /* ── Component ──────────────────────────────────────────── */
@@ -52,16 +52,14 @@ export function AppSidebar() {
     router.push('/login');
   }
 
-  const visibleItems = NAV_ITEMS.filter(
-    item => !item.adminOnly || isAdmin
-  );
+  const visibleItems = NAV_ITEMS.filter(item => !item.adminOnly || isAdmin);
 
   return (
     <aside
       className={cn(
         'app-sidebar',
         'app-sidebar--floating',
-        isCollapsed && 'app-sidebar--collapsed',
+        isCollapsed && 'app-sidebar--collapsed'
       )}
       aria-label="Navegación principal"
     >
@@ -84,8 +82,8 @@ export function AppSidebar() {
                 src="/Assets/Burbujas.svg"
                 alt="Perfect Store"
                 className="app-sidebar__logo-img"
-                width={20}
-                height={22}
+                width={16}
+                height={18}
               />
             )}
           </button>
@@ -97,8 +95,8 @@ export function AppSidebar() {
                 src="/Assets/Burbujas.svg"
                 alt="Perfect Store"
                 className="app-sidebar__logo-img"
-                width={20}
-                height={22}
+                width={16}
+                height={18}
               />
               <span className="app-sidebar__logo-text">Perfect Store</span>
             </Link>
@@ -170,7 +168,9 @@ export function AppSidebar() {
         {/* Profile switcher dropdown */}
         {isUserMenuOpen && !isCollapsed && (
           <div className="app-sidebar__user-menu">
-            <p className="app-sidebar__user-menu-label">{navMsgs.changeProfile}</p>
+            <p className="app-sidebar__user-menu-label">
+              {navMsgs.changeProfile}
+            </p>
             {APP_USERS.map(u => (
               <button
                 key={u.id}
@@ -184,13 +184,22 @@ export function AppSidebar() {
                   setIsUserMenuOpen(false);
                 }}
               >
-                <div className="app-sidebar__user-menu-avatar">{u.initials}</div>
+                <div className="app-sidebar__user-menu-avatar">
+                  {u.initials}
+                </div>
                 <div className="app-sidebar__user-menu-info">
                   <span className="app-sidebar__user-menu-name">{u.name}</span>
-                  <span className="app-sidebar__user-menu-role">{u.roleLabel}</span>
+                  <span className="app-sidebar__user-menu-role">
+                    {u.roleLabel}
+                  </span>
                 </div>
                 {u.id === user.id && (
-                  <Check size={12} strokeWidth={2.5} className="app-sidebar__user-menu-check" aria-hidden="true" />
+                  <Check
+                    size={12}
+                    strokeWidth={2.5}
+                    className="app-sidebar__user-menu-check"
+                    aria-hidden="true"
+                  />
                 )}
               </button>
             ))}

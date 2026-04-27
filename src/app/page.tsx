@@ -41,8 +41,13 @@ export default function HomePage() {
         {/* ─── Stats Section ─────────────────────────────────── */}
         <section className="stats-section">
           <div className="stats-section__content">
-            <h2 className="stats-section__title">{msgs.statsTitle}</h2>
-            <p className="stats-section__subtitle">{msgs.statsSubtitle}</p>
+            <div className="section-header stats-section__header">
+              <div className="section-header__accent-line" />
+              <div className="section-header__body">
+                <h2 className="stats-section__title">{msgs.statsTitle}</h2>
+                <p className="stats-section__subtitle">{msgs.statsSubtitle}</p>
+              </div>
+            </div>
 
             <div className="stats-row">
               <div className="stat-card">
@@ -50,7 +55,9 @@ export default function HomePage() {
                   <FolderOpen size={18} strokeWidth={1.5} aria-hidden="true" />
                 </div>
                 <div className="stat-card__body">
-                  <span className="stat-card__label">{msgs.metrics.totalProjects}</span>
+                  <span className="stat-card__label">
+                    {msgs.metrics.totalProjects}
+                  </span>
                   <p className="stat-card__value">{MOCK_PROJECTS.length}</p>
                 </div>
                 <div className="stat-card__deco" aria-hidden="true" />
@@ -61,7 +68,9 @@ export default function HomePage() {
                   <ImageIcon size={18} strokeWidth={1.5} aria-hidden="true" />
                 </div>
                 <div className="stat-card__body">
-                  <span className="stat-card__label">{msgs.metrics.totalImages}</span>
+                  <span className="stat-card__label">
+                    {msgs.metrics.totalImages}
+                  </span>
                   <p className="stat-card__value">{totalImages}</p>
                 </div>
                 <div className="stat-card__deco" aria-hidden="true" />
@@ -72,7 +81,9 @@ export default function HomePage() {
                   <Package size={18} strokeWidth={1.5} aria-hidden="true" />
                 </div>
                 <div className="stat-card__body">
-                  <span className="stat-card__label">{msgs.metrics.totalSkus}</span>
+                  <span className="stat-card__label">
+                    {msgs.metrics.totalSkus}
+                  </span>
                   <p className="stat-card__value">{TOTAL_SKUS}</p>
                 </div>
                 <div className="stat-card__deco" aria-hidden="true" />
@@ -83,7 +94,9 @@ export default function HomePage() {
                   <TrendingUp size={18} strokeWidth={1.5} aria-hidden="true" />
                 </div>
                 <div className="stat-card__body">
-                  <span className="stat-card__label">{msgs.metrics.imagesThisWeek}</span>
+                  <span className="stat-card__label">
+                    {msgs.metrics.imagesThisWeek}
+                  </span>
                   <p className="stat-card__value">{imagesThisWeek}</p>
                 </div>
                 <div className="stat-card__deco" aria-hidden="true" />

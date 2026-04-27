@@ -1,43 +1,19 @@
 'use client';
 
-import { useActionState, useEffect } from 'react';
-import { useFormStatus } from 'react-dom';
+import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
-import { createProjectAction } from '../../actions';
 import { projectMessages } from '../../messages';
 
-const msgs = projectMessages.modal;
+const msgs = projectMessages.brandModal;
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="btn btn--primary modal-form__submit"
-    >
-      {pending ? msgs.creatingButton : msgs.createButton}
-    </button>
-  );
-}
-
-interface NewProjectModalProps {
+interface NewBrandModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function NewProjectModal({ isOpen, onClose }: NewProjectModalProps) {
-  const [state, formAction, isPending] = useActionState(
-    createProjectAction,
-    null
-  );
-
-  useEffect(() => {
-    if (state?.success) {
-      onClose();
-    }
-  }, [state?.success, onClose]);
+export function NewBrandModal({ isOpen, onClose }: NewBrandModalProps) {
+  const [isPending, setIsPending] = useState(false);
 
   function handleClose() {
     if (!isPending) onClose();
@@ -45,6 +21,15 @@ export function NewProjectModal({ isOpen, onClose }: NewProjectModalProps) {
 
   function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
     if (e.target === e.currentTarget) handleClose();
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsPending(true);
+    setTimeout(() => {
+      setIsPending(false);
+      onClose();
+    }, 800);
   }
 
   if (!isOpen) return null;
@@ -58,7 +43,7 @@ export function NewProjectModal({ isOpen, onClose }: NewProjectModalProps) {
             type="button"
             onClick={handleClose}
             className="modal__close"
-            aria-label="Close"
+            aria-label="Cerrar"
           >
             <X size={14} strokeWidth={2} />
           </button>
@@ -66,39 +51,34 @@ export function NewProjectModal({ isOpen, onClose }: NewProjectModalProps) {
 
         <p className="modal__subtitle">{msgs.subtitle}</p>
 
-        <form action={formAction} className="modal-form">
+        <form onSubmit={handleSubmit} className="modal-form">
           <div className="modal-form__field">
-            <label htmlFor="project-name" className="modal-form__label">
+            <label htmlFor="brand-name" className="modal-form__label">
               {msgs.nameLabel}
             </label>
             <input
-              id="project-name"
+              id="brand-name"
               name="name"
               type="text"
               placeholder={msgs.namePlaceholder}
               className="modal-form__input"
               autoFocus
+              required
             />
           </div>
 
           <div className="modal-form__field">
-            <label htmlFor="project-brand" className="modal-form__label">
-              {msgs.brandLabel}
+            <label htmlFor="brand-client" className="modal-form__label">
+              {msgs.clientLabel}
             </label>
             <input
-              id="project-brand"
-              name="brand"
+              id="brand-client"
+              name="client"
               type="text"
-              placeholder={msgs.brandPlaceholder}
+              placeholder={msgs.clientPlaceholder}
               className="modal-form__input"
             />
           </div>
-
-          {state?.error && (
-            <p className="modal-form__error" role="alert">
-              {state.error}
-            </p>
-          )}
 
           <div className="modal-form__actions">
             <button
@@ -108,7 +88,13 @@ export function NewProjectModal({ isOpen, onClose }: NewProjectModalProps) {
             >
               {msgs.cancelButton}
             </button>
-            <SubmitButton />
+            <button
+              type="submit"
+              disabled={isPending}
+              className="btn btn--primary modal-form__submit"
+            >
+              {isPending ? msgs.creatingButton : msgs.createButton}
+            </button>
           </div>
         </form>
       </div>

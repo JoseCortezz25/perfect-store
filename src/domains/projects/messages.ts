@@ -1,6 +1,7 @@
 export const projectMessages = {
   home: {
     newProject: 'Nuevo proyecto',
+    newBrand: 'Nueva marca',
     searchPlaceholder: 'Buscar proyectos...',
     metrics: {
       totalProjects: 'Total proyectos',
@@ -39,6 +40,20 @@ export const projectMessages = {
     brandLabel: 'Marca',
     brandPlaceholder: 'Ej. Nike',
     createButton: 'Crear proyecto',
+    creatingButton: 'Creando...',
+    cancelButton: 'Cancelar',
+    errors: {
+      serverError: 'Algo salió mal. Por favor intenta de nuevo.'
+    }
+  },
+  brandModal: {
+    title: 'Nueva marca',
+    subtitle: 'Completa los datos para registrar una nueva marca',
+    nameLabel: 'Nombre de la marca',
+    namePlaceholder: 'Ej. Nike',
+    clientLabel: 'Cliente',
+    clientPlaceholder: 'Ej. Empresa S.A.',
+    createButton: 'Crear marca',
     creatingButton: 'Creando...',
     cancelButton: 'Cancelar',
     errors: {
@@ -124,9 +139,9 @@ export const projectMessages = {
         noResult: 'Sube una versión para ver el resultado',
         scoreLabel: (score: number) => `${score}`,
         scoreMax: '/ 100',
-        passCount: (_n: number) => 'aprobados',
-        failCount: (_n: number) => 'fallidos',
-        warningCount: (_n: number) => 'advertencias',
+        passCount: () => 'aprobados',
+        failCount: () => 'fallidos',
+        warningCount: () => 'advertencias',
         groups: {
           weight: 'Peso del archivo',
           dimensions: 'Dimensiones',
