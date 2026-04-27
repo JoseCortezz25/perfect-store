@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useSyncExternalStore } from 'react';
+import { useState, useSyncExternalStore, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
@@ -10,7 +10,8 @@ import {
   X,
   ArrowLeft,
   FolderPlus,
-  Plus
+  Plus,
+  ChevronDown
 } from 'lucide-react';
 import { generatorStore } from '../../stores/generator.store';
 import { generatorMessages } from '../../messages';
@@ -44,8 +45,23 @@ export function ResultsShell() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [addMode, setAddMode] = useState<'existing' | 'new'>('existing');
   const [selectedProjectId, setSelectedProjectId] = useState('');
+  const [isProjectDropOpen, setIsProjectDropOpen] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
   const [newProjectBrand, setNewProjectBrand] = useState('');
+  const projDropRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        projDropRef.current &&
+        !projDropRef.current.contains(e.target as Node)
+      ) {
+        setIsProjectDropOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   function handleRegenerate(img: GeneratedImage) {
     const next = images.map(i =>
@@ -355,25 +371,59 @@ export function ResultsShell() {
               {/* Tab content */}
               {addMode === 'existing' ? (
                 <div className="gen-modal__field">
-                  <label
-                    className="gen-modal__label"
-                    htmlFor="add-project-select"
-                  >
+                  <label className="gen-modal__label">
                     {modalMsgs.selectLabel}
                   </label>
-                  <select
-                    id="add-project-select"
-                    className="gen-modal__select"
-                    value={selectedProjectId}
-                    onChange={e => setSelectedProjectId(e.target.value)}
-                  >
-                    <option value="">{modalMsgs.selectPlaceholder}</option>
-                    {EXISTING_PROJECTS.map(p => (
-                      <option key={p.id} value={p.id}>
-                        {p.name} — {p.brand}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="gen-proj-drop" ref={projDropRef}>
+                    <button
+                      type="button"
+                      className={cn(
+                        'gen-proj-drop__trigger',
+                        !selectedProjectId &&
+                          'gen-proj-drop__trigger--placeholder'
+                      )}
+                      data-open={isProjectDropOpen}
+                      onClick={() => setIsProjectDropOpen(o => !o)}
+                    >
+                      <span>
+                        {selectedProjectId
+                          ? (() => {
+                              const p = EXISTING_PROJECTS.find(
+                                x => x.id === selectedProjectId
+                              );
+                              return p
+                                ? `${p.name} — ${p.brand}`
+                                : modalMsgs.selectPlaceholder;
+                            })()
+                          : modalMsgs.selectPlaceholder}
+                      </span>
+                      <ChevronDown
+                        size={13}
+                        strokeWidth={1.5}
+                        className="gen-proj-drop__chevron"
+                        data-open={isProjectDropOpen}
+                        aria-hidden="true"
+                      />
+                    </button>
+                    {isProjectDropOpen && (
+                      <div className="gen-proj-drop__dropdown">
+                        {EXISTING_PROJECTS.map(p => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            className="gen-proj-drop__option"
+                            data-active={selectedProjectId === p.id}
+                            onClick={() => {
+                              setSelectedProjectId(p.id);
+                              setIsProjectDropOpen(false);
+                            }}
+                          >
+                            {p.name} — {p.brand}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <>
