@@ -1,5 +1,6 @@
 'use client';
 
+import { createPortal } from 'react-dom';
 import { X, Trash2 } from 'lucide-react';
 import { adminMessages } from '../../messages';
 
@@ -24,7 +25,7 @@ export function ConfirmDeleteModal({
   onConfirm,
   onCancel,
 }: ConfirmDeleteModalProps) {
-  return (
+  return createPortal(
     <div className="admin-modal-overlay" onClick={onCancel}>
       <div
         className="admin-modal admin-modal--narrow"
@@ -66,6 +67,7 @@ export function ConfirmDeleteModal({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

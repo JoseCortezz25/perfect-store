@@ -7,8 +7,7 @@ import {
   Check,
   Plus,
   LayoutGrid,
-  LayoutList,
-  Image as ImageIcon
+  LayoutList
 } from 'lucide-react';
 import Link from 'next/link';
 import { ProjectCard } from '../molecules/project-card';
@@ -47,7 +46,11 @@ function ProjectListRow({ project }: { project: Project }) {
     <Link href={`/projects/${project.id}`} className="project-list-row">
       <div className="project-list-row__name-cell">
         <div className="project-list-row__thumb" aria-hidden="true">
-          <ImageIcon size={18} strokeWidth={1} />
+          <img
+            src={project.thumbnail ?? '/Images/Placceholder-Image.png'}
+            alt=""
+            className="project-list-row__thumb-img"
+          />
         </div>
         <div className="project-list-row__name-info">
           <span className="project-list-row__name">{project.name}</span>

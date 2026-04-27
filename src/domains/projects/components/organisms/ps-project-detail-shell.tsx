@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { RefreshCw, Download, X, ArrowLeft } from 'lucide-react';
 import { projectMessages } from '../../messages';
@@ -171,20 +172,11 @@ export function PsProjectDetailShell({ project }: PsProjectDetailShellProps) {
                       }
                       aria-label={msgs.imageAlt(idx + 1)}
                     >
-                      <div
+                      <img
+                        src="/Images/Placceholder-Image.png"
+                        alt={msgs.imageAlt(idx + 1)}
                         className="result-card__placeholder"
-                        style={{
-                          backgroundColor: img.accentColor + '33',
-                          borderColor: img.accentColor + '55'
-                        }}
-                      >
-                        <span
-                          className="result-card__placeholder-text"
-                          style={{ color: img.accentColor }}
-                        >
-                          {idx + 1}
-                        </span>
-                      </div>
+                      />
                     </button>
                     <div className="result-card__actions">
                       <button
@@ -217,7 +209,7 @@ export function PsProjectDetailShell({ project }: PsProjectDetailShellProps) {
       </div>
 
       {/* Image detail modal — wide two-column layout */}
-      {activeImageState && (
+      {activeImageState && createPortal(
         <div
           className="gen-modal-overlay"
           onClick={() => setActiveImageState(null)}
@@ -232,24 +224,12 @@ export function PsProjectDetailShell({ project }: PsProjectDetailShellProps) {
             <div className="pd-modal-layout">
               {/* Left: large image */}
               <div className="pd-modal-image">
-                <div
+                <img
+                  src="/Images/Placceholder-Image.png"
+                  alt=""
                   className="pd-modal-image__preview"
-                  style={{
-                    backgroundColor: activeImageState.image.accentColor + '33'
-                  }}
                   aria-hidden="true"
-                >
-                  <span
-                    style={{
-                      color: activeImageState.image.accentColor,
-                      fontSize: 96,
-                      fontWeight: 800,
-                      opacity: 0.6
-                    }}
-                  >
-                    AI
-                  </span>
-                </div>
+                />
               </div>
 
               {/* Right: details */}
@@ -351,7 +331,8 @@ export function PsProjectDetailShell({ project }: PsProjectDetailShellProps) {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

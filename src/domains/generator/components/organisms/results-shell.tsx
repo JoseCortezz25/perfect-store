@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useSyncExternalStore } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import {
   RefreshCw,
@@ -189,7 +190,7 @@ export function ResultsShell() {
       </div>
 
       {/* ════ Image detail modal ════ */}
-      {activeImage && (
+      {activeImage && createPortal(
         <div
           className="gen-modal-overlay"
           onClick={() => setActiveImage(null)}
@@ -294,11 +295,12 @@ export function ResultsShell() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ════ Add to project modal ════ */}
-      {showAddModal && (
+      {showAddModal && createPortal(
         <div
           className="gen-modal-overlay"
           onClick={handleAddModalClose}
@@ -423,7 +425,8 @@ export function ResultsShell() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

@@ -1,10 +1,10 @@
-import { Topbar } from '@/components/layout/topbar';
+import { AppSidebar } from '@/components/layout/app-sidebar';
 import { ProjectsGrid } from '@/domains/projects/components/organisms/projects-grid';
 import { projectMessages } from '@/domains/projects/messages';
 import { getAllPsProjects } from '@/domains/projects/ps-project-detail.repository';
 import type { Project } from '@/domains/projects/projects.types';
 import { FolderOpen, ImageIcon, Package, TrendingUp } from 'lucide-react';
-import '@/styles/components/layout/topbar.css';
+import '@/styles/components/layout/app-sidebar.css';
 import '@/styles/domains/projects/home.css';
 
 const MOCK_PROJECTS: Project[] = getAllPsProjects().map(p => ({
@@ -13,7 +13,8 @@ const MOCK_PROJECTS: Project[] = getAllPsProjects().map(p => ({
   brand: p.brand,
   totalImages: p.sessions.reduce((sum, s) => sum + s.images.length, 0),
   createdAt: p.createdAt,
-  updatedAt: p.sessions[0]?.generatedAt ?? p.createdAt
+  updatedAt: p.sessions[0]?.generatedAt ?? p.createdAt,
+  thumbnail: p.thumbnail
 }));
 
 // ─── Métricas ─────────────────────────────────────────────────────────────────
@@ -33,80 +34,59 @@ const msgs = projectMessages.home;
 export default function HomePage() {
   return (
     <div className="dashboard">
-      <Topbar />
+      <AppSidebar />
       <main className="dashboard__main">
         <div className="dashboard__bg" />
 
         {/* ─── Stats Section ─────────────────────────────────── */}
         <section className="stats-section">
           <div className="stats-section__content">
-            <div className="stats-card">
-              <div className="section-header">
-                <div className="section-header__accent-line" />
-                <div className="section-header__body">
-                  <h1 className="section-header__title">{msgs.statsTitle}</h1>
-                  <p className="section-header__subtitle">
-                    {msgs.statsSubtitle}
-                  </p>
+            <h2 className="stats-section__title">{msgs.statsTitle}</h2>
+            <p className="stats-section__subtitle">{msgs.statsSubtitle}</p>
+
+            <div className="stats-row">
+              <div className="stat-card">
+                <div className="stat-card__icon stat-card__icon--blue">
+                  <FolderOpen size={18} strokeWidth={1.5} aria-hidden="true" />
                 </div>
+                <div className="stat-card__body">
+                  <span className="stat-card__label">{msgs.metrics.totalProjects}</span>
+                  <p className="stat-card__value">{MOCK_PROJECTS.length}</p>
+                </div>
+                <div className="stat-card__deco" aria-hidden="true" />
               </div>
 
-              <div className="home-metrics">
-                <div className="metric-item">
-                  <div className="metric-item__header">
-                    <FolderOpen
-                      size={16}
-                      strokeWidth={1.5}
-                      className="metric-item__icon"
-                    />
-                    <p className="metric-item__label">
-                      {msgs.metrics.totalProjects}
-                    </p>
-                  </div>
-                  <p className="metric-item__value">{MOCK_PROJECTS.length}</p>
+              <div className="stat-card">
+                <div className="stat-card__icon stat-card__icon--purple">
+                  <ImageIcon size={18} strokeWidth={1.5} aria-hidden="true" />
                 </div>
+                <div className="stat-card__body">
+                  <span className="stat-card__label">{msgs.metrics.totalImages}</span>
+                  <p className="stat-card__value">{totalImages}</p>
+                </div>
+                <div className="stat-card__deco" aria-hidden="true" />
+              </div>
 
-                <div className="metric-item">
-                  <div className="metric-item__header">
-                    <ImageIcon
-                      size={16}
-                      strokeWidth={1.5}
-                      className="metric-item__icon"
-                    />
-                    <p className="metric-item__label">
-                      {msgs.metrics.totalImages}
-                    </p>
-                  </div>
-                  <p className="metric-item__value">{totalImages}</p>
+              <div className="stat-card">
+                <div className="stat-card__icon stat-card__icon--orange">
+                  <Package size={18} strokeWidth={1.5} aria-hidden="true" />
                 </div>
+                <div className="stat-card__body">
+                  <span className="stat-card__label">{msgs.metrics.totalSkus}</span>
+                  <p className="stat-card__value">{TOTAL_SKUS}</p>
+                </div>
+                <div className="stat-card__deco" aria-hidden="true" />
+              </div>
 
-                <div className="metric-item">
-                  <div className="metric-item__header">
-                    <Package
-                      size={16}
-                      strokeWidth={1.5}
-                      className="metric-item__icon"
-                    />
-                    <p className="metric-item__label">
-                      {msgs.metrics.totalSkus}
-                    </p>
-                  </div>
-                  <p className="metric-item__value">{TOTAL_SKUS}</p>
+              <div className="stat-card">
+                <div className="stat-card__icon stat-card__icon--pink">
+                  <TrendingUp size={18} strokeWidth={1.5} aria-hidden="true" />
                 </div>
-
-                <div className="metric-item">
-                  <div className="metric-item__header">
-                    <TrendingUp
-                      size={16}
-                      strokeWidth={1.5}
-                      className="metric-item__icon"
-                    />
-                    <p className="metric-item__label">
-                      {msgs.metrics.imagesThisWeek}
-                    </p>
-                  </div>
-                  <p className="metric-item__value">{imagesThisWeek}</p>
+                <div className="stat-card__body">
+                  <span className="stat-card__label">{msgs.metrics.imagesThisWeek}</span>
+                  <p className="stat-card__value">{imagesThisWeek}</p>
                 </div>
+                <div className="stat-card__deco" aria-hidden="true" />
               </div>
             </div>
           </div>

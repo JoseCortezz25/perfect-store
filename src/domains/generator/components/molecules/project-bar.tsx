@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useSyncExternalStore } from 'react';
+import { createPortal } from 'react-dom';
 import { FolderOpen, ChevronDown, X, Plus } from 'lucide-react';
 import { generatorStore } from '../../stores/generator.store';
 import { generatorMessages } from '../../messages';
@@ -93,7 +94,7 @@ export function ProjectBar() {
         </button>
       </div>
 
-      {isOpen && (
+      {isOpen && createPortal(
         <div
           className="gen-modal-overlay"
           onClick={handleClose}
@@ -211,7 +212,8 @@ export function ProjectBar() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

@@ -18,7 +18,8 @@ const DEFAULT_CONFIG: GeneratorConfig = {
   atmosphericChips: [],
   dayMoment: 2,
   prominence: 2,
-  quality: 'medio'
+  quality: 'medio',
+  imageCount: 4
 };
 
 type Listener = () => void;

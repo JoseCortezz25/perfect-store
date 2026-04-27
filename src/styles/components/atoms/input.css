@@ -1,65 +1,65 @@
 .input-text {
-  @apply rounded-[12px] border border-black/10 bg-black/5 p-[12px] transition-all duration-300;
-  box-shadow:
-    0px 0px 1px 1px rgba(255, 255, 255, 0.05) inset,
-    1px 1px 1px 0px rgba(255, 255, 255, 0.15) inset;
+  @apply rounded-[12px] border bg-white p-[12px] transition-all duration-300;
+  border-color: #095EAA;
 
   label {
-    @apply text-black-300 w-full text-[11px] leading-[12px];
+    @apply w-full text-[11px] leading-[12px];
+    color: #095EAA;
+    font-family: var(--font-montserrat), sans-serif;
   }
 
   .input-text__input {
     @apply flex items-center gap-[4px];
 
     .input-text__show-password {
-      @apply text-black-200 cursor-pointer [&>svg]:size-[16px];
+      color: #1888CA;
+      @apply cursor-pointer [&>svg]:size-[16px];
     }
   }
 
   input {
-    @apply text-black-200 space-y-[4px] rounded-none border-none !bg-transparent p-0 shadow-none focus-within:outline-0 hover:shadow-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0;
+    @apply space-y-[4px] rounded-none border-none bg-transparent p-0 shadow-none focus-within:outline-0 hover:shadow-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0;
+    color: #333333;
+    font-family: var(--font-montserrat), sans-serif;
 
     &:focus {
-      @apply text-black-100;
+      color: #000000;
     }
 
     &::placeholder {
-      @apply text-black-200;
+      color: #999999;
     }
 
-    /* Filled */
     &:not(:placeholder-shown) {
-      @apply text-black-200;
+      color: #333333;
     }
   }
 
   &:hover {
-    @apply border border-black/40 bg-black/5;
-    box-shadow:
-      0px 0px 6px 1px rgba(255, 255, 255, 0.15),
-      0px 0px 1px 1px rgba(255, 255, 255, 0.05) inset,
-      1px 1px 1px 0px rgba(255, 255, 255, 0.15) inset;
+    @apply border bg-white;
+    border-color: #1888CA;
+    box-shadow: 0px 0px 8px 1px rgba(9, 94, 170, 0.12);
+  }
 
-    input {
-      @apply text-black-100;
-    }
+  &:focus-within {
+    border-color: #00B3E6;
+    border-width: 2px;
+    box-shadow: 0px 0px 0px 3px rgba(0, 179, 230, 0.12);
   }
 
   &:has(input:disabled) {
-    @apply border border-black/10 bg-black/5;
-    box-shadow:
-      0px 0px 1px 1px rgba(255, 255, 255, 0.05) inset,
-      1px 1px 1px 0px rgba(255, 255, 255, 0.15) inset;
+    border-color: #81CCF2;
+    background-color: #F5F5F5;
 
     label {
-      @apply text-black-200;
+      color: #81CCF2;
     }
 
     input {
-      @apply text-black-300;
+      color: #999999;
 
       &::placeholder {
-        @apply text-black-200;
+        color: #999999;
       }
     }
   }

@@ -35,11 +35,11 @@ export function AdminShell() {
   return (
     <div className="admin-content">
       {/* Page header */}
-      <div className="admin-page-header">
+      <div className="section-header">
         <div className="section-header__accent-line" />
-        <div>
-          <h1 className="admin-page-header__title">{msgs.pageTitle}</h1>
-          <p className="admin-page-header__subtitle">{msgs.pageSubtitle}</p>
+        <div className="section-header__body">
+          <h1 className="section-header__title">{msgs.pageTitle}</h1>
+          <p className="section-header__subtitle">{msgs.pageSubtitle}</p>
         </div>
       </div>
 

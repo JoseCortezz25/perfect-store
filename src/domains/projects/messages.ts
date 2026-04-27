@@ -124,9 +124,9 @@ export const projectMessages = {
         noResult: 'Sube una versión para ver el resultado',
         scoreLabel: (score: number) => `${score}`,
         scoreMax: '/ 100',
-        passCount: () => 'aprobados',
-        failCount: () => 'fallidos',
-        warningCount: () => 'advertencias',
+        passCount: (_n: number) => 'aprobados',
+        failCount: (_n: number) => 'fallidos',
+        warningCount: (_n: number) => 'advertencias',
         groups: {
           weight: 'Peso del archivo',
           dimensions: 'Dimensiones',

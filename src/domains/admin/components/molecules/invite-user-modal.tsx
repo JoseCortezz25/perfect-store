@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ChevronDown } from 'lucide-react';
 import { adminMessages } from '../../messages';
 import type { AdminUser } from '../../admin.types';
@@ -66,7 +67,7 @@ export function InviteUserModal({ onInvite, onCancel }: InviteUserModalProps) {
 
   const selectedLabel = ROLES.find(r => r.value === role)?.label ?? '';
 
-  return (
+  return createPortal(
     <div className="admin-modal-overlay" onClick={onCancel}>
       <div
         className="admin-modal"
@@ -165,6 +166,7 @@ export function InviteUserModal({ onInvite, onCancel }: InviteUserModalProps) {
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

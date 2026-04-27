@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ChevronDown } from 'lucide-react';
 import { adminMessages } from '../../messages';
 import { RoleBadge } from '../atoms/role-badge';
@@ -51,7 +52,7 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
     onSave(user.id, role);
   }
 
-  return (
+  return createPortal(
     <div className="admin-modal-overlay" onClick={onCancel}>
       <div
         className="admin-modal"
@@ -175,6 +176,7 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -49,6 +49,8 @@ export const generatorMessages = {
       }
     },
 
+    visualReferences: 'Ver referencias visuales',
+
     angle: {
       label: 'Ángulo',
       viewExamples: 'Ver ejemplos',
@@ -89,7 +91,7 @@ export const generatorMessages = {
       label: 'Descripción de contexto',
       toolbarLabel: 'Contexto',
       freeText: {
-        label: 'Texto libre',
+        label: 'Prompt',
         placeholder: 'Describe el contexto de la imagen...'
       },
       elements: {
@@ -151,6 +153,11 @@ export const generatorMessages = {
       }
     },
 
+    imageCount: {
+      label: 'Cantidad',
+      options: [1, 2, 4, 8] as const
+    },
+
     generateBtn: 'Generar imágenes',
     generateBtnLoading: 'Generando...',
     validationSkus: 'Selecciona al menos un SKU para continuar',
@@ -162,8 +169,19 @@ export const generatorMessages = {
     back: 'Volver a configuración',
     addToProject: 'Añadir a proyecto',
     regenerate: 'Regenerar',
+    regenerateAll: 'Regenerar todo',
     download: 'Descargar',
+    downloadAll: 'Descargar todo',
     imageAlt: (n: number) => `Imagen generada ${n}`,
+    imageSingular: 'imagen generada',
+    imagePlural: 'imágenes generadas',
+    emptyState: {
+      title: 'Genera tu primera imagen',
+      subtitle: 'Configura los parámetros y haz clic en Generar',
+      previewLabel: 'Vista previa del prompt',
+      previewEmpty: 'Configura los parámetros para componer tu prompt'
+    },
+    galleryTitle: 'Imágenes de proyectos',
     modal: {
       title: 'Detalle de imagen',
       close: 'Cerrar',
@@ -173,7 +191,9 @@ export const generatorMessages = {
         angle: 'Ángulo',
         aspect: 'Aspecto',
         quality: 'Calidad',
-        prompt: 'Prompt'
+        prompt: 'Prompt',
+        project: 'Proyecto',
+        brand: 'Marca'
       }
     }
   }
