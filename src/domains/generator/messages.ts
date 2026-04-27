@@ -14,7 +14,7 @@ export const generatorMessages = {
     subtitle: 'Selecciona o crea el proyecto donde se guardarán las imágenes',
     selectLabel: 'Proyecto existente',
     selectPlaceholder: 'Seleccionar proyecto...',
-    orCreate: 'o crear uno nuevo',
+    orCreate: 'Nuevo proyecto',
     newNameLabel: 'Nombre del proyecto',
     newNamePlaceholder: 'Ej: Campaña Verano 2026',
     newBrandLabel: 'Marca',

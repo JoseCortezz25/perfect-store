@@ -28,6 +28,10 @@ const EXISTING_PROJECTS = getAllPsProjects().map(p => ({
   brand: p.brand
 }));
 
+const ALL_BRANDS = Array.from(
+  new Set(EXISTING_PROJECTS.map(p => p.brand))
+).sort();
+
 export function ResultsShell() {
   const router = useRouter();
   const images = useSyncExternalStore(
@@ -48,7 +52,12 @@ export function ResultsShell() {
   const [isProjectDropOpen, setIsProjectDropOpen] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
   const [newProjectBrand, setNewProjectBrand] = useState('');
+  const [isBrandDropOpen, setIsBrandDropOpen] = useState(false);
+  const [selectedBrandFilter, setSelectedBrandFilter] = useState('');
+  const [isBrandFilterOpen, setIsBrandFilterOpen] = useState(false);
   const projDropRef = useRef<HTMLDivElement>(null);
+  const brandDropRef = useRef<HTMLDivElement>(null);
+  const brandFilterRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -57,6 +66,18 @@ export function ResultsShell() {
         !projDropRef.current.contains(e.target as Node)
       ) {
         setIsProjectDropOpen(false);
+      }
+      if (
+        brandDropRef.current &&
+        !brandDropRef.current.contains(e.target as Node)
+      ) {
+        setIsBrandDropOpen(false);
+      }
+      if (
+        brandFilterRef.current &&
+        !brandFilterRef.current.contains(e.target as Node)
+      ) {
+        setIsBrandFilterOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -112,8 +133,12 @@ export function ResultsShell() {
     setShowAddModal(false);
     setAddMode('existing');
     setSelectedProjectId('');
+    setIsProjectDropOpen(false);
+    setSelectedBrandFilter('');
+    setIsBrandFilterOpen(false);
     setNewProjectName('');
     setNewProjectBrand('');
+    setIsBrandDropOpen(false);
   }
 
   const angleLabel = config.angle ? cfgMsgs.angle.options[config.angle] : '—';
@@ -370,61 +395,113 @@ export function ResultsShell() {
 
               {/* Tab content */}
               {addMode === 'existing' ? (
-                <div className="gen-modal__field">
-                  <label className="gen-modal__label">
-                    {modalMsgs.selectLabel}
-                  </label>
-                  <div className="gen-proj-drop" ref={projDropRef}>
-                    <button
-                      type="button"
-                      className={cn(
-                        'gen-proj-drop__trigger',
-                        !selectedProjectId &&
-                          'gen-proj-drop__trigger--placeholder'
+                <>
+                  <div className="gen-modal__field">
+                    <label className="gen-modal__label">
+                      {modalMsgs.newBrandLabel}
+                    </label>
+                    <div className="gen-proj-drop" ref={brandFilterRef}>
+                      <button
+                        type="button"
+                        className={cn(
+                          'gen-proj-drop__trigger',
+                          !selectedBrandFilter &&
+                            'gen-proj-drop__trigger--placeholder'
+                        )}
+                        data-open={isBrandFilterOpen}
+                        onClick={() => setIsBrandFilterOpen(o => !o)}
+                      >
+                        <span>
+                          {selectedBrandFilter || 'Seleccionar marca...'}
+                        </span>
+                        <ChevronDown
+                          size={13}
+                          strokeWidth={1.5}
+                          className="gen-proj-drop__chevron"
+                          data-open={isBrandFilterOpen}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      {isBrandFilterOpen && (
+                        <div className="gen-proj-drop__dropdown">
+                          {ALL_BRANDS.map(brand => (
+                            <button
+                              key={brand}
+                              type="button"
+                              className="gen-proj-drop__option"
+                              data-active={selectedBrandFilter === brand}
+                              onClick={() => {
+                                setSelectedBrandFilter(brand);
+                                setSelectedProjectId('');
+                                setIsBrandFilterOpen(false);
+                              }}
+                            >
+                              {brand}
+                            </button>
+                          ))}
+                        </div>
                       )}
-                      data-open={isProjectDropOpen}
-                      onClick={() => setIsProjectDropOpen(o => !o)}
-                    >
-                      <span>
-                        {selectedProjectId
-                          ? (() => {
-                              const p = EXISTING_PROJECTS.find(
-                                x => x.id === selectedProjectId
-                              );
-                              return p
-                                ? `${p.name} — ${p.brand}`
-                                : modalMsgs.selectPlaceholder;
-                            })()
-                          : modalMsgs.selectPlaceholder}
-                      </span>
-                      <ChevronDown
-                        size={13}
-                        strokeWidth={1.5}
-                        className="gen-proj-drop__chevron"
-                        data-open={isProjectDropOpen}
-                        aria-hidden="true"
-                      />
-                    </button>
-                    {isProjectDropOpen && (
-                      <div className="gen-proj-drop__dropdown">
-                        {EXISTING_PROJECTS.map(p => (
-                          <button
-                            key={p.id}
-                            type="button"
-                            className="gen-proj-drop__option"
-                            data-active={selectedProjectId === p.id}
-                            onClick={() => {
-                              setSelectedProjectId(p.id);
-                              setIsProjectDropOpen(false);
-                            }}
-                          >
-                            {p.name} — {p.brand}
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                    </div>
                   </div>
-                </div>
+                  <div className="gen-modal__field">
+                    <label className="gen-modal__label">
+                      {modalMsgs.selectLabel}
+                    </label>
+                    <div className="gen-proj-drop" ref={projDropRef}>
+                      <button
+                        type="button"
+                        className={cn(
+                          'gen-proj-drop__trigger',
+                          !selectedProjectId &&
+                            'gen-proj-drop__trigger--placeholder'
+                        )}
+                        data-open={isProjectDropOpen}
+                        onClick={() => setIsProjectDropOpen(o => !o)}
+                      >
+                        <span>
+                          {selectedProjectId
+                            ? (() => {
+                                const p = EXISTING_PROJECTS.find(
+                                  x => x.id === selectedProjectId
+                                );
+                                return p ? p.name : modalMsgs.selectPlaceholder;
+                              })()
+                            : modalMsgs.selectPlaceholder}
+                        </span>
+                        <ChevronDown
+                          size={13}
+                          strokeWidth={1.5}
+                          className="gen-proj-drop__chevron"
+                          data-open={isProjectDropOpen}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      {isProjectDropOpen && (
+                        <div className="gen-proj-drop__dropdown">
+                          {(selectedBrandFilter
+                            ? EXISTING_PROJECTS.filter(
+                                p => p.brand === selectedBrandFilter
+                              )
+                            : EXISTING_PROJECTS
+                          ).map(p => (
+                            <button
+                              key={p.id}
+                              type="button"
+                              className="gen-proj-drop__option"
+                              data-active={selectedProjectId === p.id}
+                              onClick={() => {
+                                setSelectedProjectId(p.id);
+                                setIsProjectDropOpen(false);
+                              }}
+                            >
+                              {p.name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
               ) : (
                 <>
                   <div className="gen-modal__field">
@@ -444,20 +521,48 @@ export function ResultsShell() {
                     />
                   </div>
                   <div className="gen-modal__field">
-                    <label
-                      className="gen-modal__label"
-                      htmlFor="add-project-brand"
-                    >
+                    <label className="gen-modal__label">
                       {modalMsgs.newBrandLabel}
                     </label>
-                    <input
-                      id="add-project-brand"
-                      type="text"
-                      className="gen-modal__input"
-                      placeholder="Ej: Bretaña"
-                      value={newProjectBrand}
-                      onChange={e => setNewProjectBrand(e.target.value)}
-                    />
+                    <div className="gen-proj-drop" ref={brandDropRef}>
+                      <button
+                        type="button"
+                        className={cn(
+                          'gen-proj-drop__trigger',
+                          !newProjectBrand &&
+                            'gen-proj-drop__trigger--placeholder'
+                        )}
+                        data-open={isBrandDropOpen}
+                        onClick={() => setIsBrandDropOpen(o => !o)}
+                      >
+                        <span>{newProjectBrand || 'Seleccionar marca...'}</span>
+                        <ChevronDown
+                          size={13}
+                          strokeWidth={1.5}
+                          className="gen-proj-drop__chevron"
+                          data-open={isBrandDropOpen}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      {isBrandDropOpen && (
+                        <div className="gen-proj-drop__dropdown">
+                          {ALL_BRANDS.map(brand => (
+                            <button
+                              key={brand}
+                              type="button"
+                              className="gen-proj-drop__option"
+                              data-active={newProjectBrand === brand}
+                              onClick={() => {
+                                setNewProjectBrand(brand);
+                                setIsBrandDropOpen(false);
+                              }}
+                            >
+                              {brand}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </>
               )}

@@ -24,9 +24,7 @@ import {
   Package,
   Layers,
   Leaf,
-  Mountain,
-  ThumbsUp,
-  ThumbsDown
+  Mountain
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { StepSlider } from '../atoms/step-slider';
@@ -1445,29 +1443,6 @@ export function GeneratorShell() {
                         role="button"
                         aria-label={resMsgs.imageAlt(idx + 1)}
                       >
-                        <div
-                          className="result-img__pill result-img__pill--top"
-                          onClick={e => e.stopPropagation()}
-                        >
-                          <button
-                            type="button"
-                            className="result-img__pill-btn"
-                            aria-label="Me gusta"
-                          >
-                            <ThumbsUp size={13} strokeWidth={1.5} />
-                          </button>
-                          <span
-                            className="result-img__pill-sep"
-                            aria-hidden="true"
-                          />
-                          <button
-                            type="button"
-                            className="result-img__pill-btn"
-                            aria-label="No me gusta"
-                          >
-                            <ThumbsDown size={13} strokeWidth={1.5} />
-                          </button>
-                        </div>
                         <div
                           className="result-img__pill result-img__pill--bottom"
                           onClick={e => e.stopPropagation()}

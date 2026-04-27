@@ -120,17 +120,17 @@
 .login-form__input {
   @apply w-full outline-none;
   background-color: #FFFFFF;
-  border: 1px solid #D4E8F5;
-  border-radius: 12px;
+  border: 1px solid #CCCCCC;
+  border-radius: 10px;
   padding: 12px 16px;
   font-family: var(--font-montserrat), sans-serif;
   font-size: 16px;
   font-weight: 400;
   color: #333333;
   transition:
-    border-color 200ms cubic-bezier(0.2, 0, 0, 1),
-    background-color 200ms cubic-bezier(0.2, 0, 0, 1),
-    box-shadow 200ms cubic-bezier(0.2, 0, 0, 1);
+    border-color 150ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 150ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .login-form__input::placeholder {
@@ -139,13 +139,13 @@
 
 .login-form__input:hover:not(:focus) {
   border-color: #1888CA;
-  box-shadow: 0px 0px 8px 1px rgba(9, 94, 170, 0.12);
+  background-color: rgba(9, 94, 170, 0.08);
 }
 
 .login-form__input:focus {
-  border-color: #00B3E6;
+  border-color: #095EAA;
   border-width: 2px;
-  box-shadow: 0px 0px 0px 3px rgba(0, 179, 230, 0.12);
+  background-color: #FFFFFF;
 }
 
 .login-form__error {
