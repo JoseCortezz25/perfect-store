@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ShieldOff, Users, Layers } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { useCurrentUser } from '@/domains/auth/hooks/use-current-user';
 import { UsersPanel } from './users-panel';
 import { BrandsPanel } from './brands-panel';
@@ -56,7 +57,10 @@ export function AdminShell() {
             type="button"
             role="tab"
             aria-selected={activeTab === tab}
-            className={`admin-tabs__tab${activeTab === tab ? 'admin-tabs__tab--active' : ''}`}
+            className={cn(
+              'admin-tabs__tab',
+              activeTab === tab && 'admin-tabs__tab--active'
+            )}
             onClick={() => setActiveTab(tab)}
           >
             {TAB_ICONS[tab]}

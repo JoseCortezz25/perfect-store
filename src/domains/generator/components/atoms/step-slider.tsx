@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 interface StepSliderProps {
   label: string;
@@ -27,7 +28,10 @@ export function StepSlider({
             <button
               key={step}
               type="button"
-              className={`step-slider__tick${i === value ? 'step-slider__tick--active' : ''}`}
+              className={cn(
+                'step-slider__tick',
+                i === value && 'step-slider__tick--active'
+              )}
               onClick={() => onChange(i)}
               aria-label={step}
               aria-pressed={i === value}

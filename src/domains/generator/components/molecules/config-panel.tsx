@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useSyncExternalStore } from 'react';
+import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { Upload, X } from 'lucide-react';
 import { ChipSelector } from '../atoms/chip-selector';
@@ -144,7 +145,10 @@ export function ConfigPanel() {
             <button
               key={type}
               type="button"
-              className={`config-option${config.imageType === type ? 'config-option--active' : ''}`}
+              className={cn(
+                'config-option',
+                config.imageType === type && 'config-option--active'
+              )}
               onClick={() => generatorStore.setConfig({ imageType: type })}
               aria-pressed={config.imageType === type}
             >
@@ -162,7 +166,10 @@ export function ConfigPanel() {
             <button
               key={angle}
               type="button"
-              className={`config-option${config.angle === angle ? 'config-option--active' : ''}`}
+              className={cn(
+                'config-option',
+                config.angle === angle && 'config-option--active'
+              )}
               onClick={() => generatorStore.setConfig({ angle })}
               aria-pressed={config.angle === angle}
             >
@@ -180,7 +187,11 @@ export function ConfigPanel() {
             <button
               key={ratio}
               type="button"
-              className={`config-option config-option--ratio${config.aspectRatio === ratio ? 'config-option--active' : ''}`}
+              className={cn(
+                'config-option',
+                'config-option--ratio',
+                config.aspectRatio === ratio && 'config-option--active'
+              )}
               onClick={() => generatorStore.setConfig({ aspectRatio: ratio })}
               aria-pressed={config.aspectRatio === ratio}
             >
@@ -253,7 +264,10 @@ export function ConfigPanel() {
             <button
               key={q}
               type="button"
-              className={`config-option${config.quality === q ? 'config-option--active' : ''}`}
+              className={cn(
+                'config-option',
+                config.quality === q && 'config-option--active'
+              )}
               onClick={() => generatorStore.setConfig({ quality: q })}
               aria-pressed={config.quality === q}
             >

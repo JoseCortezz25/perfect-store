@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useSyncExternalStore } from 'react';
+import { cn } from '@/lib/utils';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import {
@@ -190,244 +191,252 @@ export function ResultsShell() {
       </div>
 
       {/* ════ Image detail modal ════ */}
-      {activeImage && createPortal(
-        <div
-          className="gen-modal-overlay"
-          onClick={() => setActiveImage(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={msgs.modal.title}
-        >
+      {activeImage &&
+        createPortal(
           <div
-            className="gen-modal gen-modal--image"
-            onClick={e => e.stopPropagation()}
+            className="gen-modal-overlay"
+            onClick={() => setActiveImage(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={msgs.modal.title}
           >
-            <div className="gen-modal__header">
-              <h2 className="gen-modal__title">{msgs.modal.title}</h2>
-              <button
-                type="button"
-                className="gen-modal__close"
-                onClick={() => setActiveImage(null)}
-                aria-label={msgs.modal.close}
-              >
-                <X size={16} strokeWidth={1.5} />
-              </button>
-            </div>
-
             <div
-              className="gen-modal__image-preview"
-              style={{
-                backgroundColor: activeImage.accentColor + '33',
-                borderColor: activeImage.accentColor + '55'
-              }}
-              aria-hidden="true"
+              className="gen-modal gen-modal--image"
+              onClick={e => e.stopPropagation()}
             >
-              <span
-                style={{
-                  color: activeImage.accentColor,
-                  fontSize: 64,
-                  fontWeight: 700
-                }}
-              >
-                AI
-              </span>
-            </div>
+              <div className="gen-modal__header">
+                <h2 className="gen-modal__title">{msgs.modal.title}</h2>
+                <button
+                  type="button"
+                  className="gen-modal__close"
+                  onClick={() => setActiveImage(null)}
+                  aria-label={msgs.modal.close}
+                >
+                  <X size={16} strokeWidth={1.5} />
+                </button>
+              </div>
 
-            <div className="gen-modal__params">
-              <div className="gen-modal__param">
-                <span className="gen-modal__param-key">
-                  {msgs.modal.params.skus}
-                </span>
-                <span className="gen-modal__param-val">
-                  {config.selectedSkus.map(s => s.name).join(', ') || '—'}
-                </span>
-              </div>
-              <div className="gen-modal__param">
-                <span className="gen-modal__param-key">
-                  {msgs.modal.params.angle}
-                </span>
-                <span className="gen-modal__param-val">{angleLabel}</span>
-              </div>
-              <div className="gen-modal__param">
-                <span className="gen-modal__param-key">
-                  {msgs.modal.params.aspect}
-                </span>
-                <span className="gen-modal__param-val">
-                  {config.aspectRatio}
+              <div
+                className="gen-modal__image-preview"
+                style={{
+                  backgroundColor: activeImage.accentColor + '33',
+                  borderColor: activeImage.accentColor + '55'
+                }}
+                aria-hidden="true"
+              >
+                <span
+                  style={{
+                    color: activeImage.accentColor,
+                    fontSize: 64,
+                    fontWeight: 700
+                  }}
+                >
+                  AI
                 </span>
               </div>
-              <div className="gen-modal__param">
-                <span className="gen-modal__param-key">
-                  {msgs.modal.params.quality}
-                </span>
-                <span className="gen-modal__param-val">{qualityLabel}</span>
-              </div>
-              {config.freeText && (
-                <div className="gen-modal__param gen-modal__param--full">
+
+              <div className="gen-modal__params">
+                <div className="gen-modal__param">
                   <span className="gen-modal__param-key">
-                    {msgs.modal.params.prompt}
+                    {msgs.modal.params.skus}
                   </span>
                   <span className="gen-modal__param-val">
-                    {config.freeText}
+                    {config.selectedSkus.map(s => s.name).join(', ') || '—'}
                   </span>
                 </div>
-              )}
-            </div>
+                <div className="gen-modal__param">
+                  <span className="gen-modal__param-key">
+                    {msgs.modal.params.angle}
+                  </span>
+                  <span className="gen-modal__param-val">{angleLabel}</span>
+                </div>
+                <div className="gen-modal__param">
+                  <span className="gen-modal__param-key">
+                    {msgs.modal.params.aspect}
+                  </span>
+                  <span className="gen-modal__param-val">
+                    {config.aspectRatio}
+                  </span>
+                </div>
+                <div className="gen-modal__param">
+                  <span className="gen-modal__param-key">
+                    {msgs.modal.params.quality}
+                  </span>
+                  <span className="gen-modal__param-val">{qualityLabel}</span>
+                </div>
+                {config.freeText && (
+                  <div className="gen-modal__param gen-modal__param--full">
+                    <span className="gen-modal__param-key">
+                      {msgs.modal.params.prompt}
+                    </span>
+                    <span className="gen-modal__param-val">
+                      {config.freeText}
+                    </span>
+                  </div>
+                )}
+              </div>
 
-            <div className="gen-modal__footer">
-              <button
-                type="button"
-                className="btn btn--secondary"
-                onClick={() => setActiveImage(null)}
-              >
-                {msgs.modal.close}
-              </button>
-              <button
-                type="button"
-                className="btn btn--primary"
-                onClick={() => {
-                  handleDownload(activeImage);
-                  setActiveImage(null);
-                }}
-              >
-                <Download size={14} strokeWidth={1.5} aria-hidden="true" />
-                {msgs.download}
-              </button>
+              <div className="gen-modal__footer">
+                <button
+                  type="button"
+                  className="btn btn--secondary"
+                  onClick={() => setActiveImage(null)}
+                >
+                  {msgs.modal.close}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--primary"
+                  onClick={() => {
+                    handleDownload(activeImage);
+                    setActiveImage(null);
+                  }}
+                >
+                  <Download size={14} strokeWidth={1.5} aria-hidden="true" />
+                  {msgs.download}
+                </button>
+              </div>
             </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body
+        )}
 
       {/* ════ Add to project modal ════ */}
-      {showAddModal && createPortal(
-        <div
-          className="gen-modal-overlay"
-          onClick={handleAddModalClose}
-          role="dialog"
-          aria-modal="true"
-          aria-label={msgs.addToProject}
-        >
+      {showAddModal &&
+        createPortal(
           <div
-            className="gen-modal gen-modal--add-project"
-            onClick={e => e.stopPropagation()}
+            className="gen-modal-overlay"
+            onClick={handleAddModalClose}
+            role="dialog"
+            aria-modal="true"
+            aria-label={msgs.addToProject}
           >
-            <div className="gen-modal__header">
-              <h2 className="gen-modal__title">{msgs.addToProject}</h2>
-              <button
-                type="button"
-                className="gen-modal__close"
-                onClick={handleAddModalClose}
-                aria-label={modalMsgs.cancel}
-              >
-                <X size={16} strokeWidth={1.5} />
-              </button>
-            </div>
+            <div
+              className="gen-modal gen-modal--add-project"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="gen-modal__header">
+                <h2 className="gen-modal__title">{msgs.addToProject}</h2>
+                <button
+                  type="button"
+                  className="gen-modal__close"
+                  onClick={handleAddModalClose}
+                  aria-label={modalMsgs.cancel}
+                >
+                  <X size={16} strokeWidth={1.5} />
+                </button>
+              </div>
 
-            {/* Mode tabs */}
-            <div className="results-add-tabs">
-              <button
-                type="button"
-                className={`results-add-tab${addMode === 'existing' ? 'results-add-tab--active' : ''}`}
-                onClick={() => setAddMode('existing')}
-              >
-                {modalMsgs.selectLabel}
-              </button>
-              <button
-                type="button"
-                className={`results-add-tab${addMode === 'new' ? 'results-add-tab--active' : ''}`}
-                onClick={() => setAddMode('new')}
-              >
-                <Plus size={12} strokeWidth={2} aria-hidden="true" />
-                {modalMsgs.orCreate}
-              </button>
-            </div>
-
-            {/* Tab content */}
-            {addMode === 'existing' ? (
-              <div className="gen-modal__field">
-                <label
-                  className="gen-modal__label"
-                  htmlFor="add-project-select"
+              {/* Mode tabs */}
+              <div className="results-add-tabs">
+                <button
+                  type="button"
+                  className={cn(
+                    'results-add-tab',
+                    addMode === 'existing' && 'results-add-tab--active'
+                  )}
+                  onClick={() => setAddMode('existing')}
                 >
                   {modalMsgs.selectLabel}
-                </label>
-                <select
-                  id="add-project-select"
-                  className="gen-modal__select"
-                  value={selectedProjectId}
-                  onChange={e => setSelectedProjectId(e.target.value)}
+                </button>
+                <button
+                  type="button"
+                  className={cn(
+                    'results-add-tab',
+                    addMode === 'new' && 'results-add-tab--active'
+                  )}
+                  onClick={() => setAddMode('new')}
                 >
-                  <option value="">{modalMsgs.selectPlaceholder}</option>
-                  {EXISTING_PROJECTS.map(p => (
-                    <option key={p.id} value={p.id}>
-                      {p.name} — {p.brand}
-                    </option>
-                  ))}
-                </select>
+                  <Plus size={12} strokeWidth={2} aria-hidden="true" />
+                  {modalMsgs.orCreate}
+                </button>
               </div>
-            ) : (
-              <>
-                <div className="gen-modal__field">
-                  <label
-                    className="gen-modal__label"
-                    htmlFor="add-project-name"
-                  >
-                    {modalMsgs.newNameLabel}
-                  </label>
-                  <input
-                    id="add-project-name"
-                    type="text"
-                    className="gen-modal__input"
-                    placeholder={modalMsgs.newNamePlaceholder}
-                    value={newProjectName}
-                    onChange={e => setNewProjectName(e.target.value)}
-                  />
-                </div>
-                <div className="gen-modal__field">
-                  <label
-                    className="gen-modal__label"
-                    htmlFor="add-project-brand"
-                  >
-                    {modalMsgs.newBrandLabel}
-                  </label>
-                  <input
-                    id="add-project-brand"
-                    type="text"
-                    className="gen-modal__input"
-                    placeholder="Ej: Bretaña"
-                    value={newProjectBrand}
-                    onChange={e => setNewProjectBrand(e.target.value)}
-                  />
-                </div>
-              </>
-            )}
 
-            <div className="gen-modal__footer">
-              <button
-                type="button"
-                className="btn btn--secondary"
-                onClick={handleAddModalClose}
-              >
-                {modalMsgs.cancel}
-              </button>
-              <button
-                type="button"
-                className="btn btn--primary"
-                onClick={handleAddConfirm}
-                disabled={
-                  addMode === 'existing'
-                    ? !selectedProjectId
-                    : !newProjectName.trim()
-                }
-              >
-                {modalMsgs.confirm}
-              </button>
+              {/* Tab content */}
+              {addMode === 'existing' ? (
+                <div className="gen-modal__field">
+                  <label
+                    className="gen-modal__label"
+                    htmlFor="add-project-select"
+                  >
+                    {modalMsgs.selectLabel}
+                  </label>
+                  <select
+                    id="add-project-select"
+                    className="gen-modal__select"
+                    value={selectedProjectId}
+                    onChange={e => setSelectedProjectId(e.target.value)}
+                  >
+                    <option value="">{modalMsgs.selectPlaceholder}</option>
+                    {EXISTING_PROJECTS.map(p => (
+                      <option key={p.id} value={p.id}>
+                        {p.name} — {p.brand}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                <>
+                  <div className="gen-modal__field">
+                    <label
+                      className="gen-modal__label"
+                      htmlFor="add-project-name"
+                    >
+                      {modalMsgs.newNameLabel}
+                    </label>
+                    <input
+                      id="add-project-name"
+                      type="text"
+                      className="gen-modal__input"
+                      placeholder={modalMsgs.newNamePlaceholder}
+                      value={newProjectName}
+                      onChange={e => setNewProjectName(e.target.value)}
+                    />
+                  </div>
+                  <div className="gen-modal__field">
+                    <label
+                      className="gen-modal__label"
+                      htmlFor="add-project-brand"
+                    >
+                      {modalMsgs.newBrandLabel}
+                    </label>
+                    <input
+                      id="add-project-brand"
+                      type="text"
+                      className="gen-modal__input"
+                      placeholder="Ej: Bretaña"
+                      value={newProjectBrand}
+                      onChange={e => setNewProjectBrand(e.target.value)}
+                    />
+                  </div>
+                </>
+              )}
+
+              <div className="gen-modal__footer">
+                <button
+                  type="button"
+                  className="btn btn--secondary"
+                  onClick={handleAddModalClose}
+                >
+                  {modalMsgs.cancel}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--primary"
+                  onClick={handleAddConfirm}
+                  disabled={
+                    addMode === 'existing'
+                      ? !selectedProjectId
+                      : !newProjectName.trim()
+                  }
+                >
+                  {modalMsgs.confirm}
+                </button>
+              </div>
             </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body
+        )}
     </>
   );
 }

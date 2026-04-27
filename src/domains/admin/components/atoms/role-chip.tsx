@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { adminMessages } from '../../messages';
 import type { UserRole } from '@/domains/auth/stores/user.store';
 
@@ -50,7 +51,7 @@ export function RoleChip({ role, userId, onChangeRole }: RoleChipProps) {
     <div className="role-chip-wrap" ref={ref}>
       <button
         type="button"
-        className={`role-chip ${ROLE_CLS[role]}`}
+        className={cn('role-chip', ROLE_CLS[role])}
         onClick={() => setIsOpen(o => !o)}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
@@ -59,7 +60,10 @@ export function RoleChip({ role, userId, onChangeRole }: RoleChipProps) {
         <ChevronDown
           size={12}
           strokeWidth={1.5}
-          className={`role-chip__chevron${isOpen ? 'role-chip__chevron--open' : ''}`}
+          className={cn(
+            'role-chip__chevron',
+            isOpen && 'role-chip__chevron--open'
+          )}
           aria-hidden="true"
         />
       </button>
@@ -72,11 +76,14 @@ export function RoleChip({ role, userId, onChangeRole }: RoleChipProps) {
               type="button"
               role="option"
               aria-selected={r === role}
-              className={`role-chip__option${r === role ? 'role-chip__option--active' : ''}`}
+              className={cn(
+                'role-chip__option',
+                r === role && 'role-chip__option--active'
+              )}
               onClick={() => handleSelect(r)}
             >
               <span
-                className={`role-chip__option-dot ${DOT_CLS[r]}`}
+                className={cn('role-chip__option-dot', DOT_CLS[r])}
                 aria-hidden="true"
               />
               {adminMessages.users.roles[r]}

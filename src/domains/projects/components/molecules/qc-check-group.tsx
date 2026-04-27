@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ChevronDown, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { QcCheckItem } from '../atoms/qc-check-item';
 import type { QcCheckGroup as QcCheckGroupType } from '../../projects.types';
 
@@ -39,14 +40,17 @@ function GroupSummary({ items }: { items: QcCheckGroupType['items'] }) {
   );
 }
 
-export function QcCheckGroup({ group, defaultOpen = false }: QcCheckGroupProps) {
+export function QcCheckGroup({
+  group,
+  defaultOpen = false
+}: QcCheckGroupProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
     <div className="qc-group">
       <button
         type="button"
-        className={`qc-group__header${isOpen ? ' qc-group__header--open' : ''}`}
+        className={cn('qc-group__header', isOpen && 'qc-group__header--open')}
         onClick={() => setIsOpen(o => !o)}
         aria-expanded={isOpen}
       >
@@ -55,7 +59,10 @@ export function QcCheckGroup({ group, defaultOpen = false }: QcCheckGroupProps) 
         <ChevronDown
           size={14}
           strokeWidth={1.5}
-          className={`qc-group__chevron${isOpen ? ' qc-group__chevron--open' : ''}`}
+          className={cn(
+            'qc-group__chevron',
+            isOpen && 'qc-group__chevron--open'
+          )}
           aria-hidden="true"
         />
       </button>

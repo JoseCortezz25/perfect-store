@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 import {
   Search,
   ChevronDown,
@@ -204,7 +205,10 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
                     onClick={() => toggleBrand(brand)}
                   >
                     <span
-                      className={`brand-filter__checkbox${isChecked ? 'brand-filter__checkbox--checked' : ''}`}
+                      className={cn(
+                        'brand-filter__checkbox',
+                        isChecked && 'brand-filter__checkbox--checked'
+                      )}
                     >
                       {isChecked && <Check size={10} strokeWidth={3} />}
                     </span>
@@ -265,7 +269,10 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
           <div className="view-toggle" role="group" aria-label="Vista">
             <button
               type="button"
-              className={`view-toggle__btn${viewMode === 'grid' ? 'view-toggle__btn--active' : ''}`}
+              className={cn(
+                'view-toggle__btn',
+                viewMode === 'grid' && 'view-toggle__btn--active'
+              )}
               onClick={() => setViewMode('grid')}
               aria-label={msgs.viewGrid}
               title={msgs.viewGrid}
@@ -274,7 +281,10 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
             </button>
             <button
               type="button"
-              className={`view-toggle__btn${viewMode === 'list' ? 'view-toggle__btn--active' : ''}`}
+              className={cn(
+                'view-toggle__btn',
+                viewMode === 'list' && 'view-toggle__btn--active'
+              )}
               onClick={() => setViewMode('list')}
               aria-label={msgs.viewList}
               title={msgs.viewList}

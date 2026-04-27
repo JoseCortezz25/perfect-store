@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Trash2, Layers } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { ConfirmDeleteModal } from '../molecules/confirm-delete-modal';
 import { adminMessages } from '../../messages';
 import { MOCK_ADMIN_BRANDS } from '../../admin.repository';
@@ -85,7 +86,10 @@ export function BrandsPanel() {
             return (
               <div
                 key={brand.id}
-                className={`admin-brand-item${idx < brands.length - 1 ? 'admin-brand-item--bordered' : ''}`}
+                className={cn(
+                  'admin-brand-item',
+                  idx < brands.length - 1 && 'admin-brand-item--bordered'
+                )}
               >
                 <div className="admin-brand-item__header admin-brands-cols">
                   {/* MARCA */}

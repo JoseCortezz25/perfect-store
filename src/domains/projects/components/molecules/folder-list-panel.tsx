@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Search, Folder, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { projectMessages } from '../../messages';
 import type { BannerFolder, FolderStatus } from '../../projects.types';
 
@@ -10,8 +11,9 @@ const msgs = projectMessages.detail.foldersPanel;
 const FOLDER_DOT_CLS: Record<FolderStatus, string> = {
   approved: 'folder-item__dot--approved',
   rejected: 'folder-item__dot--rejected',
-  pending:  'folder-item__dot--pending',
-  'in_review': 'folder-item__dot--in-review',
+  pending: 'folder-item__dot--pending',
+  // eslint-disable-next-line camelcase
+  in_review: 'folder-item__dot--in-review'
 };
 
 interface FolderListPanelProps {
@@ -22,7 +24,13 @@ interface FolderListPanelProps {
   onToggleCollapse?: () => void;
 }
 
-export function FolderListPanel({ folders, selectedId, onSelect, isCollapsed, onToggleCollapse }: FolderListPanelProps) {
+export function FolderListPanel({
+  folders,
+  selectedId,
+  onSelect,
+  isCollapsed,
+  onToggleCollapse
+}: FolderListPanelProps) {
   const [query, setQuery] = useState('');
 
   const filtered = query
@@ -63,7 +71,12 @@ export function FolderListPanel({ folders, selectedId, onSelect, isCollapsed, on
 
       {/* Search */}
       <div className="folder-list__search">
-        <Search size={12} strokeWidth={1.5} className="folder-list__search-icon" aria-hidden="true" />
+        <Search
+          size={12}
+          strokeWidth={1.5}
+          className="folder-list__search-icon"
+          aria-hidden="true"
+        />
         <input
           type="text"
           className="folder-list__search-input"
@@ -79,10 +92,16 @@ export function FolderListPanel({ folders, selectedId, onSelect, isCollapsed, on
           <button
             key={folder.id}
             type="button"
-            className={`folder-item${selectedId === folder.id ? ' folder-item--selected' : ''}`}
+            className={cn(
+              'folder-item',
+              selectedId === folder.id && 'folder-item--selected'
+            )}
             onClick={() => onSelect(folder.id)}
           >
-            <span className={`folder-item__dot ${FOLDER_DOT_CLS[folder.status]}`} aria-hidden="true" />
+            <span
+              className={cn('folder-item__dot', FOLDER_DOT_CLS[folder.status])}
+              aria-hidden="true"
+            />
             <Folder
               size={15}
               strokeWidth={1.5}
