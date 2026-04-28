@@ -16,7 +16,7 @@ const sodaFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Sphere',
+  title: 'Perfect Store',
   description: 'Quality control platform for digital display pieces'
 };
 
