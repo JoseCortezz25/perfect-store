@@ -44,7 +44,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b01',
     name: 'Bretaña Verano Caribe 2026',
     brand: 'Bretaña',
-    thumbnail: '/images/Breta%C3%B1a/3.png',
+    thumbnail: '/Images/Breta%C3%B1a/3.png',
     skus: ['Bretaña Mora 400ml', 'Bretaña Fresa 400ml'],
     createdAt: new Date('2026-03-10'),
     sessions: [
@@ -70,7 +70,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b02',
     name: 'Bretaña Góndola Nacional',
     brand: 'Bretaña',
-    thumbnail: '/images/Breta%C3%B1a/4.webp',
+    thumbnail: '/Images/Breta%C3%B1a/4.webp',
     skus: ['Bretaña Mora 400ml', 'Bretaña Maracuyá 400ml', 'Bretaña Uva 400ml'],
     createdAt: new Date('2026-02-20'),
     sessions: [
@@ -88,7 +88,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b03',
     name: 'Bretaña Activación Colegio',
     brand: 'Bretaña',
-    thumbnail: '/images/Breta%C3%B1a/5.png',
+    thumbnail: '/Images/Breta%C3%B1a/5.png',
     skus: ['Bretaña Fresa 250ml', 'Bretaña Mora 250ml'],
     createdAt: new Date('2026-02-05'),
     sessions: [
@@ -106,7 +106,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b04',
     name: 'Bretaña Tienda Barrio Q1',
     brand: 'Bretaña',
-    thumbnail: '/images/Breta%C3%B1a/6-v1.png',
+    thumbnail: '/Images/Breta%C3%B1a/6-v1.png',
     skus: ['Bretaña Mora 400ml', 'Bretaña Uva 400ml'],
     createdAt: new Date('2026-01-15'),
     sessions: [
@@ -124,7 +124,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b05',
     name: 'Bretaña Perfect Store Jumbo',
     brand: 'Bretaña',
-    thumbnail: '/images/Breta%C3%B1a/8.webp',
+    thumbnail: '/Images/Breta%C3%B1a/8.webp',
     skus: [
       'Bretaña Maracuyá 400ml',
       'Bretaña Fresa 400ml',
@@ -146,7 +146,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b06',
     name: 'Bretaña Lanzamiento Maracuyá',
     brand: 'Bretaña',
-    thumbnail: '/images/Breta%C3%B1a/limonada-cereza-683x1024%20(1).jpg',
+    thumbnail: '/Images/Breta%C3%B1a/limonada-cereza-683x1024%20(1).jpg',
     skus: ['Bretaña Maracuyá 400ml'],
     createdAt: new Date('2025-12-01'),
     sessions: [
@@ -164,7 +164,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b07',
     name: 'Bretaña Navidad 2025',
     brand: 'Bretaña',
-    thumbnail: '/images/Breta%C3%B1a/limonada-cereza-683x1024.jpg',
+    thumbnail: '/Images/Breta%C3%B1a/limonada-cereza-683x1024.jpg',
     skus: ['Bretaña Mora 1.5L', 'Bretaña Fresa 1.5L'],
     createdAt: new Date('2025-11-15'),
     sessions: [
@@ -182,7 +182,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b08',
     name: 'Bretaña Canal Moderno',
     brand: 'Bretaña',
-    thumbnail: '/images/Breta%C3%B1a/mowi-910x1024.jpg',
+    thumbnail: '/Images/Breta%C3%B1a/mowi-910x1024.jpg',
     skus: ['Bretaña Uva 400ml', 'Bretaña Mora 400ml'],
     createdAt: new Date('2025-11-01'),
     sessions: [
@@ -200,7 +200,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b09',
     name: 'Bretaña Impulso Cajas',
     brand: 'Bretaña',
-    thumbnail: '/images/Breta%C3%B1a/naranja-pina-683x1024.jpg',
+    thumbnail: '/Images/Breta%C3%B1a/naranja-pina-683x1024.jpg',
     skus: [
       'Bretaña Fresa 250ml',
       'Bretaña Maracuyá 250ml',
@@ -222,7 +222,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b10',
     name: 'Bretaña Lifestyle Urbano',
     brand: 'Bretaña',
-    thumbnail: '/images/Breta%C3%B1a/tamarindo.png',
+    thumbnail: '/Images/Breta%C3%B1a/tamarindo.png',
     skus: ['Bretaña Mora 400ml', 'Bretaña Maracuyá 400ml'],
     createdAt: new Date('2025-09-20'),
     sessions: [
@@ -242,7 +242,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-001',
     name: 'Campaña Verano 2026',
     brand: 'Colombiana',
-    thumbnail: '/images/Colombiana/2_5_1.png',
+    thumbnail: '/Images/Colombiana/2_5_1.png',
     skus: ['Colombiana 400ml', 'Colombiana 1.5L', 'Colombiana Naranja 400ml'],
     createdAt: new Date('2026-04-01'),
     sessions: [
@@ -276,7 +276,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-c02',
     name: 'Colombiana 70 Años',
     brand: 'Colombiana',
-    thumbnail: '/images/Colombiana/3.webp',
+    thumbnail: '/Images/Colombiana/3.webp',
     skus: ['Colombiana 400ml', 'Colombiana 1.5L'],
     createdAt: new Date('2025-11-01'),
     sessions: [
@@ -317,7 +317,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-c04',
     name: 'Colombiana Navidad',
     brand: 'Colombiana',
-    thumbnail: '/images/Colombiana/848x600_carnaval.webp',
+    thumbnail: '/Images/Colombiana/848x600_carnaval.webp',
     skus: ['Colombiana 1.5L', 'Colombiana 400ml'],
     createdAt: new Date('2025-12-01'),
     sessions: [
@@ -335,7 +335,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-c05',
     name: 'Colombiana Tiendas de Barrio',
     brand: 'Colombiana',
-    thumbnail: '/images/Colombiana/P-0001-3.png',
+    thumbnail: '/Images/Colombiana/P-0001-3.png',
     skus: ['Colombiana 400ml'],
     createdAt: new Date('2025-10-15'),
     sessions: [
@@ -353,7 +353,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-c06',
     name: 'Colombiana Perfect Store Carulla',
     brand: 'Colombiana',
-    thumbnail: '/images/Colombiana/a3af06123769773.60f5a2e179f51.jpg',
+    thumbnail: '/Images/Colombiana/a3af06123769773.60f5a2e179f51.jpg',
     skus: ['Colombiana 400ml', 'Colombiana Naranja 400ml', 'Colombiana 1.5L'],
     createdAt: new Date('2025-09-05'),
     sessions: [
@@ -404,7 +404,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-p02',
     name: 'Postobón Uva Verano',
     brand: 'Sabores',
-    thumbnail: '/images/Sabores/6170890333279.jpeg',
+    thumbnail: '/Images/Sabores/6170890333279.jpeg',
     skus: ['Postobón Uva 400ml', 'Postobón Uva 1.5L'],
     createdAt: new Date('2026-02-14'),
     sessions: [
@@ -422,7 +422,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-p03',
     name: 'Postobón Naranja Canal',
     brand: 'Sabores',
-    thumbnail: '/images/Sabores/En-caso-de-necesitar-otra-imagen-1.webp',
+    thumbnail: '/Images/Sabores/En-caso-de-necesitar-otra-imagen-1.webp',
     skus: ['Postobón Naranja 400ml'],
     createdAt: new Date('2026-03-01'),
     sessions: [
@@ -440,7 +440,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-p04',
     name: 'Postobón Back to School',
     brand: 'Sabores',
-    thumbnail: '/images/Sabores/postobon-1.jpg',
+    thumbnail: '/Images/Sabores/postobon-1.jpg',
     skus: ['Postobón Manzana 400ml', 'Postobón Uva 400ml'],
     createdAt: new Date('2025-12-10'),
     sessions: [
@@ -458,7 +458,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-p05',
     name: 'Postobón Góndola Sur Colombia',
     brand: 'Sabores',
-    thumbnail: '/images/Sabores/postobon-2.jpg',
+    thumbnail: '/Images/Sabores/postobon-2.jpg',
     skus: [
       'Postobón Manzana 400ml',
       'Postobón Naranja 400ml',
@@ -509,7 +509,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-h02',
     name: 'Hit Mango Verano',
     brand: 'Hit',
-    thumbnail: '/images/Hit/5806d830741507.Y3JvcCwxOTg5LDE1NTcsMTcsOTU2.jpg',
+    thumbnail: '/Images/Hit/5806d830741507.Y3JvcCwxOTg5LDE1NTcsMTcsOTU2.jpg',
     skus: ['Hit Mango 400ml', 'Hit Mango 1L'],
     createdAt: new Date('2026-02-28'),
     sessions: [
@@ -527,7 +527,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-h03',
     name: 'Hit Canal Moderno Bogotá',
     brand: 'Hit',
-    thumbnail: '/images/Hit/Honeyview_HIT_2.jpg',
+    thumbnail: '/Images/Hit/Honeyview_HIT_2.jpg',
     skus: ['Hit Mora 400ml', 'Hit Lulo 400ml', 'Hit Mango 400ml'],
     createdAt: new Date('2026-01-25'),
     sessions: [
@@ -545,7 +545,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-h04',
     name: 'Hit Góndola Carrefour',
     brand: 'Hit',
-    thumbnail: '/images/Hit/destacado_mandarina_0.jpg',
+    thumbnail: '/Images/Hit/destacado_mandarina_0.jpg',
     skus: ['Hit Mango 400ml', 'Hit Mora 400ml'],
     createdAt: new Date('2025-12-20'),
     sessions: [
@@ -563,7 +563,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-h05',
     name: 'Hit Lanzamiento Lulo',
     brand: 'Hit',
-    thumbnail: '/images/Hit/maxresdefault.jpg',
+    thumbnail: '/Images/Hit/maxresdefault.jpg',
     skus: ['Hit Lulo 400ml'],
     createdAt: new Date('2025-10-01'),
     sessions: [
