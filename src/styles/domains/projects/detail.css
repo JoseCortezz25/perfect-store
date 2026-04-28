@@ -198,14 +198,14 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #999999;
+  color: #555555;
 }
 
 .pd-modal-prompt__text {
   font-family: var(--font-montserrat), sans-serif;
   font-size: 13px;
   font-weight: 300;
-  color: #555555;
+  color: #333333;
   line-height: 1.75;
   margin: 0;
 }
@@ -234,7 +234,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #999999;
+  color: #555555;
 }
 
 .pd-modal-param__val {
