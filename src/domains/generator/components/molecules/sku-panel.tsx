@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useSyncExternalStore } from 'react';
+import { cn } from '@/lib/utils';
 import { Search, X } from 'lucide-react';
 import { SkuCard } from '../atoms/sku-card';
 import { generatorStore } from '../../stores/generator.store';
@@ -52,7 +53,10 @@ export function SkuPanel() {
       <div className="sku-panel__brands">
         <button
           type="button"
-          className={`sku-brand-pill${activeBrand === null ? 'sku-brand-pill--active' : ''}`}
+          className={cn(
+            'sku-brand-pill',
+            activeBrand === null && 'sku-brand-pill--active'
+          )}
           onClick={() => setActiveBrand(null)}
         >
           {msgs.allBrands}
@@ -61,7 +65,10 @@ export function SkuPanel() {
           <button
             key={brand}
             type="button"
-            className={`sku-brand-pill${activeBrand === brand ? 'sku-brand-pill--active' : ''}`}
+            className={cn(
+              'sku-brand-pill',
+              activeBrand === brand && 'sku-brand-pill--active'
+            )}
             onClick={() => setActiveBrand(brand)}
           >
             {brand}

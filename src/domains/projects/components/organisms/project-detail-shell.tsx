@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
 import { ProjectDetailHeader } from '../molecules/project-detail-header';
 import { FolderListPanel } from '../molecules/folder-list-panel';
 import { PieceListPanel } from '../molecules/piece-list-panel';
@@ -36,10 +37,14 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
   const [selectedPieceId, setSelectedPieceId] = useState<string | null>(null);
 
   /* ── QC multi-select ── */
-  const [checkedPieceIds, setCheckedPieceIds] = useState<Set<string>>(new Set());
+  const [checkedPieceIds, setCheckedPieceIds] = useState<Set<string>>(
+    new Set()
+  );
 
   /* ── QC decisions ── */
-  const [pieceDecisions, setPieceDecisions] = useState<Map<string, 'approved' | 'rejected'>>(new Map());
+  const [pieceDecisions, setPieceDecisions] = useState<
+    Map<string, 'approved' | 'rejected'>
+  >(new Map());
 
   function handleToggleCheck(id: string) {
     setCheckedPieceIds(prev => {
@@ -67,7 +72,7 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
     setCheckedPieceIds(new Set());
   }
 
-  function handleReject(ids: string[], _comment: string) {
+  function handleReject(ids: string[]) {
     setPieceDecisions(prev => {
       const next = new Map(prev);
       ids.forEach(id => next.set(id, 'rejected'));
@@ -87,7 +92,10 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
 
   /* When version changes, reset folder + piece + decisions (skip on mount) */
   useEffect(() => {
-    if (isFirstRender.current) { isFirstRender.current = false; return; }
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     const version = project.versions.find(v => v.id === selectedVersionId);
     setSelectedFolderId(version?.folders[0]?.id ?? null);
     setSelectedPieceId(null);
@@ -106,11 +114,14 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
   }, [canSeeValidador]);
 
   /* ── Derived ── */
-  const selectedVersion = project.versions.find(v => v.id === selectedVersionId);
-  const selectedFolder  = selectedVersion?.folders.find(f => f.id === selectedFolderId);
-  const pieces          = selectedFolder?.pieces ?? [];
-  const selectedPiece   = pieces.find(p => p.id === selectedPieceId) ?? null;
-
+  const selectedVersion = project.versions.find(
+    v => v.id === selectedVersionId
+  );
+  const selectedFolder = selectedVersion?.folders.find(
+    f => f.id === selectedFolderId
+  );
+  const pieces = selectedFolder?.pieces ?? [];
+  const selectedPiece = pieces.find(p => p.id === selectedPieceId) ?? null;
 
   return (
     <div className="detail-content">
@@ -123,8 +134,12 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
       />
 
       {/* ── 3-panel layout ── */}
-      <div className={`detail-three-panel${isFolderOpen ? '' : ' detail-three-panel--folder-hidden'}`}>
-
+      <div
+        className={cn(
+          'detail-three-panel',
+          !isFolderOpen && 'detail-three-panel--folder-hidden'
+        )}
+      >
         {/* Panel 1 — Folders */}
         <FolderListPanel
           folders={selectedVersion?.folders ?? []}
@@ -139,7 +154,9 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
           pieces={pieces}
           selectedId={selectedPieceId}
           onSelect={setSelectedPieceId}
-          showCheckboxes={activeTab === 'validador' && canSeeValidador && canQcReview}
+          showCheckboxes={
+            activeTab === 'validador' && canSeeValidador && canQcReview
+          }
           checkedIds={checkedPieceIds}
           onToggleCheck={handleToggleCheck}
           onSelectAll={handleSelectAll}
@@ -158,36 +175,41 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
                 type="button"
                 role="tab"
                 aria-selected={activeTab === 'validador'}
-                className={`detail-tab${activeTab === 'validador' ? ' detail-tab--active' : ''}`}
+                className={cn(
+                  'detail-tab',
+                  activeTab === 'validador' && 'detail-tab--active'
+                )}
                 onClick={() => setActiveTab('validador')}
               >
                 {msgs.tabs.validador}
-                {activeTab === 'validador' && <span className="detail-tab__glow" aria-hidden="true" />}
+                {activeTab === 'validador' && (
+                  <span className="detail-tab__glow" aria-hidden="true" />
+                )}
               </button>
             )}
             <button
               type="button"
               role="tab"
               aria-selected={activeTab === 'preview'}
-              className={`detail-tab${activeTab === 'preview' ? ' detail-tab--active' : ''}`}
+              className={cn(
+                'detail-tab',
+                activeTab === 'preview' && 'detail-tab--active'
+              )}
               onClick={() => setActiveTab('preview')}
             >
               {msgs.tabs.preview}
-              {activeTab === 'preview' && <span className="detail-tab__glow" aria-hidden="true" />}
+              {activeTab === 'preview' && (
+                <span className="detail-tab__glow" aria-hidden="true" />
+              )}
             </button>
           </div>
 
           {/* Content */}
           <div className="detail-right-content" role="tabpanel">
             {activeTab === 'validador' && canSeeValidador && (
-              <ValidadorTab
-                projectId={project.id}
-                version={selectedVersion}
-              />
+              <ValidadorTab projectId={project.id} version={selectedVersion} />
             )}
-            {activeTab === 'preview' && (
-              <PreviewTab piece={selectedPiece} />
-            )}
+            {activeTab === 'preview' && <PreviewTab piece={selectedPiece} />}
           </div>
         </div>
       </div>

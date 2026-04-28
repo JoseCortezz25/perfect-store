@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import type { UserRole } from '@/domains/auth/stores/user.store';
 import { adminMessages } from '../../messages';
 
@@ -13,7 +14,7 @@ interface RoleBadgeProps {
 
 export function RoleBadge({ role }: RoleBadgeProps) {
   return (
-    <span className={`role-badge ${ROLE_CLS[role]}`}>
+    <span className={cn('role-badge', ROLE_CLS[role])}>
       {adminMessages.users.roles[role]}
     </span>
   );

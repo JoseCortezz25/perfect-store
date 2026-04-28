@@ -1,6 +1,7 @@
 'use client';
 
 import { Moon, Sun, RotateCw, Maximize2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { projectMessages } from '../../messages';
 import type { BannerPiece } from '../../projects.types';
 
@@ -16,11 +17,20 @@ interface PreviewToolbarProps {
   selectedPiece: BannerPiece | null;
 }
 
-export function PreviewToolbar({ background, onBackgroundChange, onReload, onFullscreen, selectedPiece }: PreviewToolbarProps) {
+export function PreviewToolbar({
+  background,
+  onBackgroundChange,
+  onReload,
+  onFullscreen,
+  selectedPiece
+}: PreviewToolbarProps) {
   return (
     <div className="preview-toolbar">
       {selectedPiece ? (
-        <div className="preview-toolbar__piece-info" aria-label="Pieza seleccionada">
+        <div
+          className="preview-toolbar__piece-info"
+          aria-label="Pieza seleccionada"
+        >
           <p className="preview-toolbar__piece-name">{selectedPiece.name}</p>
           <p className="preview-toolbar__piece-size">{selectedPiece.size}</p>
         </div>
@@ -29,10 +39,17 @@ export function PreviewToolbar({ background, onBackgroundChange, onReload, onFul
       )}
       <div className="preview-toolbar__right">
         {/* Background toggle */}
-        <div className="preview-toolbar__bg-toggle" role="group" aria-label="Fondo del canvas">
+        <div
+          className="preview-toolbar__bg-toggle"
+          role="group"
+          aria-label="Fondo del canvas"
+        >
           <button
             type="button"
-            className={`preview-toolbar__bg-btn${background === 'dark' ? ' preview-toolbar__bg-btn--active' : ''}`}
+            className={cn(
+              'preview-toolbar__bg-btn',
+              background === 'dark' && 'preview-toolbar__bg-btn--active'
+            )}
             onClick={() => onBackgroundChange('dark')}
             aria-pressed={background === 'dark'}
             title={msgs.darkBg}
@@ -42,7 +59,10 @@ export function PreviewToolbar({ background, onBackgroundChange, onReload, onFul
           </button>
           <button
             type="button"
-            className={`preview-toolbar__bg-btn${background === 'light' ? ' preview-toolbar__bg-btn--active' : ''}`}
+            className={cn(
+              'preview-toolbar__bg-btn',
+              background === 'light' && 'preview-toolbar__bg-btn--active'
+            )}
             onClick={() => onBackgroundChange('light')}
             aria-pressed={background === 'light'}
             title={msgs.lightBg}

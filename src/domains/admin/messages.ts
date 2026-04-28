@@ -11,13 +11,16 @@ export const adminMessages = {
   },
 
   nav: {
-    myProjects: 'Mis proyectos',
+    myProjects: 'Home',
     generator: 'Generador',
     admin: 'Admin',
+    settings: 'Ajustes',
     changeProfile: 'Cambiar perfil',
     myProfile: 'Mi perfil',
     closeSession: 'Cerrar sesión',
-    close: 'Cerrar'
+    close: 'Cerrar',
+    collapse: 'Colapsar',
+    expand: 'Expandir'
   },
 
   users: {

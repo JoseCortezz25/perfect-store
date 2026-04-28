@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wireframe — Generador v3</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', 'Helvetica Neue', sans-serif;
+    background: #ECEEF2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 24px 64px;
+    gap: 24px;
+  }
+
+  h1.wf-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6B7280;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── Frame ────────────────────────────────────── */
+  .frame {
+    width: 100%;
+    max-width: 1200px;
+    background: #F5F7FA;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    height: 820px;
+  }
+
+  /* ── Topbar ───────────────────────────────────── */
+  .topbar {
+    height: 52px;
+    background: rgba(255,255,255,0.9);
+    border-bottom: 1px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    flex-shrink: 0;
+  }
+  .topbar__brand { display: flex; align-items: center; gap: 8px; }
+  .topbar__logo { width: 28px; height: 28px; border-radius: 50%; background: #CBD5E1; }
+  .topbar__name { font-size: 12px; font-weight: 700; color: #94A3B8; letter-spacing: 0.08em; text-transform: uppercase; }
+  .topbar__nav { display: flex; gap: 4px; }
+  .topbar__nav-item { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; color: #94A3B8; }
+  .topbar__nav-item.active { background: #3B5BDB; color: #fff; }
+  .topbar__user { width: 120px; height: 28px; border-radius: 14px; background: #E2E8F0; }
+
+  /* ── Body ─────────────────────────────────────── */
+  .body { display: flex; flex: 1; overflow: hidden; }
+
+  /* ── Left Panel ───────────────────────────────── */
+  .panel {
+    width: 290px;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid #E2E8F0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 16px 24px;
+  }
+
+  .panel__page-title {
+    font-size: 26px; font-weight: 800; color: #1E293B;
+    letter-spacing: 0.04em; text-transform: uppercase; line-height: 1;
+  }
+  .panel__page-subtitle { font-size: 10px; color: #94A3B8; margin-top: 3px; margin-bottom: 14px; }
+
+  /* Project bar */
+  .project-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 10px;
+    border: 1px dashed #CBD5E1; border-radius: 8px;
+    margin-bottom: 14px;
+  }
+  .project-bar__label { font-size: 9px; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.08em; }
+  .project-bar__value { font-size: 10px; font-weight: 600; color: #475569; }
+  .project-bar__action { font-size: 10px; color: #3B5BDB; font-weight: 600; }
+
+  /* Divider */
+  .divider { height: 1px; background: #F1F5F9; margin: 10px 0; }
+
+  /* Section */
+  .section { margin-bottom: 12px; }
+  .section__label {
+    display: block;
+    font-size: 9px; font-weight: 700; color: #94A3B8;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* Dropdown */
+  .dropdown-row { display: flex; gap: 6px; }
+  .dropdown {
+    flex: 1; height: 32px;
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    background: #F8FAFC;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 10px;
+  }
+  .dropdown--full { flex: none; width: 100%; }
+  .dropdown__text { font-size: 10px; color: #64748B; }
+  .dropdown__arrow {
+    width: 0; height: 0;
+    border-left: 4px solid transparent; border-right: 4px solid transparent;
+    border-top: 4px solid #CBD5E1;
+  }
+
+  /* Ver ejemplos link — clearly visible below dropdown */
+  .ver-ejemplos {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #3B5BDB;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .ver-ejemplos__icon {
+    width: 14px; height: 14px; border-radius: 3px;
+    background: #EEF2FF;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ver-ejemplos__icon svg { display: block; }
+
+  /* Slider step */
+  .step-slider { display: flex; flex-direction: column; gap: 5px; }
+  .step-slider__track {
+    position: relative; height: 4px;
+    background: #E2E8F0; border-radius: 2px; margin: 4px 0;
+  }
+  .step-slider__fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 40%; background: #3B5BDB; border-radius: 2px;
+  }
+  .step-slider__thumb {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    left: 40%; width: 12px; height: 12px;
+    border-radius: 50%; background: #3B5BDB;
+    border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    margin-left: -6px;
+  }
+  .step-slider__labels {
+    display: flex; justify-content: space-between;
+    font-size: 8px; color: #94A3B8;
+  }
+
+  /* Prompt */
+  .prompt-box {
+    width: 100%; min-height: 72px;
+    border: 1px dashed #CBD5E1; border-radius: 10px;
+    background: #F8FAFC; padding: 10px;
+  }
+  .prompt-box__placeholder { font-size: 10px; color: #CBD5E1; font-style: italic; }
+
+  /* Bottom controls */
+  .bottom-controls { margin-top: 4px; display: flex; flex-direction: column; gap: 8px; }
+  .controls-row { display: flex; gap: 6px; align-items: center; }
+
+  .format-select {
+    flex: 1; height: 34px;
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    background: #F8FAFC;
+    display: flex; align-items: center; gap: 7px; padding: 0 10px;
+  }
+  .format-select__icon {
+    width: 16px; height: 16px;
+    border: 1.5px solid #94A3B8; border-radius: 3px; flex-shrink: 0;
+  }
+  .format-select__text { font-size: 10px; color: #475569; font-weight: 600; }
+  .format-select__arrow {
+    margin-left: auto;
+    width: 0; height: 0;
+    border-left: 3px solid transparent; border-right: 3px solid transparent;
+    border-top: 3px solid #CBD5E1;
+  }
+
+  .stepper {
+    display: flex; align-items: center; gap: 6px;
+    height: 34px; border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 0 10px; background: #F8FAFC;
+  }
+  .stepper__btn {
+    width: 16px; height: 16px; border-radius: 4px;
+    background: #E2E8F0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: #64748B; line-height: 1;
+  }
+  .stepper__value { font-size: 11px; font-weight: 700; color: #1E293B; }
+
+  .generate-btn {
+    width: 100%; height: 40px; background: #3B5BDB;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .generate-btn__text { font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.08em; }
+  .generate-btn__spark { font-size: 14px; }
+
+  /* ── Right Panel ──────────────────────────────── */
+  .results { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  .results__main {
+    flex: 0 0 85%;
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+    gap: 10px; border-bottom: 1px solid #E2E8F0;
+  }
+  .results__empty-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: #E2E8F0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .results__empty-title { font-size: 14px; font-weight: 700; color: #94A3B8; }
+  .results__empty-sub { font-size: 11px; color: #CBD5E1; text-align: center; max-width: 200px; }
+
+  .results__gallery { flex: 1; padding: 12px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .results__gallery-label { font-size: 9px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.1em; }
+  .results__gallery-strip { display: flex; gap: 8px; }
+  .results__gallery-thumb { width: 80px; height: 54px; border-radius: 6px; background: #E2E8F0; flex-shrink: 0; }
+  .results__gallery-thumb:nth-child(2) { background: #D1E8FF; }
+  .results__gallery-thumb:nth-child(3) { background: #F5D0FE; }
+  .results__gallery-thumb:nth-child(4) { background: #FDE68A; }
+  .results__gallery-thumb:nth-child(5) { background: #D1FAE5; }
+
+  /* ── Annotations ──────────────────────────────── */
+  .annotations {
+    width: 100%; max-width: 1200px;
+    display: grid; grid-template-columns: 290px 1fr;
+    gap: 20px;
+  }
+  .ann-col { display: flex; flex-direction: column; gap: 7px; }
+  .ann { display: flex; gap: 8px; align-items: flex-start; }
+  .ann__dot {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #3B5BDB; color: #fff;
+    font-size: 9px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .ann__text { font-size: 11px; color: #475569; line-height: 1.4; }
+  .ann__text strong { color: #1E293B; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<h1 class="wf-title">Wireframe — Generador v3 · Columna única de control</h1>
+
+<div class="frame">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar__brand">
+      <div class="topbar__logo"></div>
+      <span class="topbar__name">Perfect Store</span>
+    </div>
+    <div class="topbar__nav">
+      <div class="topbar__nav-item">Mis proyectos</div>
+      <div class="topbar__nav-item active">Generador</div>
+    </div>
+    <div class="topbar__user"></div>
+  </div>
+
+  <div class="body">
+
+    <!-- ── LEFT PANEL ── -->
+    <div class="panel">
+
+      <div class="panel__page-title">Generador</div>
+      <div class="panel__page-subtitle">Configura y genera imágenes para tus campañas</div>
+
+      <!-- Proyecto -->
+      <div class="project-bar">
+        <div>
+          <div class="project-bar__label">Proyecto activo</div>
+          <div class="project-bar__value">Ninguno seleccionado</div>
+        </div>
+        <div class="project-bar__action">Cambiar</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- PRODUCTOS -->
+      <div class="section">
+        <span class="section__label">Productos</span>
+        <div class="dropdown-row">
+          <div class="dropdown">
+            <span class="dropdown__text">Marcas</span>
+            <div class="dropdown__arrow"></div>
+          </div>
+          <div class="dropdown">
+            <span class="dropdown__text">SKU</span>
+            <div class="dropdown__arrow"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- VISUAL -->
+      <div class="section">
+        <span class="section__label">Visual</span>
+
+        <!-- Ángulo -->
+        <div style="margin-bottom: 10px;">
+          <div style="font-size:9px; color:#B0BAC9; margin-bottom:5px; font-weight:600;">Ángulo</div>
+          <div class="dropdown dropdown--full">
+            <span class="dropdown__text">Frontal</span>
+            <div class="dropdown__arrow"></div>
+          </div>
+          <a class="ver-ejemplos">
+            <div class="ver-ejemplos__icon">
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                <rect x="0" y="0" width="3" height="3" rx="0.5" fill="#3B5BDB"/>
+                <rect x="5" y="0" width="3" height="3" rx="0.5" fill="#3B5BDB"/>
+                <rect x="0" y="5" width="3" height="3" rx="0.5" fill="#3B5BDB"/>
+                <rect x="5" y="5" width="3" height="3" rx="0.5" fill="#3B5BDB"/>
+              </svg>
+            </div>
+            Ver ejemplos
+          </a>
+        </div>
+
+        <!-- Iluminación -->
+        <div>
+          <div style="font-size:9px; color:#B0BAC9; margin-bottom:5px; font-weight:600;">Iluminación</div>
+          <div class="dropdown dropdown--full">
+            <span class="dropdown__text">Estudio</span>
+            <div class="dropdown__arrow"></div>
+          </div>
+          <a class="ver-ejemplos">
+            <div class="ver-ejemplos__icon">
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                <rect x="0" y="0" width="3" height="3" rx="0.5" fill="#3B5BDB"/>
+                <rect x="5" y="0" width="3" height="3" rx="0.5" fill="#3B5BDB"/>
+                <rect x="0" y="5" width="3" height="3" rx="0.5" fill="#3B5BDB"/>
+                <rect x="5" y="5" width="3" height="3" rx="0.5" fill="#3B5BDB"/>
+              </svg>
+            </div>
+            Ver ejemplos
+          </a>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- CONTEXTO -->
+      <div class="section">
+        <span class="section__label">Contexto</span>
+        <div class="dropdown-row">
+          <div class="dropdown">
+            <span class="dropdown__text">Elementos</span>
+            <div class="dropdown__arrow"></div>
+          </div>
+          <div class="dropdown">
+            <span class="dropdown__text">Atmósfera</span>
+            <div class="dropdown__arrow"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOMENTO DEL DÍA -->
+      <div class="section">
+        <span class="section__label">Momento del día</span>
+        <div class="step-slider">
+          <div class="step-slider__track">
+            <div class="step-slider__fill"></div>
+            <div class="step-slider__thumb"></div>
+          </div>
+          <div class="step-slider__labels">
+            <span>Amanecer</span>
+            <span>Mediodía</span>
+            <span>Noche</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROTAGONISMO -->
+      <div class="section">
+        <span class="section__label">Protagonismo</span>
+        <div class="step-slider">
+          <div class="step-slider__track">
+            <div class="step-slider__fill" style="width:60%"></div>
+            <div class="step-slider__thumb" style="left:60%"></div>
+          </div>
+          <div class="step-slider__labels">
+            <span>Solo producto</span>
+            <span>Solo entorno</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- PROMPT -->
+      <div class="section">
+        <span class="section__label">Prompt / Contexto</span>
+        <div class="prompt-box">
+          <span class="prompt-box__placeholder">Describe el contexto de la imagen…</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- BOTTOM CONTROLS -->
+      <div class="bottom-controls">
+        <div class="controls-row">
+          <div class="format-select">
+            <div class="format-select__icon"></div>
+            <span class="format-select__text">1:1 · Square</span>
+            <div class="format-select__arrow"></div>
+          </div>
+          <div class="stepper">
+            <div class="stepper__btn">−</div>
+            <span class="stepper__value">4</span>
+            <div class="stepper__btn">+</div>
+          </div>
+        </div>
+        <div class="generate-btn">
+          <span class="generate-btn__spark">✦</span>
+          <span class="generate-btn__text">Generar imágenes</span>
+        </div>
+      </div>
+
+    </div><!-- /panel -->
+
+    <!-- ── RIGHT: RESULTS ── -->
+    <div class="results">
+      <div class="results__main">
+        <div class="results__empty-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="3"/>
+            <path d="M3 15l5-5 4 4 3-3 6 6"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+          </svg>
+        </div>
+        <div class="results__empty-title">Genera tu primera imagen</div>
+        <div class="results__empty-sub">Configura los parámetros y haz clic en Generar</div>
+      </div>
+      <div class="results__gallery">
+        <div class="results__gallery-label">Imágenes de proyectos</div>
+        <div class="results__gallery-strip">
+          <div class="results__gallery-thumb"></div>
+          <div class="results__gallery-thumb"></div>
+          <div class="results__gallery-thumb"></div>
+          <div class="results__gallery-thumb"></div>
+          <div class="results__gallery-thumb"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+</div><!-- /frame -->
+
+<!-- ANNOTATIONS -->
+<div class="annotations">
+  <div class="ann-col">
+    <div class="ann">
+      <div class="ann__dot">1</div>
+      <div class="ann__text"><strong>Marcas + SKU</strong> — renombrados, siguen como dropdowns en fila.</div>
+    </div>
+    <div class="ann">
+      <div class="ann__dot">2</div>
+      <div class="ann__text"><strong>Ángulo e Iluminación</strong> — dropdowns individuales full-width. "Ver ejemplos" como link visible debajo de cada uno, abre modal 85%.</div>
+    </div>
+    <div class="ann">
+      <div class="ann__dot">3</div>
+      <div class="ann__text"><strong>Elementos + Atmósfera</strong> — dropdowns en fila, igual que estaban.</div>
+    </div>
+  </div>
+  <div class="ann-col">
+    <div class="ann">
+      <div class="ann__dot">4</div>
+      <div class="ann__text"><strong>Prompt</strong> — fusionado en el panel de control, después de los sliders.</div>
+    </div>
+    <div class="ann">
+      <div class="ann__dot">5</div>
+      <div class="ann__text"><strong>Formato + Cantidad</strong> — una fila compacta. Dropdown enriquecido + stepper − 4 +.</div>
+    </div>
+    <div class="ann">
+      <div class="ann__dot">6</div>
+      <div class="ann__text"><strong>Resultados</strong> — 85% empty state / imágenes · 15% galería de proyectos.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

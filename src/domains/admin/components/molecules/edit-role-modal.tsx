@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ChevronDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { adminMessages } from '../../messages';
 import { RoleBadge } from '../atoms/role-badge';
 import type { AdminUser } from '../../admin.types';
@@ -51,7 +53,7 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
     onSave(user.id, role);
   }
 
-  return (
+  return createPortal(
     <div className="admin-modal-overlay" onClick={onCancel}>
       <div
         className="admin-modal"
@@ -131,7 +133,10 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
                   <ChevronDown
                     size={14}
                     strokeWidth={1.5}
-                    className={`admin-custom-select__chevron${isRoleOpen ? 'admin-custom-select__chevron--open' : ''}`}
+                    className={cn(
+                      'admin-custom-select__chevron',
+                      isRoleOpen && 'admin-custom-select__chevron--open'
+                    )}
                     aria-hidden="true"
                   />
                 </button>
@@ -143,7 +148,11 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
                         type="button"
                         role="option"
                         aria-selected={role === r.value}
-                        className={`admin-custom-select__option${role === r.value ? 'admin-custom-select__option--active' : ''}`}
+                        className={cn(
+                          'admin-custom-select__option',
+                          role === r.value &&
+                            'admin-custom-select__option--active'
+                        )}
                         onClick={() => {
                           setRole(r.value);
                           setIsRoleOpen(false);
@@ -175,6 +184,7 @@ export function EditRoleModal({ user, onSave, onCancel }: EditRoleModalProps) {
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

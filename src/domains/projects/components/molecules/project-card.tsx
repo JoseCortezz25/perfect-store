@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Image as ImageIcon } from 'lucide-react';
 import { projectMessages } from '../../messages';
 import type { Project } from '../../projects.types';
 
@@ -12,9 +11,20 @@ export function ProjectCard({ project }: ProjectCardProps) {
     <Link href={`/projects/${project.id}`} className="project-card">
       {/* Image preview area */}
       <div className="project-card__preview">
-        <div className="project-card__preview-icon" aria-hidden="true">
-          <ImageIcon size={32} strokeWidth={1} />
-        </div>
+        {project.thumbnail ? (
+          <img
+            src={project.thumbnail}
+            alt={project.name}
+            className="project-card__preview-img"
+          />
+        ) : (
+          <img
+            src="/Images/Placceholder-Image.png"
+            alt=""
+            className="project-card__preview-img"
+            aria-hidden="true"
+          />
+        )}
       </div>
 
       {/* Card body */}

@@ -7,7 +7,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-mulish);
+  --font-sans: var(--font-montserrat);
+  --font-display: var(--font-soda);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -42,162 +43,121 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* OP Surfaces */
-  --color-surface-0: #000000;
-  --color-surface-1: #080808;
-  --color-surface-2: #0d0d0d;
-  --color-surface-3: #131313;
-  --color-surface-4: #191919;
-  --color-surface-5: #202020;
-  --color-surface-6: #3b3b3b;
+  /* ── Postobón Blue palette ───────────────────────────────────── */
+  --color-pb-blue-light: #81CCF2;
+  --color-pb-blue-cyan:  #00B3E6;
+  --color-pb-blue-mid:   #1888CA;
+  --color-pb-blue-dark:  #095EAA;
 
-  /* Surface contrast */
-  --color-contrast-0: #ffffff;
-  --color-contrast-1: #f5f5f5;
-  --color-contrast-2: #dcdcdc;
-  --color-contrast-3: #8c8c8c;
-  --color-contrast-4: #6e6e6e;
-  --color-contrast-5: #545454;
+  /* ── Light mode surfaces ─────────────────────────────────────── */
+  --color-surface-0: #FFFFFF;   /* pure white — outermost canvas  */
+  --color-surface-1: #F0F7FC;   /* app background — subtle blue   */
+  --color-surface-2: #FFFFFF;   /* card backgrounds               */
+  --color-surface-3: #EBF4FC;   /* nested surfaces, hover areas   */
+  --color-surface-4: #FFFFFF;   /* input backgrounds              */
+  --color-surface-5: #F5F5F5;   /* disabled surfaces              */
+  --color-surface-6: #D4E8F5;   /* dividers / separators          */
 
-  /* OP Blue */
-  --color-op-blue-50: #f6f8ff;
-  --color-op-blue-100: #f0f3fe;
-  --color-op-blue-200: #dce3fd;
-  --color-op-blue-300: #c1cffc;
-  --color-op-blue-400: #97b1f9;
-  --color-op-blue-500: #6689f4;
-  --color-op-blue-600: #4361ef;
-  --color-op-blue-700: #2c40e4;
-  --color-op-blue-800: #242dd1;
-  --color-op-blue-900: #2327aa;
-  --color-op-blue-950: #191a52;
+  /* ── Text hierarchy ──────────────────────────────────────────── */
+  --color-contrast-0: #000000;  /* primary text                   */
+  --color-contrast-1: #1A1A1A;  /* headings                       */
+  --color-contrast-2: #333333;  /* body                           */
+  --color-contrast-3: #555555;  /* secondary text                 */
+  --color-contrast-4: #777777;  /* muted text                     */
+  --color-contrast-5: #999999;  /* placeholder / disabled text    */
 
-  /* CTA Button */
-  --color-cta-gradient-from: var(--color-op-blue-400);   /* #97b1f9 — bright hover end  */
-  --color-cta-gradient-mid:  var(--color-op-blue-500);   /* #6689f4 — mid sweep        */
-  --color-cta-default:       var(--color-op-blue-600);   /* #4361ef — brand principal  */
-  --color-cta-pressed:       var(--color-op-blue-800);   /* #242dd1 — press state      */
-  --color-cta-disabled-bg:   var(--color-surface-5);
-  --color-cta-disabled-text: var(--color-contrast-5);
+  /* ── CTA Button tokens ───────────────────────────────────────── */
+  --color-cta-default:       #095EAA;
+  --color-cta-hover:         #1888CA;
+  --color-cta-pressed:       #00B3E6;
+  --color-cta-disabled-bg:   #81CCF2;
+  --color-cta-disabled-text: #FFFFFF;
 
-  /* Status — full token set (bg / text / border) */
-  --color-status-approved-bg:             rgba(34, 197, 94, 0.15);
-  --color-status-approved-text:           #22c55e;
-  --color-status-approved-border:         rgba(34, 197, 94, 0.3);
+  /* ── Flavor / secondary colors ───────────────────────────────── */
+  --color-flavor-uva:       #8B4996;
+  --color-flavor-pina:      #FFDE0B;
+  --color-flavor-limonada:  #7FB640;
+  --color-flavor-tamarindo: #DF5B2A;
+  --color-flavor-naranja:   #F1861C;
+  --color-flavor-kola:      #E62C34;
+  --color-flavor-manzana:   #EC71A1;
 
-  --color-status-client-approved-bg:      rgba(21, 128, 61, 0.15);
-  --color-status-client-approved-text:    #15803d;
-  --color-status-client-approved-border:  rgba(21, 128, 61, 0.3);
+  /* ── Status tokens (bg / text / border) ─────────────────────── */
+  --color-status-approved-bg:             rgba(127, 182, 64, 0.12);
+  --color-status-approved-text:           #7FB640;
+  --color-status-approved-border:         rgba(127, 182, 64, 0.30);
 
-  --color-status-rejected-bg:             rgba(239, 68, 68, 0.15);
-  --color-status-rejected-text:           #ef4444;
-  --color-status-rejected-border:         rgba(239, 68, 68, 0.3);
+  --color-status-client-approved-bg:      rgba(9, 94, 170, 0.10);
+  --color-status-client-approved-text:    #095EAA;
+  --color-status-client-approved-border:  rgba(9, 94, 170, 0.25);
 
-  --color-status-warning-bg:              rgba(245, 158, 11, 0.15);
-  --color-status-warning-text:            #f59e0b;
-  --color-status-warning-border:          rgba(245, 158, 11, 0.3);
+  --color-status-rejected-bg:             rgba(230, 44, 52, 0.10);
+  --color-status-rejected-text:           #E62C34;
+  --color-status-rejected-border:         rgba(230, 44, 52, 0.25);
 
-  --color-status-pending-bg:              rgba(107, 114, 128, 0.15);
-  --color-status-pending-text:            #9ca3af;
-  --color-status-pending-border:          rgba(107, 114, 128, 0.3);
+  --color-status-warning-bg:              rgba(241, 134, 28, 0.12);
+  --color-status-warning-text:            #F1861C;
+  --color-status-warning-border:          rgba(241, 134, 28, 0.30);
 
-  --color-status-in-review-bg:            rgba(139, 92, 246, 0.15);
-  --color-status-in-review-text:          #8b5cf6;
-  --color-status-in-review-border:        rgba(139, 92, 246, 0.3);
+  --color-status-pending-bg:              rgba(129, 204, 242, 0.20);
+  --color-status-pending-text:            #1888CA;
+  --color-status-pending-border:          rgba(24, 136, 202, 0.30);
 
-  --color-status-delivered-bg:            rgba(67, 97, 239, 0.15);
-  --color-status-delivered-text:          #4361ef;
-  --color-status-delivered-border:        rgba(67, 97, 239, 0.3);
+  --color-status-in-review-bg:            rgba(0, 179, 230, 0.10);
+  --color-status-in-review-text:          #00B3E6;
+  --color-status-in-review-border:        rgba(0, 179, 230, 0.25);
 
-  /* Brand Accent — data viz only */
-  --color-accent-secondary-blue: #18AFDF;
-  --color-accent-purple:         #7345FF;
-  --color-accent-lilac:          #B439FF;
-  --color-accent-pink:           #FF2F9C;
+  --color-status-delivered-bg:            rgba(9, 94, 170, 0.10);
+  --color-status-delivered-text:          #095EAA;
+  --color-status-delivered-border:        rgba(9, 94, 170, 0.25);
 
-  /* Legacy neutrals */
+  /* ── Neutrals ────────────────────────────────────────────────── */
   --color-black: #000000;
-  --color-black-950: #0d0d0d;
-  --color-black-900: #131313;
-  --color-black-800: #191919;
-  --color-black-700: #202020;
-  --color-black-600: #2e2e2e;
-  --color-black-500: #3b3b3b;
-  --color-black-400: #545454;
-  --color-black-300: #6e6e6e;
-  --color-black-200: #8c8c8c;
-  --color-black-100: #dcdcdc;
-  --color-black-50: #f5f5f5;
-  --color-white: #ffffff;
+  --color-white: #FFFFFF;
+  --color-neutral-100: #F5F5F5;
+  --color-neutral-200: #E0E0E0;
+  --color-neutral-300: #CCCCCC;
+  --color-neutral-400: #999999;
+  --color-neutral-500: #777777;
+  --color-neutral-600: #555555;
+  --color-neutral-700: #333333;
+  --color-neutral-800: #1A1A1A;
+  --color-neutral-900: #000000;
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: #080808;
-  --foreground: oklch(0.147 0.004 49.25);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.147 0.004 49.25);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.147 0.004 49.25);
-  --primary: oklch(0.216 0.006 56.043);
-  --primary-foreground: oklch(0.985 0.001 106.423);
-  --secondary: oklch(0.97 0.001 106.424);
-  --secondary-foreground: oklch(0.216 0.006 56.043);
-  --muted: oklch(0.97 0.001 106.424);
-  --muted-foreground: oklch(0.553 0.013 58.071);
-  --accent: oklch(0.97 0.001 106.424);
-  --accent-foreground: oklch(0.216 0.006 56.043);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.923 0.003 48.717);
-  --input: oklch(0.923 0.003 48.717);
-  --ring: oklch(0.709 0.01 56.259);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0.001 106.423);
-  --sidebar-foreground: oklch(0.147 0.004 49.25);
-  --sidebar-primary: oklch(0.216 0.006 56.043);
-  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-accent: oklch(0.97 0.001 106.424);
-  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
-  --sidebar-border: oklch(0.923 0.003 48.717);
-  --sidebar-ring: oklch(0.709 0.01 56.259);
-}
-
-.dark {
-  --background: oklch(0.147 0.004 49.25);
-  --foreground: oklch(0.985 0.001 106.423);
-  --card: oklch(0.216 0.006 56.043);
-  --card-foreground: oklch(0.985 0.001 106.423);
-  --popover: oklch(0.216 0.006 56.043);
-  --popover-foreground: oklch(0.985 0.001 106.423);
-  --primary: oklch(0.923 0.003 48.717);
-  --primary-foreground: oklch(0.216 0.006 56.043);
-  --secondary: oklch(0.268 0.007 34.298);
-  --secondary-foreground: oklch(0.985 0.001 106.423);
-  --muted: oklch(0.268 0.007 34.298);
-  --muted-foreground: oklch(0.709 0.01 56.259);
-  --accent: oklch(0.268 0.007 34.298);
-  --accent-foreground: oklch(0.985 0.001 106.423);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.553 0.013 58.071);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.216 0.006 56.043);
-  --sidebar-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-accent: oklch(0.268 0.007 34.298);
-  --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.553 0.013 58.071);
+  --radius: 0.75rem;
+  --background: #F6F6F6;
+  --foreground: #000000;
+  --card: #FFFFFF;
+  --card-foreground: #000000;
+  --popover: #FFFFFF;
+  --popover-foreground: #000000;
+  --primary: #095EAA;
+  --primary-foreground: #FFFFFF;
+  --secondary: #00B3E6;
+  --secondary-foreground: #FFFFFF;
+  --muted: #EBF4FC;
+  --muted-foreground: #777777;
+  --accent: #81CCF2;
+  --accent-foreground: #095EAA;
+  --destructive: #E62C34;
+  --border: #81CCF2;
+  --input: #FFFFFF;
+  --ring: #00B3E6;
+  --chart-1: #095EAA;
+  --chart-2: #00B3E6;
+  --chart-3: #7FB640;
+  --chart-4: #F1861C;
+  --chart-5: #8B4996;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #000000;
+  --sidebar-primary: #095EAA;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #EBF4FC;
+  --sidebar-accent-foreground: #095EAA;
+  --sidebar-border: #D4E8F5;
+  --sidebar-ring: #00B3E6;
 }
 
 @layer base {
@@ -206,9 +166,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-mulish), sans-serif;
-    background-color: #080808;
-    color: #f5f5f5;
+    font-family: var(--font-montserrat), sans-serif;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -216,5 +174,33 @@
       transition: opacity 0ms !important;
       animation: none !important;
     }
+  }
+}
+
+/* ── Remove focus ring on view toggle buttons ───────────────────── */
+.view-toggle__btn:focus,
+.view-toggle__btn:focus-visible,
+.view-toggle__btn:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ── Modal overlay blur ─────────────────────────────────────────────
+   backdrop-filter is stripped by Lightning CSS when declared in
+   page-level CSS imports. Declaring here (Tailwind pipeline) fixes it.
+   ─────────────────────────────────────────────────────────────────── */
+.gen-modal-overlay,
+.gen-ref-modal,
+.admin-modal-overlay {
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gen-modal-overlay,
+  .gen-ref-modal,
+  .admin-modal-overlay {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }

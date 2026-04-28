@@ -1,7 +1,8 @@
 'use client';
 
-import { useActionState, useEffect, useRef } from 'react';
+import { useActionState, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { createProjectAction } from '../../actions';
 import { projectMessages } from '../../messages';
@@ -11,7 +12,11 @@ const msgs = projectMessages.modal;
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="btn btn--primary modal-form__submit">
+    <button
+      type="submit"
+      disabled={pending}
+      className="btn btn--primary modal-form__submit"
+    >
       {pending ? msgs.creatingButton : msgs.createButton}
     </button>
   );
@@ -23,16 +28,10 @@ interface NewProjectModalProps {
 }
 
 export function NewProjectModal({ isOpen, onClose }: NewProjectModalProps) {
-  const [state, formAction, isPending] = useActionState(createProjectAction, null);
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      dialogRef.current?.showModal();
-    } else {
-      dialogRef.current?.close();
-    }
-  }, [isOpen]);
+  const [state, formAction, isPending] = useActionState(
+    createProjectAction,
+    null
+  );
 
   useEffect(() => {
     if (state?.success) {
@@ -44,17 +43,14 @@ export function NewProjectModal({ isOpen, onClose }: NewProjectModalProps) {
     if (!isPending) onClose();
   }
 
-  function handleBackdropClick(e: React.MouseEvent<HTMLDialogElement>) {
-    if (e.target === dialogRef.current) handleClose();
+  function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
+    if (e.target === e.currentTarget) handleClose();
   }
 
-  return (
-    <dialog
-      ref={dialogRef}
-      className="modal"
-      onClick={handleBackdropClick}
-      onClose={handleClose}
-    >
+  if (!isOpen) return null;
+
+  return createPortal(
+    <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal__card">
         <div className="modal__header">
           <h2 className="modal__title">{msgs.title}</h2>
@@ -116,6 +112,7 @@ export function NewProjectModal({ isOpen, onClose }: NewProjectModalProps) {
           </div>
         </form>
       </div>
-    </dialog>
+    </div>,
+    document.body
   );
 }

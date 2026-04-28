@@ -11,13 +11,15 @@ const DEFAULT_CONFIG: GeneratorConfig = {
   referenceImageName: null,
   imageType: null,
   angle: null,
+  illumination: null,
   aspectRatio: '1:1',
   freeText: '',
   elementChips: [],
   atmosphericChips: [],
   dayMoment: 2,
   prominence: 2,
-  quality: 'medio'
+  quality: 'medio',
+  imageCount: 4
 };
 
 type Listener = () => void;

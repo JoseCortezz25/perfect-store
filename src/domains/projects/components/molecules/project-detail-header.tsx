@@ -1,30 +1,46 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
-import { ArrowLeft, Share2, ChevronDown, CheckCircle, XCircle, Clock, Circle, Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import {
+  Share2,
+  ChevronDown,
+  CheckCircle,
+  XCircle,
+  Clock,
+  Circle,
+  Check
+} from 'lucide-react';
 import { StatusBadge } from '../atoms/status-badge';
 import { projectMessages } from '../../messages';
-import type { ProjectDetail, ProjectVersion, VersionStatus } from '../../projects.types';
+import type {
+  ProjectDetail,
+  ProjectVersion,
+  VersionStatus
+} from '../../projects.types';
 
 const msgs = projectMessages.detail;
 
 const VERSION_STATUS_ICON: Record<VersionStatus, React.ReactNode> = {
-  approved:  <CheckCircle size={11} strokeWidth={2}   />,
-  rejected:  <XCircle     size={11} strokeWidth={2}   />,
-  validating:<Clock       size={11} strokeWidth={1.5} />,
-  pending:   <Circle      size={11} strokeWidth={1.5} />,
+  approved: <CheckCircle size={11} strokeWidth={2} />,
+  rejected: <XCircle size={11} strokeWidth={2} />,
+  validating: <Clock size={11} strokeWidth={1.5} />,
+  pending: <Circle size={11} strokeWidth={1.5} />
 };
 
 const VERSION_STATUS_CLS: Record<VersionStatus, string> = {
-  approved:  'detail-version-status--approved',
-  rejected:  'detail-version-status--rejected',
-  validating:'detail-version-status--validating',
-  pending:   'detail-version-status--pending',
+  approved: 'detail-version-status--approved',
+  rejected: 'detail-version-status--rejected',
+  validating: 'detail-version-status--validating',
+  pending: 'detail-version-status--pending'
 };
 
 function formatDate(date: Date): string {
-  return date.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+  return date.toLocaleDateString('es-MX', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  });
 }
 
 interface ProjectDetailHeaderProps {
@@ -40,14 +56,15 @@ export function ProjectDetailHeader({
   versions,
   selectedVersionId,
   onVersionChange,
-  onStageLink,
+  onStageLink
 }: ProjectDetailHeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setIsOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setIsOpen(false);
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -57,11 +74,6 @@ export function ProjectDetailHeader({
 
   return (
     <div className="detail-header">
-      <Link href="/" className="detail-back-btn">
-        <ArrowLeft size={16} strokeWidth={2} aria-hidden="true" />
-        <span>{msgs.backButton}</span>
-      </Link>
-
       <div className="detail-header__row">
         <div className="detail-header__title-area">
           <h1 className="detail-header__title">{project.name}</h1>
@@ -77,14 +89,22 @@ export function ProjectDetailHeader({
                   onClick={() => setIsOpen(o => !o)}
                   aria-expanded={isOpen}
                 >
-                  <span className={`detail-version-status ${VERSION_STATUS_CLS[current.status]}`}>
+                  <span
+                    className={cn(
+                      'detail-version-status',
+                      VERSION_STATUS_CLS[current.status]
+                    )}
+                  >
                     {VERSION_STATUS_ICON[current.status]}
                   </span>
                   <span>{current.label}</span>
                   <ChevronDown
                     size={11}
                     strokeWidth={1.5}
-                    className={`detail-version-chevron${isOpen ? ' detail-version-chevron--open' : ''}`}
+                    className={cn(
+                      'detail-version-chevron',
+                      isOpen && 'detail-version-chevron--open'
+                    )}
                     aria-hidden="true"
                   />
                 </button>
@@ -95,18 +115,39 @@ export function ProjectDetailHeader({
                       <button
                         key={v.id}
                         type="button"
-                        className={`detail-version-item${v.id === selectedVersionId ? ' detail-version-item--active' : ''}`}
-                        onClick={() => { onVersionChange(v.id); setIsOpen(false); }}
+                        className={cn(
+                          'detail-version-item',
+                          v.id === selectedVersionId &&
+                            'detail-version-item--active'
+                        )}
+                        onClick={() => {
+                          onVersionChange(v.id);
+                          setIsOpen(false);
+                        }}
                       >
-                        <span className={`detail-version-status ${VERSION_STATUS_CLS[v.status]}`}>
+                        <span
+                          className={cn(
+                            'detail-version-status',
+                            VERSION_STATUS_CLS[v.status]
+                          )}
+                        >
                           {VERSION_STATUS_ICON[v.status]}
                         </span>
                         <div className="detail-version-item__info">
-                          <span className="detail-version-item__label">{v.label}</span>
-                          <span className="detail-version-item__date">{formatDate(v.uploadedAt)}</span>
+                          <span className="detail-version-item__label">
+                            {v.label}
+                          </span>
+                          <span className="detail-version-item__date">
+                            {formatDate(v.uploadedAt)}
+                          </span>
                         </div>
                         {v.id === selectedVersionId && (
-                          <Check size={11} strokeWidth={2.5} className="detail-version-item__check" aria-hidden="true" />
+                          <Check
+                            size={11}
+                            strokeWidth={2.5}
+                            className="detail-version-item__check"
+                            aria-hidden="true"
+                          />
                         )}
                       </button>
                     ))}
