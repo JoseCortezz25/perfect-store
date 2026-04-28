@@ -14,6 +14,13 @@ export interface AppUser {
 
 export const APP_USERS: AppUser[] = [
   {
+    id: '3',
+    name: 'Laura Torres',
+    initials: 'LT',
+    role: 'admin',
+    roleLabel: 'Admin'
+  },
+  {
     id: '1',
     name: 'Valentina Ríos',
     initials: 'VR',
@@ -26,13 +33,6 @@ export const APP_USERS: AppUser[] = [
     initials: 'CM',
     role: 'cliente',
     roleLabel: 'Cliente'
-  },
-  {
-    id: '3',
-    name: 'Laura Torres',
-    initials: 'LT',
-    role: 'admin',
-    roleLabel: 'Admin'
   }
 ];
 
