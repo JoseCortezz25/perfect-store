@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { CheckCircle, XCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { QcScoreRing } from '../atoms/qc-score-ring';
 import { QcCheckGroup } from '../molecules/qc-check-group';
 import { projectMessages } from '../../messages';
@@ -67,19 +68,23 @@ export function QcValidationPanel({
         <div className="qc-panel__score-stats">
           <div className="qc-panel__stat qc-panel__stat--pass">
             <span className="qc-panel__stat-value">{passCount}</span>
-            <span className="qc-panel__stat-label">{msgs.passCount()}</span>
+            <span className="qc-panel__stat-label">
+              {msgs.passCount(passCount)}
+            </span>
           </div>
           {failCount > 0 && (
             <div className="qc-panel__stat qc-panel__stat--fail">
               <span className="qc-panel__stat-value">{failCount}</span>
-              <span className="qc-panel__stat-label">{msgs.failCount()}</span>
+              <span className="qc-panel__stat-label">
+                {msgs.failCount(failCount)}
+              </span>
             </div>
           )}
           {warnCount > 0 && (
             <div className="qc-panel__stat qc-panel__stat--warn">
               <span className="qc-panel__stat-value">{warnCount}</span>
               <span className="qc-panel__stat-label">
-                {msgs.warningCount()}
+                {msgs.warningCount(warnCount)}
               </span>
             </div>
           )}
@@ -102,7 +107,10 @@ export function QcValidationPanel({
         <div className="qc-panel__decision">
           {qcDecision ? (
             <div
-              className={`qc-panel__decision-feedback qc-panel__decision-feedback--${qcDecision}`}
+              className={cn(
+                'qc-panel__decision-feedback',
+                `qc-panel__decision-feedback--${qcDecision}`
+              )}
             >
               {qcDecision === 'approved'
                 ? `✓ Versión ${versionLabel ?? ''} aprobada`

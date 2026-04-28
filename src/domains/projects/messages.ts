@@ -1,6 +1,7 @@
 export const projectMessages = {
   home: {
     newProject: 'Nuevo proyecto',
+    newBrand: 'Nueva marca',
     searchPlaceholder: 'Buscar proyectos...',
     metrics: {
       totalProjects: 'Total proyectos',
@@ -45,6 +46,20 @@ export const projectMessages = {
       serverError: 'Algo salió mal. Por favor intenta de nuevo.'
     }
   },
+  brandModal: {
+    title: 'Nueva marca',
+    subtitle: 'Completa los datos para registrar una nueva marca',
+    nameLabel: 'Nombre de la marca',
+    namePlaceholder: 'Ej. Nike',
+    clientLabel: 'Cliente',
+    clientPlaceholder: 'Ej. Empresa S.A.',
+    createButton: 'Crear marca',
+    creatingButton: 'Creando...',
+    cancelButton: 'Cancelar',
+    errors: {
+      serverError: 'Algo salió mal. Por favor intenta de nuevo.'
+    }
+  },
   card: {
     images: (n: number) => `${n} ${n === 1 ? 'imagen' : 'imágenes'}`,
     date: (d: Date) =>
@@ -83,6 +98,7 @@ export const projectMessages = {
       `${dateLabel} · ${count} ${count === 1 ? 'imagen' : 'imágenes'}`,
     regenerate: 'Regenerar',
     download: 'Descargar',
+    downloadAll: 'Descargar todo',
     imageAlt: (n: number) => `Imagen generada ${n}`,
     modal: {
       title: 'Detalle de imagen',

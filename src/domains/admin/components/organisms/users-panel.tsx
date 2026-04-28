@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { cn } from '@/lib/utils';
 import { Trash2, UserPlus, Users, Search, ChevronDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { RoleChip } from '../atoms/role-chip';
 import { InviteUserModal } from '../molecules/invite-user-modal';
 import { ConfirmDeleteModal } from '../molecules/confirm-delete-modal';
@@ -15,10 +15,11 @@ const msgs = adminMessages.users;
 
 const AVATAR_COLOR = '#4361EF';
 
-type SortKey = 'name' | 'created' | 'updated';
+type SortKey = 'name' | 'role' | 'created' | 'updated';
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: 'name', label: 'Nombre A-Z' },
+  { value: 'role', label: 'Rol' },
   { value: 'created', label: 'Fecha creación' },
   { value: 'updated', label: 'Última actualización' }
 ];
@@ -58,7 +59,7 @@ export function UsersPanel() {
       )
       .sort((a, b) => {
         if (sortBy === 'name') return a.name.localeCompare(b.name);
-        // created / updated: fall back to name order (mock data has no dates)
+        if (sortBy === 'role') return a.roleLabel.localeCompare(b.roleLabel);
         return a.name.localeCompare(b.name);
       });
   }, [users, search, sortBy]);
@@ -206,7 +207,7 @@ export function UsersPanel() {
             <span className="admin-table-header__cell admin-table-header__cell--center">
               {msgs.tableHeaders.activate}
             </span>
-            <span className="admin-table-header__cell">
+            <span className="admin-table-header__cell admin-table-header__cell--right">
               {msgs.tableHeaders.delete}
             </span>
           </div>
@@ -235,10 +236,12 @@ export function UsersPanel() {
             filteredUsers.map((user, idx) => (
               <div
                 key={user.id}
-                className={cn('admin-user-row admin-users-cols', {
-                  'admin-user-row--inactive': user.status === 'inactive',
-                  'admin-user-row--bordered': idx < filteredUsers.length - 1
-                })}
+                className={cn(
+                  'admin-user-row',
+                  'admin-users-cols',
+                  user.status === 'inactive' && 'admin-user-row--inactive',
+                  idx < filteredUsers.length - 1 && 'admin-user-row--bordered'
+                )}
               >
                 {/* Usuario */}
                 <div className="admin-user-row__identity">
@@ -273,9 +276,10 @@ export function UsersPanel() {
                     type="button"
                     role="switch"
                     aria-checked={user.status === 'active'}
-                    className={cn('admin-toggle', {
-                      'admin-toggle--active': user.status === 'active'
-                    })}
+                    className={cn(
+                      'admin-toggle',
+                      user.status === 'active' && 'admin-toggle--active'
+                    )}
                     onClick={() => setTogglingUser(user)}
                     aria-label={
                       user.status === 'active'

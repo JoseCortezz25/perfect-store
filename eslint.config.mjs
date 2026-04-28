@@ -38,7 +38,7 @@ const eslintConfig = [
             'client_review',
             'client_approved',
             'needs_fix',
-            'in_review'
+            'golden_hour'
           ]
         }
       ],

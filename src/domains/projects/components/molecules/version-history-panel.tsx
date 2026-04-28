@@ -1,6 +1,7 @@
 'use client';
 
 import { Clock, CheckCircle, XCircle, Loader, Circle } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { projectMessages } from '../../messages';
 import type { ProjectVersion, VersionStatus } from '../../projects.types';
 
@@ -21,7 +22,11 @@ const STATUS_CLASS: Record<VersionStatus, string> = {
 };
 
 function formatDate(date: Date): string {
-  return date.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
+  return date.toLocaleDateString('es-MX', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  });
 }
 
 interface VersionHistoryPanelProps {
@@ -30,31 +35,49 @@ interface VersionHistoryPanelProps {
   onSelect: (id: string) => void;
 }
 
-export function VersionHistoryPanel({ versions, activeVersionId, onSelect }: VersionHistoryPanelProps) {
+export function VersionHistoryPanel({
+  versions,
+  activeVersionId,
+  onSelect
+}: VersionHistoryPanelProps) {
   if (versions.length === 0) {
     return (
       <div className="version-history">
-        <h3 className="version-history__title">{msgs.validador.versionHistory.title}</h3>
-        <p className="version-history__empty">{msgs.validador.versionHistory.noVersions}</p>
+        <h3 className="version-history__title">
+          {msgs.validador.versionHistory.title}
+        </h3>
+        <p className="version-history__empty">
+          {msgs.validador.versionHistory.noVersions}
+        </p>
       </div>
     );
   }
 
   return (
     <div className="version-history">
-      <h3 className="version-history__title">{msgs.validador.versionHistory.title}</h3>
+      <h3 className="version-history__title">
+        {msgs.validador.versionHistory.title}
+      </h3>
       <div className="version-history__list">
         {versions.map(version => (
           <button
             key={version.id}
             type="button"
-            className={`version-item${activeVersionId === version.id ? ' version-item--active' : ''}`}
+            className={cn(
+              'version-item',
+              activeVersionId === version.id && 'version-item--active'
+            )}
             onClick={() => onSelect(version.id)}
           >
             {/* Version label + status */}
             <div className="version-item__top">
               <span className="version-item__label">{version.label}</span>
-              <span className={`version-item__status ${STATUS_CLASS[version.status]}`}>
+              <span
+                className={cn(
+                  'version-item__status',
+                  STATUS_CLASS[version.status]
+                )}
+              >
                 {STATUS_ICON[version.status]}
                 {msgs.versionStatus[version.status]}
               </span>
@@ -77,7 +100,12 @@ export function VersionHistoryPanel({ versions, activeVersionId, onSelect }: Ver
             {/* QC score preview */}
             {version.qcResult && (
               <div className="version-item__score">
-                <span className={`version-item__score-value version-item__score-value--${version.qcResult.score >= 80 ? 'pass' : version.qcResult.score >= 50 ? 'warn' : 'fail'}`}>
+                <span
+                  className={cn(
+                    'version-item__score-value',
+                    `version-item__score-value--${version.qcResult.score >= 80 ? 'pass' : version.qcResult.score >= 50 ? 'warn' : 'fail'}`
+                  )}
+                >
                   {version.qcResult.score}
                 </span>
                 <span className="version-item__score-max">/ 100</span>

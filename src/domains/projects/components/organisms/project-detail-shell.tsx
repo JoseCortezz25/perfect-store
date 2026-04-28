@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
 import { ProjectDetailHeader } from '../molecules/project-detail-header';
 import { FolderListPanel } from '../molecules/folder-list-panel';
 import { PieceListPanel } from '../molecules/piece-list-panel';
@@ -71,8 +72,7 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
     setCheckedPieceIds(new Set());
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function handleReject(ids: string[], _comment: string) {
+  function handleReject(ids: string[]) {
     setPieceDecisions(prev => {
       const next = new Map(prev);
       ids.forEach(id => next.set(id, 'rejected'));
@@ -135,7 +135,10 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
 
       {/* ── 3-panel layout ── */}
       <div
-        className={`detail-three-panel${isFolderOpen ? '' : 'detail-three-panel--folder-hidden'}`}
+        className={cn(
+          'detail-three-panel',
+          !isFolderOpen && 'detail-three-panel--folder-hidden'
+        )}
       >
         {/* Panel 1 — Folders */}
         <FolderListPanel
@@ -172,7 +175,10 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
                 type="button"
                 role="tab"
                 aria-selected={activeTab === 'validador'}
-                className={`detail-tab${activeTab === 'validador' ? 'detail-tab--active' : ''}`}
+                className={cn(
+                  'detail-tab',
+                  activeTab === 'validador' && 'detail-tab--active'
+                )}
                 onClick={() => setActiveTab('validador')}
               >
                 {msgs.tabs.validador}
@@ -185,7 +191,10 @@ export function ProjectDetailShell({ project }: ProjectDetailShellProps) {
               type="button"
               role="tab"
               aria-selected={activeTab === 'preview'}
-              className={`detail-tab${activeTab === 'preview' ? 'detail-tab--active' : ''}`}
+              className={cn(
+                'detail-tab',
+                activeTab === 'preview' && 'detail-tab--active'
+              )}
               onClick={() => setActiveTab('preview')}
             >
               {msgs.tabs.preview}

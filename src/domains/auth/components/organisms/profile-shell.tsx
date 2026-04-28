@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { User, Lock, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { useCurrentUser } from '@/domains/auth/hooks/use-current-user';
 import { RoleBadge } from '@/domains/admin/components/atoms/role-badge';
 import { authMessages } from '@/domains/auth/messages';
@@ -80,7 +81,10 @@ function PasswordField({
           value={value}
           onChange={e => onChange(e.target.value)}
           autoComplete="off"
-          className={`profile-security__input${error ? 'profile-security__input--error' : ''}`}
+          className={cn(
+            'profile-security__input',
+            error && 'profile-security__input--error'
+          )}
         />
         <button
           type="button"
@@ -102,12 +106,18 @@ function PasswordField({
             {[0, 1, 2, 3].map(i => (
               <div
                 key={i}
-                className={`profile-strength__segment${i < filled ? ` profile-strength__segment--${strength}` : ''}`}
+                className={cn(
+                  'profile-strength__segment',
+                  i < filled && `profile-strength__segment--${strength}`
+                )}
               />
             ))}
           </div>
           <span
-            className={`profile-strength__label profile-strength__label--${strength}`}
+            className={cn(
+              'profile-strength__label',
+              `profile-strength__label--${strength}`
+            )}
           >
             {STRENGTH_LABEL[strength]}
           </span>

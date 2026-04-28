@@ -1,4 +1,13 @@
 export type ImageType = 'aislado' | 'lifestyle' | 'perfect_store';
+export type ImageIllumination =
+  | 'natural'
+  | 'estudio'
+  | 'golden_hour'
+  | 'rembrandt'
+  | 'contraluz'
+  | 'cenital'
+  | 'dramatica'
+  | 'suave';
 export type ImageAngle =
   | 'frontal'
   | 'tres_cuartos'
@@ -8,7 +17,17 @@ export type ImageAngle =
   | 'isometrico'
   | 'detalle'
   | 'trasero';
-export type AspectRatio = '16:9' | '4:3' | '1:1' | '3:4' | '9:16';
+export type AspectRatio =
+  | '1:1'
+  | '16:9'
+  | '9:16'
+  | '4:3'
+  | '3:4'
+  | '2:3'
+  | '1:2'
+  | '2:1'
+  | '4:5'
+  | '3:2';
 export type ImageQuality = 'bajo' | 'medio' | 'alto';
 
 export interface Sku {
@@ -26,6 +45,7 @@ export interface GeneratorConfig {
   referenceImageName: string | null;
   imageType: ImageType | null;
   angle: ImageAngle | null;
+  illumination: ImageIllumination | null;
   aspectRatio: AspectRatio | null;
   freeText: string;
   elementChips: string[];
@@ -33,6 +53,7 @@ export interface GeneratorConfig {
   dayMoment: number;
   prominence: number;
   quality: ImageQuality;
+  imageCount: number;
 }
 
 export interface GeneratedImage {

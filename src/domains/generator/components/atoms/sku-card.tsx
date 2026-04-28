@@ -1,4 +1,5 @@
 import { Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import type { Sku } from '../../generator.types';
 
 interface SkuCardProps {
@@ -11,7 +12,7 @@ export function SkuCard({ sku, isSelected, onToggle }: SkuCardProps) {
   return (
     <button
       type="button"
-      className={`sku-card${isSelected ? 'sku-card--selected' : ''}`}
+      className={cn('sku-card', isSelected && 'sku-card--selected')}
       onClick={() => onToggle(sku)}
       aria-pressed={isSelected}
     >

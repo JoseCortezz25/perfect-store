@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
+import { cn } from '@/lib/utils';
 import {
-  ArrowLeft,
   Share2,
   ChevronDown,
   CheckCircle,
@@ -75,11 +74,6 @@ export function ProjectDetailHeader({
 
   return (
     <div className="detail-header">
-      <Link href="/" className="detail-back-btn">
-        <ArrowLeft size={16} strokeWidth={2} aria-hidden="true" />
-        <span>{msgs.backButton}</span>
-      </Link>
-
       <div className="detail-header__row">
         <div className="detail-header__title-area">
           <h1 className="detail-header__title">{project.name}</h1>
@@ -96,7 +90,10 @@ export function ProjectDetailHeader({
                   aria-expanded={isOpen}
                 >
                   <span
-                    className={`detail-version-status ${VERSION_STATUS_CLS[current.status]}`}
+                    className={cn(
+                      'detail-version-status',
+                      VERSION_STATUS_CLS[current.status]
+                    )}
                   >
                     {VERSION_STATUS_ICON[current.status]}
                   </span>
@@ -104,7 +101,10 @@ export function ProjectDetailHeader({
                   <ChevronDown
                     size={11}
                     strokeWidth={1.5}
-                    className={`detail-version-chevron${isOpen ? 'detail-version-chevron--open' : ''}`}
+                    className={cn(
+                      'detail-version-chevron',
+                      isOpen && 'detail-version-chevron--open'
+                    )}
                     aria-hidden="true"
                   />
                 </button>
@@ -115,14 +115,21 @@ export function ProjectDetailHeader({
                       <button
                         key={v.id}
                         type="button"
-                        className={`detail-version-item${v.id === selectedVersionId ? 'detail-version-item--active' : ''}`}
+                        className={cn(
+                          'detail-version-item',
+                          v.id === selectedVersionId &&
+                            'detail-version-item--active'
+                        )}
                         onClick={() => {
                           onVersionChange(v.id);
                           setIsOpen(false);
                         }}
                       >
                         <span
-                          className={`detail-version-status ${VERSION_STATUS_CLS[v.status]}`}
+                          className={cn(
+                            'detail-version-status',
+                            VERSION_STATUS_CLS[v.status]
+                          )}
                         >
                           {VERSION_STATUS_ICON[v.status]}
                         </span>

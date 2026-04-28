@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Search, Folder, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { projectMessages } from '../../messages';
 import type { BannerFolder, FolderStatus } from '../../projects.types';
 
@@ -11,6 +12,7 @@ const FOLDER_DOT_CLS: Record<FolderStatus, string> = {
   approved: 'folder-item__dot--approved',
   rejected: 'folder-item__dot--rejected',
   pending: 'folder-item__dot--pending',
+  // eslint-disable-next-line camelcase
   in_review: 'folder-item__dot--in-review'
 };
 
@@ -90,11 +92,14 @@ export function FolderListPanel({
           <button
             key={folder.id}
             type="button"
-            className={`folder-item${selectedId === folder.id ? 'folder-item--selected' : ''}`}
+            className={cn(
+              'folder-item',
+              selectedId === folder.id && 'folder-item--selected'
+            )}
             onClick={() => onSelect(folder.id)}
           >
             <span
-              className={`folder-item__dot ${FOLDER_DOT_CLS[folder.status]}`}
+              className={cn('folder-item__dot', FOLDER_DOT_CLS[folder.status])}
               aria-hidden="true"
             />
             <Folder

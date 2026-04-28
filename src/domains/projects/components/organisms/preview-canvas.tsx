@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 import { projectMessages } from '../../messages';
 import type { BannerPiece } from '../../projects.types';
 import type { PreviewBackground } from '../molecules/preview-toolbar';
@@ -79,12 +80,11 @@ export function PreviewCanvas({
 
     observer.observe(containerRef.current);
     return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dims?.width, dims?.height]);
 
   if (!piece || !dims) {
     return (
-      <div className={`preview-canvas preview-canvas--${background}`}>
+      <div className={cn('preview-canvas', `preview-canvas--${background}`)}>
         <div className="preview-canvas__empty">
           <div className="preview-canvas__empty-icon" aria-hidden="true">
             <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -138,7 +138,11 @@ export function PreviewCanvas({
   return (
     <div
       ref={containerRef}
-      className={`preview-canvas preview-canvas--${background}${trueSize ? 'preview-canvas--true-size' : ''}`}
+      className={cn(
+        'preview-canvas',
+        `preview-canvas--${background}`,
+        trueSize && 'preview-canvas--true-size'
+      )}
       style={
         {
           '--preview-scale': scale,

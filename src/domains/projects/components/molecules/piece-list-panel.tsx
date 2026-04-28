@@ -8,6 +8,7 @@ import {
   CheckCircle,
   XCircle
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { projectMessages } from '../../messages';
 import type { BannerPiece } from '../../projects.types';
 
@@ -85,7 +86,11 @@ export function PieceListPanel({
             role="checkbox"
             aria-checked={allChecked ? true : someChecked ? 'mixed' : false}
             aria-label={qcMsgs.selectAll}
-            className={`piece-item__checkbox${allChecked ? 'piece-item__checkbox--checked' : someChecked ? 'piece-item__checkbox--partial' : ''}`}
+            className={cn(
+              'piece-item__checkbox',
+              allChecked && 'piece-item__checkbox--checked',
+              !allChecked && someChecked && 'piece-item__checkbox--partial'
+            )}
             onClick={() => (allChecked ? onClearAll?.() : onSelectAll?.())}
           >
             {allChecked && (
@@ -174,7 +179,10 @@ export function PieceListPanel({
               key={piece.id}
               role="button"
               tabIndex={0}
-              className={`piece-item${selectedId === piece.id ? 'piece-item--selected' : ''}`}
+              className={cn(
+                'piece-item',
+                selectedId === piece.id && 'piece-item--selected'
+              )}
               onClick={() => onSelect(piece.id)}
               onKeyDown={e => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -187,7 +195,10 @@ export function PieceListPanel({
                 <span
                   role="checkbox"
                   aria-checked={isChecked}
-                  className={`piece-item__checkbox${isChecked ? 'piece-item__checkbox--checked' : ''}`}
+                  className={cn(
+                    'piece-item__checkbox',
+                    isChecked && 'piece-item__checkbox--checked'
+                  )}
                   onClick={e => {
                     e.stopPropagation();
                     onToggleCheck?.(piece.id);
@@ -208,7 +219,10 @@ export function PieceListPanel({
                 <div className="piece-item__meta">
                   <span className="piece-item__size">{piece.size}</span>
                   <span
-                    className={`piece-item__anim${piece.hasAnimation ? 'piece-item__anim--yes' : ''}`}
+                    className={cn(
+                      'piece-item__anim',
+                      piece.hasAnimation && 'piece-item__anim--yes'
+                    )}
                   >
                     {piece.hasAnimation ? (
                       <>
@@ -236,7 +250,10 @@ export function PieceListPanel({
               {/* Decision icon — shown once a QC decision exists */}
               {decision ? (
                 <span
-                  className={`piece-item__decision piece-item__decision--${decision}`}
+                  className={cn(
+                    'piece-item__decision',
+                    `piece-item__decision--${decision}`
+                  )}
                   aria-label={
                     decision === 'approved' ? 'Aprobada' : 'Rechazada'
                   }

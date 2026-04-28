@@ -8,9 +8,9 @@
   border-radius: 9999px;
   border: none;
   cursor: pointer;
-  font-family: var(--font-mulish), sans-serif;
+  font-family: var(--font-montserrat), sans-serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 16px;
   padding: 8px 24px;
   white-space: nowrap;
@@ -24,116 +24,71 @@
 }
 
 /* ─── Primary ─────────────────────────────────────────────────── */
-/* Pill CTA with blue gradient sweep on hover                     */
 
 .btn--primary {
-  color: #ffffff;
-  background-color: var(--color-cta-default);
-  background-image: linear-gradient(
-    to right,
-    var(--color-cta-gradient-from) 0%,
-    var(--color-cta-default)       50%,
-    var(--color-cta-pressed)       100%
-  );
-  background-size: 200% 100%;
-  background-position: right center;  /* at rest: shows default→pressed (dark blue) */
+  color: #FFFFFF;
+  background-color: #095EAA;
   transition:
-    background-color   300ms cubic-bezier(0.16, 1, 0.3, 1),
-    background-image   300ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow         400ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform          300ms cubic-bezier(0.2, 0, 0, 1);
+    background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform        200ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .btn--primary:hover:not(:disabled) {
-  background-position: left center;  /* hover: sweeps gradient to reveal light blue (#6689F4) end */
-  box-shadow: 0 4px 24px rgba(67, 97, 239, 0.35);
-  transition:
-    background-position  400ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow           400ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform            300ms cubic-bezier(0.2, 0, 0, 1);
+  background-color: #1888CA;
 }
 
 .btn--primary:active:not(:disabled) {
+  background-color: #00B3E6;
   transform: scale(0.98);
-  transition:
-    transform          120ms cubic-bezier(0.2, 0, 0, 1),
-    background-position 120ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .btn--primary:disabled {
-  background-color: var(--color-cta-disabled-bg);
-  background-image: none;
-  color: var(--color-cta-disabled-text);
+  background-color: #E4E8ED;
+  color: #AAAAAA;
   box-shadow: none;
 }
 
 /* ─── Secondary ───────────────────────────────────────────────── */
-/* Frosted glass pill — solid border at rest, gradient stroke on  */
-/* hover via pseudo-element mask technique (no border-radius hack) */
 
 .btn--secondary {
-  color: #ffffff;
-  background: linear-gradient(
-    270deg,
-    rgba(255, 255, 255, 0.00) -0.94%,
-    rgba(255, 255, 255, 0.09) 47.02%,
-    rgba(255, 255, 255, 0.00) 104.06%
-  );
-  border: 1px solid rgba(220, 220, 220, 0.6);
+  color: #095EAA;
+  background: transparent;
+  border: 1.5px solid #095EAA;
   transition:
-    background      200ms cubic-bezier(0.2, 0, 0, 1),
-    border-color    200ms cubic-bezier(0.2, 0, 0, 1),
-    backdrop-filter 200ms cubic-bezier(0.2, 0, 0, 1),
-    transform       300ms cubic-bezier(0.2, 0, 0, 1),
-    text-shadow     200ms cubic-bezier(0.2, 0, 0, 1);
-}
-
-/* Gradient stroke ring — revealed on hover via mask */
-.btn--secondary::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 9999px;
-  padding: 1px;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.08),
-    rgba(255, 255, 255, 0.55),
-    rgba(255, 255, 255, 0.08)
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 200ms cubic-bezier(0.2, 0, 0, 1);
-}
-
-.btn--secondary:hover:not(:disabled)::before {
-  opacity: 1;
+    background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+    transform        200ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .btn--secondary:hover:not(:disabled) {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 255, 255, 0.15) 0%,
-    rgba(255, 255, 255, 0.01) 80%
-  );
-  border-color: transparent;
-  backdrop-filter: blur(2px);
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+  background-color: rgba(9, 94, 170, 0.08);
 }
 
 .btn--secondary:active:not(:disabled) {
   transform: scale(0.98);
-  transition: transform 120ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .btn--secondary:disabled {
-  opacity: 0.3;
+  color: #81CCF2;
+  border-color: #81CCF2;
   cursor: not-allowed;
+}
+
+/* ─── Destructive ─────────────────────────────────────────────── */
+
+.btn--destructive {
+  color: #FFFFFF;
+  background-color: #E62C34;
+  transition:
+    background-color 200ms cubic-bezier(0.2, 0, 0, 1),
+    transform        200ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.btn--destructive:hover:not(:disabled) {
+  background-color: #c4242b;
+}
+
+.btn--destructive:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 /* ─── Reduced Motion ──────────────────────────────────────────── */
@@ -141,7 +96,8 @@
 @media (prefers-reduced-motion: reduce) {
   .btn,
   .btn--primary,
-  .btn--secondary {
+  .btn--secondary,
+  .btn--destructive {
     transition: none;
   }
 }
