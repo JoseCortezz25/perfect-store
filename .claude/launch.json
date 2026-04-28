@@ -2,14 +2,14 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "Next.js (Turbopack)",
-      "runtimeExecutable": "pnpm",
+      "name": "Next.js Dev (Turbopack)",
+      "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 3000
     },
     {
       "name": "Storybook",
-      "runtimeExecutable": "pnpm",
+      "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "storybook"],
       "port": 6006
     }
