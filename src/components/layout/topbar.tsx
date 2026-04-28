@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useRef, useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
 import {
   ChevronDown,
   Check,
