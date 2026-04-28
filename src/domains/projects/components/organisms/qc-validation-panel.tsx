@@ -68,23 +68,19 @@ export function QcValidationPanel({
         <div className="qc-panel__score-stats">
           <div className="qc-panel__stat qc-panel__stat--pass">
             <span className="qc-panel__stat-value">{passCount}</span>
-            <span className="qc-panel__stat-label">
-              {msgs.passCount(passCount)}
-            </span>
+            <span className="qc-panel__stat-label">{msgs.passCount()}</span>
           </div>
           {failCount > 0 && (
             <div className="qc-panel__stat qc-panel__stat--fail">
               <span className="qc-panel__stat-value">{failCount}</span>
-              <span className="qc-panel__stat-label">
-                {msgs.failCount(failCount)}
-              </span>
+              <span className="qc-panel__stat-label">{msgs.failCount()}</span>
             </div>
           )}
           {warnCount > 0 && (
             <div className="qc-panel__stat qc-panel__stat--warn">
               <span className="qc-panel__stat-value">{warnCount}</span>
               <span className="qc-panel__stat-label">
-                {msgs.warningCount(warnCount)}
+                {msgs.warningCount()}
               </span>
             </div>
           )}
