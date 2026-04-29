@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useActionState } from 'react';
+import { cn } from '@/lib/utils';
 import { useFormStatus } from 'react-dom';
 import { UploadCloud, File } from 'lucide-react';
 import { uploadVersionAction } from '../../project-detail.actions';
@@ -11,7 +12,11 @@ const msgs = projectMessages.detail.validador;
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="btn btn--primary upload-zone__submit">
+    <button
+      type="submit"
+      disabled={pending}
+      className="btn btn--primary upload-zone__submit"
+    >
       {pending ? msgs.submittingButton : msgs.submitButton}
     </button>
   );
@@ -59,7 +64,10 @@ export function UploadZone({ projectId }: UploadZoneProps) {
 
       {/* Drop area */}
       <div
-        className={`upload-zone__area${isDragging ? ' upload-zone__area--dragging' : ''}`}
+        className={cn(
+          'upload-zone__area',
+          isDragging && 'upload-zone__area--dragging'
+        )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -67,7 +75,9 @@ export function UploadZone({ projectId }: UploadZoneProps) {
         role="button"
         tabIndex={0}
         aria-label="Área de carga de archivos"
-        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click(); }}
+        onKeyDown={e => {
+          if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click();
+        }}
       >
         <input
           ref={fileInputRef}
@@ -79,10 +89,11 @@ export function UploadZone({ projectId }: UploadZoneProps) {
         />
 
         <div className="upload-zone__icon-wrap" aria-hidden="true">
-          {selectedFile
-            ? <File size={22} strokeWidth={1.5} />
-            : <UploadCloud size={22} strokeWidth={1.5} />
-          }
+          {selectedFile ? (
+            <File size={22} strokeWidth={1.5} />
+          ) : (
+            <UploadCloud size={22} strokeWidth={1.5} />
+          )}
         </div>
 
         {selectedFile ? (
@@ -115,7 +126,9 @@ export function UploadZone({ projectId }: UploadZoneProps) {
       </div>
 
       {state?.error && (
-        <p className="upload-zone__error" role="alert">{state.error}</p>
+        <p className="upload-zone__error" role="alert">
+          {state.error}
+        </p>
       )}
       {state?.success && (
         <p className="upload-zone__success" role="status">

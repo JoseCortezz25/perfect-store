@@ -11,7 +11,8 @@ import {
   Layers,
   ShieldCheck,
   UserCircle,
-  Wand2
+  Wand2,
+  Home
 } from 'lucide-react';
 import { useCurrentUser } from '@/domains/auth/hooks/use-current-user';
 import { APP_USERS } from '@/domains/auth/stores/user.store';
@@ -43,11 +44,20 @@ export function Topbar() {
 
   return (
     <header className="topbar">
-      {/* Left: Perfect Store brand → home */}
+      {/* Left: brand + divider + home icon */}
       <div className="topbar__left">
         <Link href="/" className="topbar__brand-link">
-          <div className="topbar__logo-placeholder" aria-hidden="true" />
-          <span className="topbar__brand">Perfect Store</span>
+          <img
+            src="/Assets/Logo-perfect-store.svg"
+            alt="Perfect Store"
+            className="topbar__logo-img"
+            width={130}
+            height={19}
+          />
+        </Link>
+        <div className="topbar__divider" aria-hidden="true" />
+        <Link href="/" className="topbar__home-btn" aria-label="Ir al inicio">
+          <Home size={15} strokeWidth={1.5} aria-hidden="true" />
         </Link>
       </div>
 

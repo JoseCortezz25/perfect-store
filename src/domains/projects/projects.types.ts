@@ -15,6 +15,7 @@ export interface Project {
   totalImages: number;
   createdAt: Date;
   updatedAt: Date;
+  thumbnail?: string;
 }
 
 export interface BrandGroup {
@@ -133,6 +134,7 @@ export interface PsProjectDetail {
   skus: string[];
   createdAt: Date;
   sessions: GenerationSession[];
+  thumbnail?: string;
 }
 
 /* ─── Project Detail (self-contained — migrated separately) ─── */

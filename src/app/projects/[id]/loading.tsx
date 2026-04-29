@@ -1,12 +1,12 @@
-import { Topbar } from '@/components/layout/topbar';
-import '@/styles/components/layout/topbar.css';
+import { AppSidebar } from '@/components/layout/app-sidebar';
+import '@/styles/components/layout/app-sidebar.css';
 import '@/styles/domains/projects/home.css';
 import '@/styles/domains/projects/detail.css';
 
 export default function ProjectDetailLoading() {
   return (
     <div className="dashboard">
-      <Topbar />
+      <AppSidebar />
       <main className="dashboard__main">
         <div className="dashboard__bg" />
         <div className="detail-content">

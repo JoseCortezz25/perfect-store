@@ -1,18 +1,19 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 import {
   Search,
   ChevronDown,
   Check,
   Plus,
   LayoutGrid,
-  LayoutList,
-  Image as ImageIcon
+  LayoutList
 } from 'lucide-react';
 import Link from 'next/link';
 import { ProjectCard } from '../molecules/project-card';
 import { NewProjectModal } from '../molecules/new-project-modal';
+import { NewBrandModal } from '../molecules/new-brand-modal';
 import { projectMessages } from '../../messages';
 import { useCurrentUser } from '@/domains/auth/hooks/use-current-user';
 import type { Project, FilterType } from '../../projects.types';
@@ -47,7 +48,11 @@ function ProjectListRow({ project }: { project: Project }) {
     <Link href={`/projects/${project.id}`} className="project-list-row">
       <div className="project-list-row__name-cell">
         <div className="project-list-row__thumb" aria-hidden="true">
-          <ImageIcon size={18} strokeWidth={1} />
+          <img
+            src={project.thumbnail ?? '/Images/Placceholder-Image.png'}
+            alt=""
+            className="project-list-row__thumb-img"
+          />
         </div>
         <div className="project-list-row__name-info">
           <span className="project-list-row__name">{project.name}</span>
@@ -82,6 +87,7 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
   const [selectedBrands, setSelectedBrands] = useState<Set<string>>(new Set());
   const [isBrandOpen, setIsBrandOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBrandModalOpen, setIsBrandModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const sortRef = useRef<HTMLDivElement>(null);
   const brandRef = useRef<HTMLDivElement>(null);
@@ -199,7 +205,10 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
                     onClick={() => toggleBrand(brand)}
                   >
                     <span
-                      className={`brand-filter__checkbox${isChecked ? 'brand-filter__checkbox--checked' : ''}`}
+                      className={cn(
+                        'brand-filter__checkbox',
+                        isChecked && 'brand-filter__checkbox--checked'
+                      )}
                     >
                       {isChecked && <Check size={10} strokeWidth={3} />}
                     </span>
@@ -260,7 +269,10 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
           <div className="view-toggle" role="group" aria-label="Vista">
             <button
               type="button"
-              className={`view-toggle__btn${viewMode === 'grid' ? 'view-toggle__btn--active' : ''}`}
+              className={cn(
+                'view-toggle__btn',
+                viewMode === 'grid' && 'view-toggle__btn--active'
+              )}
               onClick={() => setViewMode('grid')}
               aria-label={msgs.viewGrid}
               title={msgs.viewGrid}
@@ -269,7 +281,10 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
             </button>
             <button
               type="button"
-              className={`view-toggle__btn${viewMode === 'list' ? 'view-toggle__btn--active' : ''}`}
+              className={cn(
+                'view-toggle__btn',
+                viewMode === 'list' && 'view-toggle__btn--active'
+              )}
               onClick={() => setViewMode('list')}
               aria-label={msgs.viewList}
               title={msgs.viewList}
@@ -279,14 +294,24 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
           </div>
 
           {canCreateProject && (
-            <button
-              type="button"
-              className="btn btn--primary projects-container__create-btn"
-              onClick={() => setIsModalOpen(true)}
-            >
-              <Plus size={12} strokeWidth={2.5} aria-hidden="true" />
-              <span>{msgs.newProject}</span>
-            </button>
+            <>
+              <button
+                type="button"
+                className="btn btn--secondary projects-container__create-btn"
+                onClick={() => setIsBrandModalOpen(true)}
+              >
+                <Plus size={12} strokeWidth={2.5} aria-hidden="true" />
+                <span>{msgs.newBrand}</span>
+              </button>
+              <button
+                type="button"
+                className="btn btn--primary projects-container__create-btn"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <Plus size={12} strokeWidth={2.5} aria-hidden="true" />
+                <span>{msgs.newProject}</span>
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -350,6 +375,12 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
         <NewProjectModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+        />
+      )}
+      {canCreateProject && (
+        <NewBrandModal
+          isOpen={isBrandModalOpen}
+          onClose={() => setIsBrandModalOpen(false)}
         />
       )}
     </div>

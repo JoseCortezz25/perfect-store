@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useSyncExternalStore } from 'react';
+import { useState, useSyncExternalStore, useRef, useEffect } from 'react';
+import { cn } from '@/lib/utils';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import {
   RefreshCw,
@@ -8,7 +10,8 @@ import {
   X,
   ArrowLeft,
   FolderPlus,
-  Plus
+  Plus,
+  ChevronDown
 } from 'lucide-react';
 import { generatorStore } from '../../stores/generator.store';
 import { generatorMessages } from '../../messages';
@@ -24,6 +27,10 @@ const EXISTING_PROJECTS = getAllPsProjects().map(p => ({
   name: p.name,
   brand: p.brand
 }));
+
+const ALL_BRANDS = Array.from(
+  new Set(EXISTING_PROJECTS.map(p => p.brand))
+).sort();
 
 export function ResultsShell() {
   const router = useRouter();
@@ -42,8 +49,40 @@ export function ResultsShell() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [addMode, setAddMode] = useState<'existing' | 'new'>('existing');
   const [selectedProjectId, setSelectedProjectId] = useState('');
+  const [isProjectDropOpen, setIsProjectDropOpen] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
   const [newProjectBrand, setNewProjectBrand] = useState('');
+  const [isBrandDropOpen, setIsBrandDropOpen] = useState(false);
+  const [selectedBrandFilter, setSelectedBrandFilter] = useState('');
+  const [isBrandFilterOpen, setIsBrandFilterOpen] = useState(false);
+  const projDropRef = useRef<HTMLDivElement>(null);
+  const brandDropRef = useRef<HTMLDivElement>(null);
+  const brandFilterRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        projDropRef.current &&
+        !projDropRef.current.contains(e.target as Node)
+      ) {
+        setIsProjectDropOpen(false);
+      }
+      if (
+        brandDropRef.current &&
+        !brandDropRef.current.contains(e.target as Node)
+      ) {
+        setIsBrandDropOpen(false);
+      }
+      if (
+        brandFilterRef.current &&
+        !brandFilterRef.current.contains(e.target as Node)
+      ) {
+        setIsBrandFilterOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   function handleRegenerate(img: GeneratedImage) {
     const next = images.map(i =>
@@ -94,8 +133,12 @@ export function ResultsShell() {
     setShowAddModal(false);
     setAddMode('existing');
     setSelectedProjectId('');
+    setIsProjectDropOpen(false);
+    setSelectedBrandFilter('');
+    setIsBrandFilterOpen(false);
     setNewProjectName('');
     setNewProjectBrand('');
+    setIsBrandDropOpen(false);
   }
 
   const angleLabel = config.angle ? cfgMsgs.angle.options[config.angle] : '—';
@@ -189,242 +232,366 @@ export function ResultsShell() {
       </div>
 
       {/* ════ Image detail modal ════ */}
-      {activeImage && (
-        <div
-          className="gen-modal-overlay"
-          onClick={() => setActiveImage(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={msgs.modal.title}
-        >
+      {activeImage &&
+        createPortal(
           <div
-            className="gen-modal gen-modal--image"
-            onClick={e => e.stopPropagation()}
+            className="gen-modal-overlay"
+            onClick={() => setActiveImage(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={msgs.modal.title}
           >
-            <div className="gen-modal__header">
-              <h2 className="gen-modal__title">{msgs.modal.title}</h2>
-              <button
-                type="button"
-                className="gen-modal__close"
-                onClick={() => setActiveImage(null)}
-                aria-label={msgs.modal.close}
-              >
-                <X size={16} strokeWidth={1.5} />
-              </button>
-            </div>
-
             <div
-              className="gen-modal__image-preview"
-              style={{
-                backgroundColor: activeImage.accentColor + '33',
-                borderColor: activeImage.accentColor + '55'
-              }}
-              aria-hidden="true"
+              className="gen-modal gen-modal--image"
+              onClick={e => e.stopPropagation()}
             >
-              <span
-                style={{
-                  color: activeImage.accentColor,
-                  fontSize: 64,
-                  fontWeight: 700
-                }}
-              >
-                AI
-              </span>
-            </div>
+              <div className="gen-modal__header">
+                <h2 className="gen-modal__title">{msgs.modal.title}</h2>
+                <button
+                  type="button"
+                  className="gen-modal__close"
+                  onClick={() => setActiveImage(null)}
+                  aria-label={msgs.modal.close}
+                >
+                  <X size={16} strokeWidth={1.5} />
+                </button>
+              </div>
 
-            <div className="gen-modal__params">
-              <div className="gen-modal__param">
-                <span className="gen-modal__param-key">
-                  {msgs.modal.params.skus}
-                </span>
-                <span className="gen-modal__param-val">
-                  {config.selectedSkus.map(s => s.name).join(', ') || '—'}
-                </span>
-              </div>
-              <div className="gen-modal__param">
-                <span className="gen-modal__param-key">
-                  {msgs.modal.params.angle}
-                </span>
-                <span className="gen-modal__param-val">{angleLabel}</span>
-              </div>
-              <div className="gen-modal__param">
-                <span className="gen-modal__param-key">
-                  {msgs.modal.params.aspect}
-                </span>
-                <span className="gen-modal__param-val">
-                  {config.aspectRatio}
+              <div
+                className="gen-modal__image-preview"
+                style={{
+                  backgroundColor: activeImage.accentColor + '33',
+                  borderColor: activeImage.accentColor + '55'
+                }}
+                aria-hidden="true"
+              >
+                <span
+                  style={{
+                    color: activeImage.accentColor,
+                    fontSize: 64,
+                    fontWeight: 700
+                  }}
+                >
+                  AI
                 </span>
               </div>
-              <div className="gen-modal__param">
-                <span className="gen-modal__param-key">
-                  {msgs.modal.params.quality}
-                </span>
-                <span className="gen-modal__param-val">{qualityLabel}</span>
-              </div>
-              {config.freeText && (
-                <div className="gen-modal__param gen-modal__param--full">
+
+              <div className="gen-modal__params">
+                <div className="gen-modal__param">
                   <span className="gen-modal__param-key">
-                    {msgs.modal.params.prompt}
+                    {msgs.modal.params.skus}
                   </span>
                   <span className="gen-modal__param-val">
-                    {config.freeText}
+                    {config.selectedSkus.map(s => s.name).join(', ') || '—'}
                   </span>
                 </div>
-              )}
-            </div>
+                <div className="gen-modal__param">
+                  <span className="gen-modal__param-key">
+                    {msgs.modal.params.angle}
+                  </span>
+                  <span className="gen-modal__param-val">{angleLabel}</span>
+                </div>
+                <div className="gen-modal__param">
+                  <span className="gen-modal__param-key">
+                    {msgs.modal.params.aspect}
+                  </span>
+                  <span className="gen-modal__param-val">
+                    {config.aspectRatio}
+                  </span>
+                </div>
+                <div className="gen-modal__param">
+                  <span className="gen-modal__param-key">
+                    {msgs.modal.params.quality}
+                  </span>
+                  <span className="gen-modal__param-val">{qualityLabel}</span>
+                </div>
+                {config.freeText && (
+                  <div className="gen-modal__param gen-modal__param--full">
+                    <span className="gen-modal__param-key">
+                      {msgs.modal.params.prompt}
+                    </span>
+                    <span className="gen-modal__param-val">
+                      {config.freeText}
+                    </span>
+                  </div>
+                )}
+              </div>
 
-            <div className="gen-modal__footer">
-              <button
-                type="button"
-                className="btn btn--secondary"
-                onClick={() => setActiveImage(null)}
-              >
-                {msgs.modal.close}
-              </button>
-              <button
-                type="button"
-                className="btn btn--primary"
-                onClick={() => {
-                  handleDownload(activeImage);
-                  setActiveImage(null);
-                }}
-              >
-                <Download size={14} strokeWidth={1.5} aria-hidden="true" />
-                {msgs.download}
-              </button>
+              <div className="gen-modal__footer">
+                <button
+                  type="button"
+                  className="btn btn--secondary"
+                  onClick={() => setActiveImage(null)}
+                >
+                  {msgs.modal.close}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--primary"
+                  onClick={() => {
+                    handleDownload(activeImage);
+                    setActiveImage(null);
+                  }}
+                >
+                  <Download size={14} strokeWidth={1.5} aria-hidden="true" />
+                  {msgs.download}
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
 
       {/* ════ Add to project modal ════ */}
-      {showAddModal && (
-        <div
-          className="gen-modal-overlay"
-          onClick={handleAddModalClose}
-          role="dialog"
-          aria-modal="true"
-          aria-label={msgs.addToProject}
-        >
+      {showAddModal &&
+        createPortal(
           <div
-            className="gen-modal gen-modal--add-project"
-            onClick={e => e.stopPropagation()}
+            className="gen-modal-overlay"
+            onClick={handleAddModalClose}
+            role="dialog"
+            aria-modal="true"
+            aria-label={msgs.addToProject}
           >
-            <div className="gen-modal__header">
-              <h2 className="gen-modal__title">{msgs.addToProject}</h2>
-              <button
-                type="button"
-                className="gen-modal__close"
-                onClick={handleAddModalClose}
-                aria-label={modalMsgs.cancel}
-              >
-                <X size={16} strokeWidth={1.5} />
-              </button>
-            </div>
+            <div
+              className="gen-modal gen-modal--add-project"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="gen-modal__header">
+                <h2 className="gen-modal__title">{msgs.addToProject}</h2>
+                <button
+                  type="button"
+                  className="gen-modal__close"
+                  onClick={handleAddModalClose}
+                  aria-label={modalMsgs.cancel}
+                >
+                  <X size={16} strokeWidth={1.5} />
+                </button>
+              </div>
 
-            {/* Mode tabs */}
-            <div className="results-add-tabs">
-              <button
-                type="button"
-                className={`results-add-tab${addMode === 'existing' ? 'results-add-tab--active' : ''}`}
-                onClick={() => setAddMode('existing')}
-              >
-                {modalMsgs.selectLabel}
-              </button>
-              <button
-                type="button"
-                className={`results-add-tab${addMode === 'new' ? 'results-add-tab--active' : ''}`}
-                onClick={() => setAddMode('new')}
-              >
-                <Plus size={12} strokeWidth={2} aria-hidden="true" />
-                {modalMsgs.orCreate}
-              </button>
-            </div>
-
-            {/* Tab content */}
-            {addMode === 'existing' ? (
-              <div className="gen-modal__field">
-                <label
-                  className="gen-modal__label"
-                  htmlFor="add-project-select"
+              {/* Mode tabs */}
+              <div className="results-add-tabs">
+                <button
+                  type="button"
+                  className={cn(
+                    'results-add-tab',
+                    addMode === 'existing' && 'results-add-tab--active'
+                  )}
+                  onClick={() => setAddMode('existing')}
                 >
                   {modalMsgs.selectLabel}
-                </label>
-                <select
-                  id="add-project-select"
-                  className="gen-modal__select"
-                  value={selectedProjectId}
-                  onChange={e => setSelectedProjectId(e.target.value)}
+                </button>
+                <button
+                  type="button"
+                  className={cn(
+                    'results-add-tab',
+                    addMode === 'new' && 'results-add-tab--active'
+                  )}
+                  onClick={() => setAddMode('new')}
                 >
-                  <option value="">{modalMsgs.selectPlaceholder}</option>
-                  {EXISTING_PROJECTS.map(p => (
-                    <option key={p.id} value={p.id}>
-                      {p.name} — {p.brand}
-                    </option>
-                  ))}
-                </select>
+                  <Plus size={12} strokeWidth={2} aria-hidden="true" />
+                  {modalMsgs.orCreate}
+                </button>
               </div>
-            ) : (
-              <>
-                <div className="gen-modal__field">
-                  <label
-                    className="gen-modal__label"
-                    htmlFor="add-project-name"
-                  >
-                    {modalMsgs.newNameLabel}
-                  </label>
-                  <input
-                    id="add-project-name"
-                    type="text"
-                    className="gen-modal__input"
-                    placeholder={modalMsgs.newNamePlaceholder}
-                    value={newProjectName}
-                    onChange={e => setNewProjectName(e.target.value)}
-                  />
-                </div>
-                <div className="gen-modal__field">
-                  <label
-                    className="gen-modal__label"
-                    htmlFor="add-project-brand"
-                  >
-                    {modalMsgs.newBrandLabel}
-                  </label>
-                  <input
-                    id="add-project-brand"
-                    type="text"
-                    className="gen-modal__input"
-                    placeholder="Ej: Bretaña"
-                    value={newProjectBrand}
-                    onChange={e => setNewProjectBrand(e.target.value)}
-                  />
-                </div>
-              </>
-            )}
 
-            <div className="gen-modal__footer">
-              <button
-                type="button"
-                className="btn btn--secondary"
-                onClick={handleAddModalClose}
-              >
-                {modalMsgs.cancel}
-              </button>
-              <button
-                type="button"
-                className="btn btn--primary"
-                onClick={handleAddConfirm}
-                disabled={
-                  addMode === 'existing'
-                    ? !selectedProjectId
-                    : !newProjectName.trim()
-                }
-              >
-                {modalMsgs.confirm}
-              </button>
+              {/* Tab content */}
+              {addMode === 'existing' ? (
+                <>
+                  <div className="gen-modal__field">
+                    <label className="gen-modal__label">
+                      {modalMsgs.newBrandLabel}
+                    </label>
+                    <div className="gen-proj-drop" ref={brandFilterRef}>
+                      <button
+                        type="button"
+                        className={cn(
+                          'gen-proj-drop__trigger',
+                          !selectedBrandFilter &&
+                            'gen-proj-drop__trigger--placeholder'
+                        )}
+                        data-open={isBrandFilterOpen}
+                        onClick={() => setIsBrandFilterOpen(o => !o)}
+                      >
+                        <span>
+                          {selectedBrandFilter || 'Seleccionar marca...'}
+                        </span>
+                        <ChevronDown
+                          size={13}
+                          strokeWidth={1.5}
+                          className="gen-proj-drop__chevron"
+                          data-open={isBrandFilterOpen}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      {isBrandFilterOpen && (
+                        <div className="gen-proj-drop__dropdown">
+                          {ALL_BRANDS.map(brand => (
+                            <button
+                              key={brand}
+                              type="button"
+                              className="gen-proj-drop__option"
+                              data-active={selectedBrandFilter === brand}
+                              onClick={() => {
+                                setSelectedBrandFilter(brand);
+                                setSelectedProjectId('');
+                                setIsBrandFilterOpen(false);
+                              }}
+                            >
+                              {brand}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="gen-modal__field">
+                    <label className="gen-modal__label">
+                      {modalMsgs.selectLabel}
+                    </label>
+                    <div className="gen-proj-drop" ref={projDropRef}>
+                      <button
+                        type="button"
+                        className={cn(
+                          'gen-proj-drop__trigger',
+                          !selectedProjectId &&
+                            'gen-proj-drop__trigger--placeholder'
+                        )}
+                        data-open={isProjectDropOpen}
+                        onClick={() => setIsProjectDropOpen(o => !o)}
+                      >
+                        <span>
+                          {selectedProjectId
+                            ? (() => {
+                                const p = EXISTING_PROJECTS.find(
+                                  x => x.id === selectedProjectId
+                                );
+                                return p ? p.name : modalMsgs.selectPlaceholder;
+                              })()
+                            : modalMsgs.selectPlaceholder}
+                        </span>
+                        <ChevronDown
+                          size={13}
+                          strokeWidth={1.5}
+                          className="gen-proj-drop__chevron"
+                          data-open={isProjectDropOpen}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      {isProjectDropOpen && (
+                        <div className="gen-proj-drop__dropdown">
+                          {(selectedBrandFilter
+                            ? EXISTING_PROJECTS.filter(
+                                p => p.brand === selectedBrandFilter
+                              )
+                            : EXISTING_PROJECTS
+                          ).map(p => (
+                            <button
+                              key={p.id}
+                              type="button"
+                              className="gen-proj-drop__option"
+                              data-active={selectedProjectId === p.id}
+                              onClick={() => {
+                                setSelectedProjectId(p.id);
+                                setIsProjectDropOpen(false);
+                              }}
+                            >
+                              {p.name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="gen-modal__field">
+                    <label
+                      className="gen-modal__label"
+                      htmlFor="add-project-name"
+                    >
+                      {modalMsgs.newNameLabel}
+                    </label>
+                    <input
+                      id="add-project-name"
+                      type="text"
+                      className="gen-modal__input"
+                      placeholder={modalMsgs.newNamePlaceholder}
+                      value={newProjectName}
+                      onChange={e => setNewProjectName(e.target.value)}
+                    />
+                  </div>
+                  <div className="gen-modal__field">
+                    <label className="gen-modal__label">
+                      {modalMsgs.newBrandLabel}
+                    </label>
+                    <div className="gen-proj-drop" ref={brandDropRef}>
+                      <button
+                        type="button"
+                        className={cn(
+                          'gen-proj-drop__trigger',
+                          !newProjectBrand &&
+                            'gen-proj-drop__trigger--placeholder'
+                        )}
+                        data-open={isBrandDropOpen}
+                        onClick={() => setIsBrandDropOpen(o => !o)}
+                      >
+                        <span>{newProjectBrand || 'Seleccionar marca...'}</span>
+                        <ChevronDown
+                          size={13}
+                          strokeWidth={1.5}
+                          className="gen-proj-drop__chevron"
+                          data-open={isBrandDropOpen}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      {isBrandDropOpen && (
+                        <div className="gen-proj-drop__dropdown">
+                          {ALL_BRANDS.map(brand => (
+                            <button
+                              key={brand}
+                              type="button"
+                              className="gen-proj-drop__option"
+                              data-active={newProjectBrand === brand}
+                              onClick={() => {
+                                setNewProjectBrand(brand);
+                                setIsBrandDropOpen(false);
+                              }}
+                            >
+                              {brand}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              <div className="gen-modal__footer">
+                <button
+                  type="button"
+                  className="btn btn--secondary"
+                  onClick={handleAddModalClose}
+                >
+                  {modalMsgs.cancel}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--primary"
+                  onClick={handleAddConfirm}
+                  disabled={
+                    addMode === 'existing'
+                      ? !selectedProjectId
+                      : !newProjectName.trim()
+                  }
+                >
+                  {modalMsgs.confirm}
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </>
   );
 }

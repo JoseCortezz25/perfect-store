@@ -1,11 +1,18 @@
 import type { Metadata } from 'next';
-import { Mulish } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 
-const mulish = Mulish({
-  variable: '--font-mulish',
+const montserrat = Montserrat({
+  variable: '--font-montserrat',
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700', '800']
+});
+
+const sodaFont = localFont({
+  src: '../../public/Fonts/soda-font.ttf',
+  variable: '--font-soda',
+  weight: '400'
 });
 
 export const metadata: Metadata = {
@@ -20,7 +27,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${mulish.variable} antialiased`}>{children}</body>
+      <body
+        className={`${montserrat.variable} ${sodaFont.variable} antialiased`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

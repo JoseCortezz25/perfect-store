@@ -14,7 +14,7 @@ export const generatorMessages = {
     subtitle: 'Selecciona o crea el proyecto donde se guardarán las imágenes',
     selectLabel: 'Proyecto existente',
     selectPlaceholder: 'Seleccionar proyecto...',
-    orCreate: 'o crear uno nuevo',
+    orCreate: 'Nuevo proyecto',
     newNameLabel: 'Nombre del proyecto',
     newNamePlaceholder: 'Ej: Campaña Verano 2026',
     newBrandLabel: 'Marca',
@@ -49,8 +49,11 @@ export const generatorMessages = {
       }
     },
 
+    visualReferences: 'Ver referencias visuales',
+
     angle: {
       label: 'Ángulo',
+      viewExamples: 'Ver ejemplos',
       options: {
         frontal: 'Frontal',
         tres_cuartos: '3/4',
@@ -63,14 +66,46 @@ export const generatorMessages = {
       }
     },
 
+    illumination: {
+      label: 'Iluminación',
+      viewExamples: 'Ver ejemplos',
+      options: {
+        natural: 'Natural',
+        estudio: 'Estudio',
+        golden_hour: 'Golden Hour',
+        rembrandt: 'Rembrandt',
+        contraluz: 'Contraluz',
+        cenital: 'Cenital',
+        dramatica: 'Dramática',
+        suave: 'Suave'
+      }
+    },
+
+    advanced: 'Avanzado',
+
     aspectRatio: {
       label: 'Relación de aspecto'
     },
 
+    format: {
+      label: 'Formato',
+      placeholder: 'Seleccionar formato...',
+      addCta: 'Agregar',
+      remove: 'Quitar',
+      decrease: 'Reducir cantidad',
+      increase: 'Aumentar cantidad',
+      minHint: (n: number) => `Mínimo ${n} ${n === 1 ? 'imagen' : 'imágenes'}`,
+      emptyState: 'Selecciona al menos un formato'
+    },
+
+    generateBtnWithCount: (n: number) =>
+      `Generar ${n} ${n === 1 ? 'imagen' : 'imágenes'}`,
+
     context: {
       label: 'Descripción de contexto',
+      toolbarLabel: 'Contexto',
       freeText: {
-        label: 'Texto libre',
+        label: 'Prompt',
         placeholder: 'Describe el contexto de la imagen...'
       },
       elements: {
@@ -132,6 +167,11 @@ export const generatorMessages = {
       }
     },
 
+    imageCount: {
+      label: 'Cantidad',
+      options: [1, 2, 4, 8] as const
+    },
+
     generateBtn: 'Generar imágenes',
     generateBtnLoading: 'Generando...',
     validationSkus: 'Selecciona al menos un SKU para continuar',
@@ -143,8 +183,19 @@ export const generatorMessages = {
     back: 'Volver a configuración',
     addToProject: 'Añadir a proyecto',
     regenerate: 'Regenerar',
+    regenerateAll: 'Regenerar todo',
     download: 'Descargar',
+    downloadAll: 'Descargar todo',
     imageAlt: (n: number) => `Imagen generada ${n}`,
+    imageSingular: 'imagen generada',
+    imagePlural: 'imágenes generadas',
+    emptyState: {
+      title: 'Genera tu primera imagen',
+      subtitle: 'Configura los parámetros y haz clic en Generar',
+      previewLabel: 'Vista previa del prompt',
+      previewEmpty: 'Configura los parámetros para componer tu prompt'
+    },
+    galleryTitle: 'Imágenes de proyectos',
     modal: {
       title: 'Detalle de imagen',
       close: 'Cerrar',
@@ -154,7 +205,9 @@ export const generatorMessages = {
         angle: 'Ángulo',
         aspect: 'Aspecto',
         quality: 'Calidad',
-        prompt: 'Prompt'
+        prompt: 'Prompt',
+        project: 'Proyecto',
+        brand: 'Marca'
       }
     }
   }

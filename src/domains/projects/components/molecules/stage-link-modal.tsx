@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 import { X, Copy, Check } from 'lucide-react';
 import { projectMessages } from '../../messages';
 
@@ -12,7 +13,11 @@ interface StageLinkModalProps {
   onClose: () => void;
 }
 
-export function StageLinkModal({ isOpen, stageUrl, onClose }: StageLinkModalProps) {
+export function StageLinkModal({
+  isOpen,
+  stageUrl,
+  onClose
+}: StageLinkModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -71,13 +76,23 @@ export function StageLinkModal({ isOpen, stageUrl, onClose }: StageLinkModalProp
           />
           <button
             type="button"
-            className={`stage-modal__copy-btn${isCopied ? ' stage-modal__copy-btn--copied' : ''}`}
+            className={cn(
+              'stage-modal__copy-btn',
+              isCopied && 'stage-modal__copy-btn--copied'
+            )}
             onClick={handleCopy}
           >
-            {isCopied
-              ? <><Check size={14} strokeWidth={2} /><span>{msgs.copiedButton}</span></>
-              : <><Copy size={14} strokeWidth={1.5} /><span>{msgs.copyButton}</span></>
-            }
+            {isCopied ? (
+              <>
+                <Check size={14} strokeWidth={2} />
+                <span>{msgs.copiedButton}</span>
+              </>
+            ) : (
+              <>
+                <Copy size={14} strokeWidth={1.5} />
+                <span>{msgs.copyButton}</span>
+              </>
+            )}
           </button>
         </div>
       </div>

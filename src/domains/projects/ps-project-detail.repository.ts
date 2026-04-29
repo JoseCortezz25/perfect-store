@@ -44,6 +44,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b01',
     name: 'Bretaña Verano Caribe 2026',
     brand: 'Bretaña',
+    thumbnail: '/images/Breta%C3%B1a/3.png',
     skus: ['Bretaña Mora 400ml', 'Bretaña Fresa 400ml'],
     createdAt: new Date('2026-03-10'),
     sessions: [
@@ -69,6 +70,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b02',
     name: 'Bretaña Góndola Nacional',
     brand: 'Bretaña',
+    thumbnail: '/images/Breta%C3%B1a/4.webp',
     skus: ['Bretaña Mora 400ml', 'Bretaña Maracuyá 400ml', 'Bretaña Uva 400ml'],
     createdAt: new Date('2026-02-20'),
     sessions: [
@@ -86,6 +88,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b03',
     name: 'Bretaña Activación Colegio',
     brand: 'Bretaña',
+    thumbnail: '/images/Breta%C3%B1a/5.png',
     skus: ['Bretaña Fresa 250ml', 'Bretaña Mora 250ml'],
     createdAt: new Date('2026-02-05'),
     sessions: [
@@ -103,6 +106,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b04',
     name: 'Bretaña Tienda Barrio Q1',
     brand: 'Bretaña',
+    thumbnail: '/images/Breta%C3%B1a/6-v1.png',
     skus: ['Bretaña Mora 400ml', 'Bretaña Uva 400ml'],
     createdAt: new Date('2026-01-15'),
     sessions: [
@@ -120,6 +124,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b05',
     name: 'Bretaña Perfect Store Jumbo',
     brand: 'Bretaña',
+    thumbnail: '/images/Breta%C3%B1a/8.webp',
     skus: [
       'Bretaña Maracuyá 400ml',
       'Bretaña Fresa 400ml',
@@ -141,6 +146,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b06',
     name: 'Bretaña Lanzamiento Maracuyá',
     brand: 'Bretaña',
+    thumbnail: '/images/Breta%C3%B1a/limonada-cereza-683x1024%20(1).jpg',
     skus: ['Bretaña Maracuyá 400ml'],
     createdAt: new Date('2025-12-01'),
     sessions: [
@@ -158,6 +164,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b07',
     name: 'Bretaña Navidad 2025',
     brand: 'Bretaña',
+    thumbnail: '/images/Breta%C3%B1a/limonada-cereza-683x1024.jpg',
     skus: ['Bretaña Mora 1.5L', 'Bretaña Fresa 1.5L'],
     createdAt: new Date('2025-11-15'),
     sessions: [
@@ -175,6 +182,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b08',
     name: 'Bretaña Canal Moderno',
     brand: 'Bretaña',
+    thumbnail: '/images/Breta%C3%B1a/mowi-910x1024.jpg',
     skus: ['Bretaña Uva 400ml', 'Bretaña Mora 400ml'],
     createdAt: new Date('2025-11-01'),
     sessions: [
@@ -192,6 +200,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b09',
     name: 'Bretaña Impulso Cajas',
     brand: 'Bretaña',
+    thumbnail: '/images/Breta%C3%B1a/naranja-pina-683x1024.jpg',
     skus: [
       'Bretaña Fresa 250ml',
       'Bretaña Maracuyá 250ml',
@@ -213,6 +222,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-b10',
     name: 'Bretaña Lifestyle Urbano',
     brand: 'Bretaña',
+    thumbnail: '/images/Breta%C3%B1a/tamarindo.png',
     skus: ['Bretaña Mora 400ml', 'Bretaña Maracuyá 400ml'],
     createdAt: new Date('2025-09-20'),
     sessions: [
@@ -232,6 +242,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-001',
     name: 'Campaña Verano 2026',
     brand: 'Colombiana',
+    thumbnail: '/images/Colombiana/2_5_1.png',
     skus: ['Colombiana 400ml', 'Colombiana 1.5L', 'Colombiana Naranja 400ml'],
     createdAt: new Date('2026-04-01'),
     sessions: [
@@ -265,6 +276,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-c02',
     name: 'Colombiana 70 Años',
     brand: 'Colombiana',
+    thumbnail: '/images/Colombiana/3.webp',
     skus: ['Colombiana 400ml', 'Colombiana 1.5L'],
     createdAt: new Date('2025-11-01'),
     sessions: [
@@ -282,6 +294,8 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-c03',
     name: 'Colombiana Góndola Q2',
     brand: 'Colombiana',
+    thumbnail:
+      '/images/Colombiana/83e6d28646340c7ef5b37db25a87d06c3829aa2d_SoftDrinks_509470_06.jpg',
     skus: [
       'Colombiana 400ml',
       'Colombiana Naranja 400ml',
@@ -303,6 +317,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-c04',
     name: 'Colombiana Navidad',
     brand: 'Colombiana',
+    thumbnail: '/images/Colombiana/848x600_carnaval.webp',
     skus: ['Colombiana 1.5L', 'Colombiana 400ml'],
     createdAt: new Date('2025-12-01'),
     sessions: [
@@ -320,6 +335,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-c05',
     name: 'Colombiana Tiendas de Barrio',
     brand: 'Colombiana',
+    thumbnail: '/images/Colombiana/P-0001-3.png',
     skus: ['Colombiana 400ml'],
     createdAt: new Date('2025-10-15'),
     sessions: [
@@ -337,6 +353,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-c06',
     name: 'Colombiana Perfect Store Carulla',
     brand: 'Colombiana',
+    thumbnail: '/images/Colombiana/a3af06123769773.60f5a2e179f51.jpg',
     skus: ['Colombiana 400ml', 'Colombiana Naranja 400ml', 'Colombiana 1.5L'],
     createdAt: new Date('2025-09-05'),
     sessions: [
@@ -355,7 +372,9 @@ const PS_PROJECTS: PsProjectDetail[] = [
   {
     id: 'ps-004',
     name: 'Postobón Original Q2',
-    brand: 'Postobón',
+    brand: 'Sabores',
+    thumbnail:
+      '/images/Sabores/503bc9164592099.Y3JvcCwxNDAwLDEwOTUsMCwxNTk.png',
     skus: [
       'Postobón Manzana 400ml',
       'Postobón Uva 400ml',
@@ -384,7 +403,8 @@ const PS_PROJECTS: PsProjectDetail[] = [
   {
     id: 'ps-p02',
     name: 'Postobón Uva Verano',
-    brand: 'Postobón',
+    brand: 'Sabores',
+    thumbnail: '/images/Sabores/6170890333279.jpeg',
     skus: ['Postobón Uva 400ml', 'Postobón Uva 1.5L'],
     createdAt: new Date('2026-02-14'),
     sessions: [
@@ -401,7 +421,8 @@ const PS_PROJECTS: PsProjectDetail[] = [
   {
     id: 'ps-p03',
     name: 'Postobón Naranja Canal',
-    brand: 'Postobón',
+    brand: 'Sabores',
+    thumbnail: '/images/Sabores/En-caso-de-necesitar-otra-imagen-1.webp',
     skus: ['Postobón Naranja 400ml'],
     createdAt: new Date('2026-03-01'),
     sessions: [
@@ -418,7 +439,8 @@ const PS_PROJECTS: PsProjectDetail[] = [
   {
     id: 'ps-p04',
     name: 'Postobón Back to School',
-    brand: 'Postobón',
+    brand: 'Sabores',
+    thumbnail: '/images/Sabores/postobon-1.jpg',
     skus: ['Postobón Manzana 400ml', 'Postobón Uva 400ml'],
     createdAt: new Date('2025-12-10'),
     sessions: [
@@ -435,7 +457,8 @@ const PS_PROJECTS: PsProjectDetail[] = [
   {
     id: 'ps-p05',
     name: 'Postobón Góndola Sur Colombia',
-    brand: 'Postobón',
+    brand: 'Sabores',
+    thumbnail: '/images/Sabores/postobon-2.jpg',
     skus: [
       'Postobón Manzana 400ml',
       'Postobón Naranja 400ml',
@@ -459,6 +482,8 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-002',
     name: 'Activación Hit Frutas',
     brand: 'Hit',
+    thumbnail:
+      '/images/Hit/498117045_1065010415676976_4799101696404848688_n.jpg',
     skus: ['Hit Mango 400ml', 'Hit Mora 400ml', 'Hit Lulo 400ml'],
     createdAt: new Date('2026-03-18'),
     sessions: [
@@ -484,6 +509,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-h02',
     name: 'Hit Mango Verano',
     brand: 'Hit',
+    thumbnail: '/images/Hit/5806d830741507.Y3JvcCwxOTg5LDE1NTcsMTcsOTU2.jpg',
     skus: ['Hit Mango 400ml', 'Hit Mango 1L'],
     createdAt: new Date('2026-02-28'),
     sessions: [
@@ -501,6 +527,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-h03',
     name: 'Hit Canal Moderno Bogotá',
     brand: 'Hit',
+    thumbnail: '/images/Hit/Honeyview_HIT_2.jpg',
     skus: ['Hit Mora 400ml', 'Hit Lulo 400ml', 'Hit Mango 400ml'],
     createdAt: new Date('2026-01-25'),
     sessions: [
@@ -518,6 +545,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-h04',
     name: 'Hit Góndola Carrefour',
     brand: 'Hit',
+    thumbnail: '/images/Hit/destacado_mandarina_0.jpg',
     skus: ['Hit Mango 400ml', 'Hit Mora 400ml'],
     createdAt: new Date('2025-12-20'),
     sessions: [
@@ -535,6 +563,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-h05',
     name: 'Hit Lanzamiento Lulo',
     brand: 'Hit',
+    thumbnail: '/images/Hit/maxresdefault.jpg',
     skus: ['Hit Lulo 400ml'],
     createdAt: new Date('2025-10-01'),
     sessions: [
@@ -545,133 +574,6 @@ const PS_PROJECTS: PsProjectDetail[] = [
         6,
         100,
         'Botella de Hit Lulo 400ml sobre lulos frescos partidos en mitad sobre superficie de pizarra negra, gotas de lulo salpicando alrededor, fondo verde oscuro de vegetación, iluminación de estudio con rim light blanco perimetral creando volumen, fotografía food styling editorial de lanzamiento, lente 85mm macro, colores verde lima intenso y amarillo del lulo protagonistas'
-      )
-    ]
-  },
-
-  /* ── Mr. Tea (4 proyectos) ──────────────────────────────── */
-  {
-    id: 'ps-mt01',
-    name: 'Mr. Tea Limón 2026',
-    brand: 'Mr. Tea',
-    skus: ['Mr. Tea Limón 400ml', 'Mr. Tea Limón 1L'],
-    createdAt: new Date('2026-01-20'),
-    sessions: [
-      makeSession(
-        'ses-mt01a',
-        new Date('2026-04-15T14:00:00'),
-        ['Mr. Tea Limón 400ml'],
-        4,
-        60,
-        'Botella de Mr. Tea Limón 400ml sobre limones cortados en rodajas sobre mármol blanco, hojas de menta fresca como decoración, fondo blanco con textura, iluminación de estudio suave y difusa desde arriba, gotas de agua fría sobre el empaque verde lima, fotografía de producto refrescante tipo editorial de revista, lente 85mm, colores frescos verdes y amarillos, mood refrescante de verano'
-      )
-    ]
-  },
-  {
-    id: 'ps-mt02',
-    name: 'Mr. Tea Durazno Canal',
-    brand: 'Mr. Tea',
-    skus: ['Mr. Tea Durazno 400ml'],
-    createdAt: new Date('2026-03-10'),
-    sessions: [
-      makeSession(
-        'ses-mt02a',
-        new Date('2026-04-13T10:30:00'),
-        ['Mr. Tea Durazno 400ml'],
-        4,
-        25,
-        'Botella de Mr. Tea Durazno en nevera de supermercado de cadena con iluminación LED fría, empaque melocotón y crema perfectamente visible, facing correcto con etiquetas al frente, señalética de precio lateral, pasillo de bebidas al fondo, fotografía planograma de canal, lente 50mm, colores cálidos y frescos'
-      )
-    ]
-  },
-  {
-    id: 'ps-mt03',
-    name: 'Mr. Tea Lifestyle Joven',
-    brand: 'Mr. Tea',
-    skus: ['Mr. Tea Limón 400ml', 'Mr. Tea Durazno 400ml'],
-    createdAt: new Date('2025-11-20'),
-    sessions: [
-      makeSession(
-        'ses-mt03a',
-        new Date('2026-04-10T16:00:00'),
-        ['Mr. Tea Limón 400ml'],
-        4,
-        62,
-        'Pareja joven de universitarios bogotanos compartiendo Mr. Tea en parque de la 93, botellas de Limón y Durazno sobre mesa exterior metálica, fondo de edificios Chicó y árboles desenfocados, luz de tarde nublada bogotana, fotografía lifestyle urbana millenial, lente 35mm, paleta fría azul grisácea con acentos cálidos del empaque'
-      )
-    ]
-  },
-  {
-    id: 'ps-mt04',
-    name: 'Mr. Tea Góndola Éxito',
-    brand: 'Mr. Tea',
-    skus: [
-      'Mr. Tea Limón 400ml',
-      'Mr. Tea Durazno 400ml',
-      'Mr. Tea Maracuyá 400ml'
-    ],
-    createdAt: new Date('2025-09-15'),
-    sessions: [
-      makeSession(
-        'ses-mt04a',
-        new Date('2026-04-06T09:00:00'),
-        ['Mr. Tea Limón 400ml', 'Mr. Tea Durazno 400ml'],
-        4,
-        58,
-        'Góndola de tés y bebidas en Éxito con Mr. Tea en tres sabores por colores, bloque completo en dos niveles, señalética de precio amarilla institucional, iluminación LED de supermercado, perspectiva frontal a altura de producto, carros de mercado al fondo desenfocados, fotografía planograma comercial, lente 35mm'
-      )
-    ]
-  },
-
-  /* ── Squiz (3 proyectos) ────────────────────────────────── */
-  {
-    id: 'ps-003',
-    name: 'Lanzamiento Squiz Zero',
-    brand: 'Squiz',
-    skus: ['Squiz Zero Limón 250ml', 'Squiz Zero Maracuyá 250ml'],
-    createdAt: new Date('2026-02-10'),
-    sessions: [
-      makeSession(
-        'ses-021',
-        new Date('2026-04-17T09:00:00'),
-        ['Squiz Zero Limón 250ml'],
-        4,
-        165,
-        'Lata de Squiz Zero Limón 250ml en primer plano absoluto dentro de nevera de conveniencia tipo gorila iluminada con LED blanco frío, empaque verde lima y plateado que destella con la iluminación, escarcha artificial sobre la lata simulando temperatura helada, fondo de botellas y latas desenfocadas creando profundidad, contexto de tienda moderna urbana, fotografía hero shot de producto premium, alta nitidez, bokeh circular en fondo'
-      )
-    ]
-  },
-  {
-    id: 'ps-sq02',
-    name: 'Squiz Zero Maracuyá Activación',
-    brand: 'Squiz',
-    skus: ['Squiz Zero Maracuyá 250ml'],
-    createdAt: new Date('2026-03-05'),
-    sessions: [
-      makeSession(
-        'ses-sq02a',
-        new Date('2026-04-14T11:00:00'),
-        ['Squiz Zero Maracuyá 250ml'],
-        4,
-        175,
-        'Lata de Squiz Zero Maracuyá sobre superficie espejada negra con reflejo perfecto, fondo negro absoluto, iluminación de estudio con rim light lateral naranja cálido que resalta el empaque, gotas de condensación congeladas sobre la lata, fotografía de producto luxury dark mood, lente 100mm, colores naranja tropical sobre negro profundo, estética premium energética'
-      )
-    ]
-  },
-  {
-    id: 'ps-sq03',
-    name: 'Squiz Zero Canal Fitness',
-    brand: 'Squiz',
-    skus: ['Squiz Zero Limón 250ml', 'Squiz Zero Maracuyá 250ml'],
-    createdAt: new Date('2025-12-15'),
-    sessions: [
-      makeSession(
-        'ses-sq03a',
-        new Date('2026-04-12T07:30:00'),
-        ['Squiz Zero Limón 250ml'],
-        3,
-        168,
-        'Lata de Squiz Zero Limón junto a toalla de gym y auriculares sobre banco de gimnasio de madera, pesas de fondo completamente desenfocadas, luz natural de ventana lateral de gimnasio creando sombra dura, fotografía lifestyle fitness activo, lente 50mm f/1.8, paleta fría y energética, mood rendimiento deportivo y zero azúcar'
       )
     ]
   }

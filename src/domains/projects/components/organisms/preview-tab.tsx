@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 import { createPortal } from 'react-dom';
 import { CheckCircle, MessageSquare, X } from 'lucide-react';
 import { PreviewToolbar } from '../molecules/preview-toolbar';
@@ -20,23 +21,28 @@ export function PreviewTab({ piece }: PreviewTabProps) {
   const { canClientApprove } = useCurrentUser();
   const [background, setBackground] = useState<PreviewBackground>('dark');
   const [reloadKey, setReloadKey] = useState(0);
-  const [clientDecision, setClientDecision] = useState<'approved' | 'correction' | null>(null);
+  const [clientDecision, setClientDecision] = useState<
+    'approved' | 'correction' | null
+  >(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   /* Close fullscreen on Escape */
   useEffect(() => {
     if (!isFullscreen) return;
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsFullscreen(false); };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsFullscreen(false);
+    };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [isFullscreen]);
 
   return (
     <div className="preview-right-panel">
-
       {/* ── Static toolbar bar: piece info left, controls right ── */}
       <PreviewToolbar
         background={background}
@@ -56,40 +62,53 @@ export function PreviewTab({ piece }: PreviewTabProps) {
       </div>
 
       {/* ── Fullscreen overlay — portaled to body to escape stacking contexts ── */}
-      {isFullscreen && piece && mounted && createPortal(
-        <div className="preview-fullscreen" role="dialog" aria-modal="true" aria-label={piece.name}>
-          <div className="preview-fullscreen__topbar">
-            <div className="preview-fullscreen__info">
-              <p className="preview-fullscreen__name">{piece.name}</p>
-              <p className="preview-fullscreen__size">{piece.size}</p>
+      {isFullscreen &&
+        piece &&
+        mounted &&
+        createPortal(
+          <div
+            className="preview-fullscreen"
+            role="dialog"
+            aria-modal="true"
+            aria-label={piece.name}
+          >
+            <div className="preview-fullscreen__topbar">
+              <div className="preview-fullscreen__info">
+                <p className="preview-fullscreen__name">{piece.name}</p>
+                <p className="preview-fullscreen__size">{piece.size}</p>
+              </div>
+              <button
+                type="button"
+                className="preview-fullscreen__close"
+                onClick={() => setIsFullscreen(false)}
+                aria-label={msgs.toolbar.exitFullscreen}
+              >
+                <X size={13} strokeWidth={2} aria-hidden="true" />
+                {msgs.toolbar.exitFullscreen}
+              </button>
             </div>
-            <button
-              type="button"
-              className="preview-fullscreen__close"
-              onClick={() => setIsFullscreen(false)}
-              aria-label={msgs.toolbar.exitFullscreen}
-            >
-              <X size={13} strokeWidth={2} aria-hidden="true" />
-              {msgs.toolbar.exitFullscreen}
-            </button>
-          </div>
-          <div className="preview-fullscreen__canvas-wrap">
-            <PreviewCanvas
-              piece={piece}
-              background={background}
-              reloadKey={reloadKey}
-              trueSize
-            />
-          </div>
-        </div>,
-        document.body
-      )}
+            <div className="preview-fullscreen__canvas-wrap">
+              <PreviewCanvas
+                piece={piece}
+                background={background}
+                reloadKey={reloadKey}
+                trueSize
+              />
+            </div>
+          </div>,
+          document.body
+        )}
 
       {/* ── Client approval bar ── */}
       {canClientApprove && (
         <div className="client-approval-bar">
           {clientDecision ? (
-            <div className={`client-approval-bar__feedback client-approval-bar__feedback--${clientDecision}`}>
+            <div
+              className={cn(
+                'client-approval-bar__feedback',
+                `client-approval-bar__feedback--${clientDecision}`
+              )}
+            >
               {clientDecision === 'approved'
                 ? '✓ Piezas aprobadas para producción'
                 : '✎ Correcciones solicitadas al equipo'}
@@ -103,7 +122,9 @@ export function PreviewTab({ piece }: PreviewTabProps) {
             </div>
           ) : (
             <>
-              <p className="client-approval-bar__label">¿Apruebas estas piezas?</p>
+              <p className="client-approval-bar__label">
+                ¿Apruebas estas piezas?
+              </p>
               <div className="client-approval-bar__actions">
                 <button
                   type="button"
@@ -118,7 +139,11 @@ export function PreviewTab({ piece }: PreviewTabProps) {
                   className="btn btn--secondary client-approval-bar__btn"
                   onClick={() => setClientDecision('correction')}
                 >
-                  <MessageSquare size={15} strokeWidth={1.5} aria-hidden="true" />
+                  <MessageSquare
+                    size={15}
+                    strokeWidth={1.5}
+                    aria-hidden="true"
+                  />
                   Solicitar corrección
                 </button>
               </div>
