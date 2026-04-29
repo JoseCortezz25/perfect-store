@@ -13,7 +13,6 @@ import {
   RefreshCw,
   FolderPlus,
   Plus,
-  Minus,
   Aperture,
   Sun,
   Sunrise,
@@ -28,17 +27,27 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { StepSlider } from '../atoms/step-slider';
+import { FormatSelector } from '../molecules/format-selector';
 import { generatorStore } from '../../stores/generator.store';
 import { generatorMessages } from '../../messages';
 import { MOCK_SKUS, SKU_BRANDS } from '../../generator.repository';
 import { getAllPsProjects } from '@/domains/projects/ps-project-detail.repository';
-import type {
-  ImageAngle,
-  ImageIllumination,
-  AspectRatio,
-  GeneratedImage,
-  Sku
+import {
+  FORMAT_CATALOG,
+  type ImageAngle,
+  type ImageIllumination,
+  type FormatCategory,
+  type GeneratedImage,
+  type Sku
 } from '../../generator.types';
+
+function formatGroupLabel(category: FormatCategory, formatId: string): string {
+  const cat = FORMAT_CATALOG.find(c => c.id === category);
+  if (!cat) return category;
+  if (!cat.expandable) return cat.label;
+  const fmt = cat.formats.find(f => f.id === formatId);
+  return fmt ? `${cat.label} ${fmt.label}` : cat.label;
+}
 
 const msgs = generatorMessages.config;
 const ctxMsgs = msgs.context;
@@ -67,32 +76,6 @@ const GALLERY_PROMPTS = [
   'detalle · estudio · producto solo · fondo neutro · alta definición',
   'isométrico · natural · mercado · colores vibrantes · dinámico'
 ];
-
-const ASPECT_SHAPES: Record<AspectRatio, { w: number; h: number }> = {
-  '1:1': { w: 13, h: 13 },
-  '16:9': { w: 22, h: 13 },
-  '9:16': { w: 13, h: 22 },
-  '4:3': { w: 16, h: 12 },
-  '3:4': { w: 12, h: 16 },
-  '2:3': { w: 11, h: 17 },
-  '1:2': { w: 10, h: 20 },
-  '2:1': { w: 22, h: 11 },
-  '4:5': { w: 14, h: 17 },
-  '3:2': { w: 18, h: 12 }
-};
-
-const ASPECT_LABELS: Record<AspectRatio, string> = {
-  '1:1': 'Square',
-  '16:9': 'Widescreen',
-  '9:16': 'Social story',
-  '4:3': 'Classic',
-  '3:4': 'Traditional',
-  '2:3': 'Portrait',
-  '1:2': 'Vertical',
-  '2:1': 'Horizontal',
-  '4:5': 'Social post',
-  '3:2': 'Standard'
-};
 
 /* ── Reference tile data ─────────────────────────────────────────── */
 
@@ -295,7 +278,6 @@ export function GeneratorShell() {
   const illuminationDropRef = useRef<HTMLDivElement>(null);
   const elementsDropRef = useRef<HTMLDivElement>(null);
   const atmosphericDropRef = useRef<HTMLDivElement>(null);
-  const aspectDropRef = useRef<HTMLDivElement>(null);
   const qualityRef = useRef<HTMLDivElement>(null);
 
   const config = useSyncExternalStore(
@@ -324,7 +306,6 @@ export function GeneratorShell() {
   const [illuminationOpen, setIlluminationOpen] = useState(false);
   const [elementsOpen, setElementsOpen] = useState(false);
   const [atmosphericOpen, setAtmosphericOpen] = useState(false);
-  const [aspectOpen, setAspectOpen] = useState(false);
 
   const [refPanel, setRefPanel] = useState<'angle' | 'illumination' | null>(
     null
@@ -361,7 +342,6 @@ export function GeneratorShell() {
         { ref: illuminationDropRef, close: () => setIlluminationOpen(false) },
         { ref: elementsDropRef, close: () => setElementsOpen(false) },
         { ref: atmosphericDropRef, close: () => setAtmosphericOpen(false) },
-        { ref: aspectDropRef, close: () => setAspectOpen(false) },
         { ref: qualityRef, close: () => {} }
       ];
       targets.forEach(({ ref, close }) => {
@@ -451,9 +431,40 @@ export function GeneratorShell() {
     });
   });
 
-  const canGenerate = config.selectedSkus.length > 0 && !isGenerating;
+  const totalImages = config.formats.reduce((sum, f) => sum + f.count, 0);
+
+  const canGenerate =
+    config.selectedSkus.length > 0 && totalImages > 0 && !isGenerating;
   const selectedCount = config.selectedSkus.length;
   const hasImages = images.length > 0;
+
+  /* Build ordered format groups from the images array */
+  const formatGroups: Array<{
+    key: string;
+    category: FormatCategory;
+    format: string;
+    label: string;
+    imgs: GeneratedImage[];
+  }> = [];
+  if (hasImages) {
+    const seen = new Set<string>();
+    images.forEach(img => {
+      if (!img.category || !img.format) return;
+      const key = `${img.category}::${img.format}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        formatGroups.push({
+          key,
+          category: img.category,
+          format: img.format,
+          label: formatGroupLabel(img.category, img.format),
+          imgs: []
+        });
+      }
+      const group = formatGroups.find(g => g.key === key);
+      if (group) group.imgs.push(img);
+    });
+  }
 
   const refItems = refPanel === 'angle' ? ANGLE_REFS : ILLUMINATION_REFS;
 
@@ -486,27 +497,25 @@ export function GeneratorShell() {
 
   function handleGenerate() {
     if (config.selectedSkus.length === 0) return;
+    if (totalImages === 0) return;
     generatorStore.setIsGenerating(true);
-    const newImages: GeneratedImage[] = Array.from(
-      { length: config.imageCount },
-      (_, i) => ({
-        id: `img-${Date.now()}-${i}`,
-        accentColor: MOCK_ACCENT_COLORS[i % MOCK_ACCENT_COLORS.length]
-      })
-    );
+    const newImages: GeneratedImage[] = [];
+    let colorIdx = 0;
+    config.formats.forEach(sel => {
+      for (let i = 0; i < sel.count; i++) {
+        newImages.push({
+          id: `img-${Date.now()}-${newImages.length}`,
+          accentColor: MOCK_ACCENT_COLORS[colorIdx % MOCK_ACCENT_COLORS.length],
+          category: sel.category,
+          format: sel.format
+        });
+        colorIdx++;
+      }
+    });
     setTimeout(() => {
       generatorStore.setImages(newImages);
       generatorStore.setIsGenerating(false);
     }, 1800);
-  }
-
-  function handleImageCountStep(direction: 'up' | 'down') {
-    const current = config.imageCount;
-    if (direction === 'up' && current < 8) {
-      generatorStore.setConfig({ imageCount: current + 1 });
-    } else if (direction === 'down' && current > 1) {
-      generatorStore.setConfig({ imageCount: current - 1 });
-    }
   }
 
   function handleRegenerate(img: GeneratedImage) {
@@ -547,6 +556,12 @@ export function GeneratorShell() {
 
   function handleDownloadAll() {
     images.forEach(img => handleDownload(img));
+  }
+
+  function handleDownloadFormat(category: FormatCategory, format: string) {
+    images
+      .filter(img => img.category === category && img.format === format)
+      .forEach(img => handleDownload(img));
   }
 
   function handleRegenerateAll() {
@@ -1154,6 +1169,14 @@ export function GeneratorShell() {
 
             <div className="gen-left__sep" />
 
+            {/* ── FORMATO ── */}
+            <div className="gen-left__section">
+              <p className="gen-left__section-label">{msgs.format.label}</p>
+              <FormatSelector />
+            </div>
+
+            <div className="gen-left__sep" />
+
             {/* ── PROMPT / CONTEXTO ── */}
             <div className="gen-left__section">
               <p className="gen-left__section-label">
@@ -1201,7 +1224,7 @@ export function GeneratorShell() {
                   </div>
                 )}
 
-                {/* ── Chat footer: upload + aspect ratio + image count ── */}
+                {/* ── Chat footer: upload only ── */}
                 <div className="gen-chat-footer">
                   <input
                     ref={fileRef}
@@ -1247,101 +1270,6 @@ export function GeneratorShell() {
                       />
                     </button>
                   )}
-
-                  {/* Aspect ratio */}
-                  <div className="gen-drop" ref={aspectDropRef}>
-                    <button
-                      type="button"
-                      className="gen-chat-footer__btn"
-                      data-open={aspectOpen}
-                      onClick={() => setAspectOpen(o => !o)}
-                    >
-                      <span
-                        className="gen-ratio-icon"
-                        style={{
-                          width:
-                            ASPECT_SHAPES[config.aspectRatio ?? '1:1'].w * 0.65,
-                          height:
-                            ASPECT_SHAPES[config.aspectRatio ?? '1:1'].h * 0.65
-                        }}
-                        aria-hidden="true"
-                      />
-                      {config.aspectRatio}
-                      <ChevronDown
-                        size={10}
-                        strokeWidth={1.5}
-                        className="gen-drop__chevron"
-                        data-open={aspectOpen}
-                        aria-hidden="true"
-                      />
-                    </button>
-                    {aspectOpen && (
-                      <div className="gen-drop__menu gen-drop__menu--visual gen-drop__menu--up gen-drop__menu--ratio">
-                        {(Object.keys(ASPECT_SHAPES) as AspectRatio[]).map(
-                          ratio => {
-                            const shape = ASPECT_SHAPES[ratio];
-                            const isSelected = config.aspectRatio === ratio;
-                            return (
-                              <button
-                                key={ratio}
-                                type="button"
-                                className={cn(
-                                  'gen-visual-item gen-visual-item--ratio',
-                                  isSelected && 'gen-visual-item--active'
-                                )}
-                                onClick={() => {
-                                  generatorStore.setConfig({
-                                    aspectRatio: ratio
-                                  });
-                                  setAspectOpen(false);
-                                }}
-                              >
-                                <span
-                                  className="gen-ratio-icon gen-ratio-icon--sm"
-                                  style={{
-                                    width: shape.w * 0.75,
-                                    height: shape.h * 0.75
-                                  }}
-                                  aria-hidden="true"
-                                />
-                                <span className="gen-visual-item__ratio-value">
-                                  {ratio}
-                                </span>
-                                <span className="gen-visual-item__ratio-label">
-                                  {ASPECT_LABELS[ratio]}
-                                </span>
-                              </button>
-                            );
-                          }
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Image count stepper */}
-                  <div className="gen-chat-footer__stepper">
-                    <button
-                      type="button"
-                      className="gen-chat-footer__stepper-btn"
-                      onClick={() => handleImageCountStep('down')}
-                      aria-label="Reducir cantidad"
-                      disabled={config.imageCount <= 1}
-                    >
-                      <Minus size={10} strokeWidth={2} aria-hidden="true" />
-                    </button>
-                    <span className="gen-chat-footer__stepper-val">
-                      {config.imageCount}
-                    </span>
-                    <button
-                      type="button"
-                      className="gen-chat-footer__stepper-btn"
-                      onClick={() => handleImageCountStep('up')}
-                      aria-label="Aumentar cantidad"
-                      disabled={config.imageCount >= 8}
-                    >
-                      <Plus size={10} strokeWidth={2} aria-hidden="true" />
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -1361,7 +1289,9 @@ export function GeneratorShell() {
               ) : (
                 <>
                   <Wand2 size={15} strokeWidth={1.5} aria-hidden="true" />
-                  {msgs.generateBtn}
+                  {totalImages > 0
+                    ? msgs.generateBtnWithCount(totalImages)
+                    : msgs.format.emptyState}
                 </>
               )}
             </button>
@@ -1373,10 +1303,11 @@ export function GeneratorShell() {
 
         {/* ════ COL 2 — RESULTS PANEL ════ */}
         <div className="gen-unified__right">
-          {/* Top — blank state or generated images */}
+          {/* Results area — scrolls via gen-unified__right */}
           <div className="gen-results__top">
             {hasImages ? (
               <div className="gen-results-imgs">
+                {/* Global header */}
                 <div className="gen-results-imgs__header">
                   <p className="gen-results-imgs__count">
                     {images.length}{' '}
@@ -1423,55 +1354,86 @@ export function GeneratorShell() {
                     </button>
                   </div>
                 </div>
-                <div className="gen-results-grid">
-                  {images.map((img, idx) => (
-                    <div key={img.id} className="result-img">
+
+                {/* Format groups */}
+                {formatGroups.map(group => (
+                  <div key={group.key} className="gen-format-group">
+                    <div className="gen-format-group__header">
+                      <span className="gen-format-group__label">
+                        {group.label}
+                      </span>
+                      <span className="gen-format-group__count">
+                        {group.imgs.length}{' '}
+                        {group.imgs.length === 1
+                          ? resMsgs.imageSingular
+                          : resMsgs.imagePlural}
+                      </span>
                       <button
                         type="button"
-                        className="result-img__btn"
-                        aria-label={resMsgs.imageAlt(idx + 1)}
+                        className="btn btn--secondary"
+                        onClick={() =>
+                          handleDownloadFormat(group.category, group.format)
+                        }
                       >
-                        <img
-                          src="/Images/Placceholder-Image.png"
-                          alt={resMsgs.imageAlt(idx + 1)}
-                          className="result-img__placeholder"
+                        <Download
+                          size={12}
+                          strokeWidth={1.5}
+                          aria-hidden="true"
                         />
+                        {resMsgs.downloadAll}
                       </button>
-                      <div
-                        className="result-img__overlay"
-                        onClick={() => setActiveImage(img)}
-                        role="button"
-                        aria-label={resMsgs.imageAlt(idx + 1)}
-                      >
-                        <div
-                          className="result-img__pill result-img__pill--bottom"
-                          onClick={e => e.stopPropagation()}
-                        >
-                          <button
-                            type="button"
-                            className="result-img__pill-btn"
-                            onClick={() => handleDownload(img)}
-                            aria-label={resMsgs.download}
-                          >
-                            <Download size={13} strokeWidth={1.5} />
-                          </button>
-                          <span
-                            className="result-img__pill-sep"
-                            aria-hidden="true"
-                          />
-                          <button
-                            type="button"
-                            className="result-img__pill-btn"
-                            onClick={() => handleRegenerate(img)}
-                            aria-label={resMsgs.regenerate}
-                          >
-                            <RefreshCw size={13} strokeWidth={1.5} />
-                          </button>
-                        </div>
-                      </div>
                     </div>
-                  ))}
-                </div>
+                    <div className="gen-results-grid">
+                      {group.imgs.map((img, idx) => (
+                        <div key={img.id} className="result-img">
+                          <button
+                            type="button"
+                            className="result-img__btn"
+                            aria-label={resMsgs.imageAlt(idx + 1)}
+                          >
+                            <img
+                              src="/Images/Placceholder-Image.png"
+                              alt={resMsgs.imageAlt(idx + 1)}
+                              className="result-img__placeholder"
+                            />
+                          </button>
+                          <div
+                            className="result-img__overlay"
+                            onClick={() => setActiveImage(img)}
+                            role="button"
+                            aria-label={resMsgs.imageAlt(idx + 1)}
+                          >
+                            <div
+                              className="result-img__pill result-img__pill--bottom"
+                              onClick={e => e.stopPropagation()}
+                            >
+                              <button
+                                type="button"
+                                className="result-img__pill-btn"
+                                onClick={() => handleDownload(img)}
+                                aria-label={resMsgs.download}
+                              >
+                                <Download size={13} strokeWidth={1.5} />
+                              </button>
+                              <span
+                                className="result-img__pill-sep"
+                                aria-hidden="true"
+                              />
+                              <button
+                                type="button"
+                                className="result-img__pill-btn"
+                                onClick={() => handleRegenerate(img)}
+                                aria-label={resMsgs.regenerate}
+                              >
+                                <RefreshCw size={13} strokeWidth={1.5} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="gen-results-empty">

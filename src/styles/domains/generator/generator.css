@@ -3158,12 +3158,12 @@
 
 /* Top area — 85% of the right column */
 .gen-results__top {
-  flex: 0 0 85%;
+  flex: none;
   min-height: 200px;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .gen-results__top::-webkit-scrollbar        { width: 4px; }
@@ -3319,6 +3319,46 @@
 .gen-results-action-btn--cta {
   padding-left: 14px;
   padding-right: 14px;
+}
+
+/* ── Format group (separates results by format) ──────────────── */
+
+.gen-format-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #EAECEF;
+  margin-top: 4px;
+}
+
+.gen-format-group:first-of-type {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.gen-format-group__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gen-format-group__label {
+  font-family: var(--font-soda), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #1A1A1A;
+  flex: 1;
+}
+
+.gen-format-group__count {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #95989E;
 }
 
 /* Generated image grid inside results panel */
@@ -3764,6 +3804,154 @@
 /* ── Reduced motion for new elements ── */
 @media (prefers-reduced-motion: reduce) {
   .gen-ver-ejemplos {
+    transition: none;
+  }
+}
+
+/* ─── Format Selector dropdown menu ──────────────────────────── */
+
+.gen-drop__menu--format {
+  min-width: 220px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Category group inside the menu */
+.fmt-menu__group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #F0F1F3;
+}
+
+.fmt-menu__group:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* Category sub-label */
+.fmt-menu__cat-label {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #B0B4BB;
+  padding: 6px 8px 4px;
+}
+
+/* Format row */
+.fmt-menu__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 8px;
+  border-radius: 7px;
+  transition: background 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.fmt-menu__row:hover {
+  background: rgba(9, 94, 170, 0.04);
+}
+
+.fmt-menu__row--selected {
+  background: rgba(9, 94, 170, 0.06);
+}
+
+.fmt-menu__name {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #1A1A1A;
+  flex: 1;
+}
+
+.fmt-menu__row--selected .fmt-menu__name {
+  font-weight: 500;
+  color: #095EAA;
+}
+
+/* Add button (+) for unselected formats */
+.fmt-menu__add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid #D4D7DC;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  color: #777777;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 120ms cubic-bezier(0.2, 0, 0, 1),
+              color 120ms cubic-bezier(0.2, 0, 0, 1),
+              background 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.fmt-menu__add:hover {
+  border-color: #095EAA;
+  color: #095EAA;
+  background: rgba(9, 94, 170, 0.06);
+}
+
+/* Stepper for selected formats */
+.fmt-menu__stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.fmt-menu__step-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: #095EAA;
+  cursor: pointer;
+  transition: background 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.fmt-menu__step-btn:hover:not(:disabled) {
+  background: rgba(9, 94, 170, 0.10);
+}
+
+.fmt-menu__step-btn:disabled {
+  color: rgba(9, 94, 170, 0.3);
+  cursor: not-allowed;
+}
+
+.fmt-menu__count {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #095EAA;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Min hint */
+.fmt-menu__hint {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: #95989E;
+  padding: 0 8px 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fmt-menu__row,
+  .fmt-menu__add,
+  .fmt-menu__step-btn {
     transition: none;
   }
 }

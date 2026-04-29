@@ -87,6 +87,20 @@ export const generatorMessages = {
       label: 'Relación de aspecto'
     },
 
+    format: {
+      label: 'Formato',
+      placeholder: 'Seleccionar formato...',
+      addCta: 'Agregar',
+      remove: 'Quitar',
+      decrease: 'Reducir cantidad',
+      increase: 'Aumentar cantidad',
+      minHint: (n: number) => `Mínimo ${n} ${n === 1 ? 'imagen' : 'imágenes'}`,
+      emptyState: 'Selecciona al menos un formato'
+    },
+
+    generateBtnWithCount: (n: number) =>
+      `Generar ${n} ${n === 1 ? 'imagen' : 'imágenes'}`,
+
     context: {
       label: 'Descripción de contexto',
       toolbarLabel: 'Contexto',

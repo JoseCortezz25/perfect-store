@@ -13,6 +13,7 @@ const DEFAULT_CONFIG: GeneratorConfig = {
   angle: null,
   illumination: null,
   aspectRatio: '1:1',
+  formats: [{ category: 'carousel', format: 'main', count: 2 }],
   freeText: '',
   elementChips: [],
   atmosphericChips: [],
