@@ -83,8 +83,18 @@ export const generatorMessages = {
 
     advanced: 'Avanzado',
 
-    aspectRatio: {
-      label: 'Relación de aspecto'
+    channel: {
+      label: 'Canal',
+      placeholder: 'Canal',
+      options: {
+        carousel: 'Carrusel',
+        instagram: 'Instagram',
+        facebook: 'Facebook',
+        youtube: 'YouTube'
+      },
+      carouselBase: '2 fijas',
+      extraLabel: (n: number) => `${n} IA`,
+      imageCountLabel: (n: number) => `×${n}`
     },
 
     format: {
@@ -167,15 +177,11 @@ export const generatorMessages = {
       }
     },
 
-    imageCount: {
-      label: 'Cantidad',
-      options: [1, 2, 4, 8] as const
-    },
-
     generateBtn: 'Generar imágenes',
     generateBtnLoading: 'Generando...',
     validationSkus: 'Selecciona al menos un SKU para continuar',
-    validationType: 'Selecciona un tipo de imagen'
+    validationType: 'Selecciona un tipo de imagen',
+    validationChannel: 'Selecciona al menos un canal'
   },
 
   results: {
@@ -186,9 +192,10 @@ export const generatorMessages = {
     regenerateAll: 'Regenerar todo',
     download: 'Descargar',
     downloadAll: 'Descargar todo',
+    downloadSection: 'Descargar sección',
     imageAlt: (n: number) => `Imagen generada ${n}`,
-    imageSingular: 'imagen generada',
-    imagePlural: 'imágenes generadas',
+    imageSingular: 'imagen',
+    imagePlural: 'imágenes',
     emptyState: {
       title: 'Genera tu primera imagen',
       subtitle: 'Configura los parámetros y haz clic en Generar',
@@ -203,7 +210,7 @@ export const generatorMessages = {
         skus: 'SKUs',
         type: 'Tipo',
         angle: 'Ángulo',
-        aspect: 'Aspecto',
+        channel: 'Canal',
         quality: 'Calidad',
         prompt: 'Prompt',
         project: 'Proyecto',
