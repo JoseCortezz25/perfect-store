@@ -11,7 +11,6 @@ import { generatorMessages } from '../../messages';
 import type {
   ImageType,
   ImageAngle,
-  AspectRatio,
   ImageQuality,
   GeneratedImage
 } from '../../generator.types';
@@ -179,27 +178,22 @@ export function ConfigPanel() {
         </div>
       </div>
 
-      {/* Aspect ratio */}
-      <div className="config-section">
-        <span className="config-label">{msgs.aspectRatio.label}</span>
-        <div className="config-options">
-          {(['1:1', '4:5', '16:9'] as AspectRatio[]).map(ratio => (
-            <button
-              key={ratio}
-              type="button"
-              className={cn(
-                'config-option',
-                'config-option--ratio',
-                config.aspectRatio === ratio && 'config-option--active'
-              )}
-              onClick={() => generatorStore.setConfig({ aspectRatio: ratio })}
-              aria-pressed={config.aspectRatio === ratio}
-            >
-              {ratio}
-            </button>
-          ))}
+      {/* Channel info — read-only display of selected channels */}
+      {config.channels.length > 0 && (
+        <div className="config-section">
+          <span className="config-label">{msgs.channel.label}</span>
+          <div className="config-options">
+            {config.channels.map(ch => (
+              <span
+                key={ch.channel}
+                className="config-option config-option--active"
+              >
+                {msgs.channel.options[ch.channel]}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Context description */}
       <div className="config-section config-section--context">

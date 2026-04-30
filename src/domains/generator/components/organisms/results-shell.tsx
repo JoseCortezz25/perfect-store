@@ -293,10 +293,10 @@ export function ResultsShell() {
                 </div>
                 <div className="gen-modal__param">
                   <span className="gen-modal__param-key">
-                    {msgs.modal.params.aspect}
+                    {msgs.modal.params.channel}
                   </span>
                   <span className="gen-modal__param-val">
-                    {config.aspectRatio}
+                    {config.channels.map(c => c.channel).join(', ') || '—'}
                   </span>
                 </div>
                 <div className="gen-modal__param">
