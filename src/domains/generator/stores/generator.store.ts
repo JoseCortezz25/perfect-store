@@ -2,7 +2,11 @@
 // Module-level singleton. Persists config and generated images across
 // navigation between /generator and /generator/results.
 
-import type { GeneratorConfig, GeneratedImage } from '../generator.types';
+import type {
+  GeneratorConfig,
+  GeneratedImage,
+  ChannelSection
+} from '../generator.types';
 
 const DEFAULT_CONFIG: GeneratorConfig = {
   projectId: null,
@@ -12,20 +16,20 @@ const DEFAULT_CONFIG: GeneratorConfig = {
   imageType: null,
   angle: null,
   illumination: null,
-  aspectRatio: '1:1',
+  channels: [],
   freeText: '',
   elementChips: [],
   atmosphericChips: [],
   dayMoment: 2,
   prominence: 2,
-  quality: 'medio',
-  imageCount: 4
+  quality: 'medio'
 };
 
 type Listener = () => void;
 
 let _config: GeneratorConfig = { ...DEFAULT_CONFIG };
 let _images: GeneratedImage[] = [];
+let _sections: ChannelSection[] = [];
 let _isGenerating = false;
 const _listeners = new Set<Listener>();
 
@@ -36,6 +40,7 @@ function notify() {
 export const generatorStore = {
   getConfig: (): GeneratorConfig => _config,
   getImages: (): GeneratedImage[] => _images,
+  getSections: (): ChannelSection[] => _sections,
   getIsGenerating: (): boolean => _isGenerating,
 
   setConfig: (patch: Partial<GeneratorConfig>): void => {
@@ -48,6 +53,12 @@ export const generatorStore = {
     notify();
   },
 
+  setSections: (sections: ChannelSection[]): void => {
+    _sections = sections;
+    _images = sections.flatMap(s => s.images);
+    notify();
+  },
+
   setIsGenerating: (val: boolean): void => {
     _isGenerating = val;
     notify();
@@ -56,6 +67,7 @@ export const generatorStore = {
   reset: (): void => {
     _config = { ...DEFAULT_CONFIG };
     _images = [];
+    _sections = [];
     _isGenerating = false;
     notify();
   },

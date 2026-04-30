@@ -17,18 +17,19 @@ export type ImageAngle =
   | 'isometrico'
   | 'detalle'
   | 'trasero';
-export type AspectRatio =
-  | '1:1'
-  | '16:9'
-  | '9:16'
-  | '4:3'
-  | '3:4'
-  | '2:3'
-  | '1:2'
-  | '2:1'
-  | '4:5'
-  | '3:2';
 export type ImageQuality = 'bajo' | 'medio' | 'alto';
+
+export type Channel = 'carousel' | 'instagram' | 'facebook' | 'youtube';
+
+export interface ChannelConfig {
+  channel: Channel;
+  imageCount: number; // carousel: extra AI images beyond 2 base; others: total images
+}
+
+export interface ChannelSection {
+  channel: Channel;
+  images: GeneratedImage[];
+}
 
 export interface Sku {
   id: string;
@@ -46,14 +47,13 @@ export interface GeneratorConfig {
   imageType: ImageType | null;
   angle: ImageAngle | null;
   illumination: ImageIllumination | null;
-  aspectRatio: AspectRatio | null;
+  channels: ChannelConfig[];
   freeText: string;
   elementChips: string[];
   atmosphericChips: string[];
   dayMoment: number;
   prominence: number;
   quality: ImageQuality;
-  imageCount: number;
 }
 
 export interface GeneratedImage {

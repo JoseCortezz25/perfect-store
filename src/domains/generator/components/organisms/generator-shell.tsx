@@ -1,6 +1,11 @@
 'use client';
 
-import { useState, useRef, useEffect, useSyncExternalStore } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useSyncExternalStore
+} from 'react';
 import { createPortal } from 'react-dom';
 import {
   ChevronDown,
@@ -14,7 +19,6 @@ import {
   FolderPlus,
   Plus,
   Minus,
-  Aperture,
   Sun,
   Sunrise,
   Sunset,
@@ -25,8 +29,7 @@ import {
   Layers,
   Leaf,
   Mountain,
-  ThumbsUp,
-  ThumbsDown
+  Camera
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { StepSlider } from '../atoms/step-slider';
@@ -37,7 +40,8 @@ import { getAllPsProjects } from '@/domains/projects/ps-project-detail.repositor
 import type {
   ImageAngle,
   ImageIllumination,
-  AspectRatio,
+  Channel,
+  ChannelSection,
   GeneratedImage,
   Sku
 } from '../../generator.types';
@@ -70,31 +74,19 @@ const GALLERY_PROMPTS = [
   'isométrico · natural · mercado · colores vibrantes · dinámico'
 ];
 
-const ASPECT_SHAPES: Record<AspectRatio, { w: number; h: number }> = {
-  '1:1': { w: 13, h: 13 },
-  '16:9': { w: 22, h: 13 },
-  '9:16': { w: 13, h: 22 },
-  '4:3': { w: 16, h: 12 },
-  '3:4': { w: 12, h: 16 },
-  '2:3': { w: 11, h: 17 },
-  '1:2': { w: 10, h: 20 },
-  '2:1': { w: 22, h: 11 },
-  '4:5': { w: 14, h: 17 },
-  '3:2': { w: 18, h: 12 }
+const CHANNEL_LABELS: Record<Channel, string> = {
+  carousel: 'Carrusel',
+  instagram: 'Instagram',
+  facebook: 'Facebook',
+  youtube: 'YouTube'
 };
 
-const ASPECT_LABELS: Record<AspectRatio, string> = {
-  '1:1': 'Square',
-  '16:9': 'Widescreen',
-  '9:16': 'Social story',
-  '4:3': 'Classic',
-  '3:4': 'Traditional',
-  '2:3': 'Portrait',
-  '1:2': 'Vertical',
-  '2:1': 'Horizontal',
-  '4:5': 'Social post',
-  '3:2': 'Standard'
-};
+const CHANNEL_ORDER: Channel[] = [
+  'carousel',
+  'instagram',
+  'facebook',
+  'youtube'
+];
 
 /* ── Reference tile data ─────────────────────────────────────────── */
 
@@ -297,7 +289,6 @@ export function GeneratorShell() {
   const illuminationDropRef = useRef<HTMLDivElement>(null);
   const elementsDropRef = useRef<HTMLDivElement>(null);
   const atmosphericDropRef = useRef<HTMLDivElement>(null);
-  const aspectDropRef = useRef<HTMLDivElement>(null);
   const qualityRef = useRef<HTMLDivElement>(null);
 
   const config = useSyncExternalStore(
@@ -315,6 +306,11 @@ export function GeneratorShell() {
     generatorStore.getImages,
     generatorStore.getImages
   );
+  const sections = useSyncExternalStore(
+    generatorStore.subscribe,
+    generatorStore.getSections,
+    generatorStore.getSections
+  );
 
   /* ── Dropdown open states ── */
   const [activeBrands, setActiveBrands] = useState<string[]>([]);
@@ -326,7 +322,8 @@ export function GeneratorShell() {
   const [illuminationOpen, setIlluminationOpen] = useState(false);
   const [elementsOpen, setElementsOpen] = useState(false);
   const [atmosphericOpen, setAtmosphericOpen] = useState(false);
-  const [aspectOpen, setAspectOpen] = useState(false);
+  const [channelOpen, setChannelOpen] = useState(false);
+  const channelDropRef = useRef<HTMLDivElement>(null);
 
   const [refPanel, setRefPanel] = useState<'angle' | 'illumination' | null>(
     null
@@ -363,7 +360,7 @@ export function GeneratorShell() {
         { ref: illuminationDropRef, close: () => setIlluminationOpen(false) },
         { ref: elementsDropRef, close: () => setElementsOpen(false) },
         { ref: atmosphericDropRef, close: () => setAtmosphericOpen(false) },
-        { ref: aspectDropRef, close: () => setAspectOpen(false) },
+        { ref: channelDropRef, close: () => setChannelOpen(false) },
         { ref: qualityRef, close: () => {} }
       ];
       targets.forEach(({ ref, close }) => {
@@ -453,9 +450,14 @@ export function GeneratorShell() {
     });
   });
 
-  const canGenerate = config.selectedSkus.length > 0 && !isGenerating;
+  const canGenerate =
+    config.selectedSkus.length > 0 &&
+    config.channels.length > 0 &&
+    !isGenerating;
   const selectedCount = config.selectedSkus.length;
-  const hasImages = images.length > 0;
+  const hasSections = sections.length > 0;
+
+  const chnMsgs = msgs.channel;
 
   const refItems = refPanel === 'angle' ? ANGLE_REFS : ILLUMINATION_REFS;
 
@@ -487,28 +489,52 @@ export function GeneratorShell() {
   }
 
   function handleGenerate() {
-    if (config.selectedSkus.length === 0) return;
+    if (!canGenerate) return;
     generatorStore.setIsGenerating(true);
-    const newImages: GeneratedImage[] = Array.from(
-      { length: config.imageCount },
-      (_, i) => ({
-        id: `img-${Date.now()}-${i}`,
-        accentColor: MOCK_ACCENT_COLORS[i % MOCK_ACCENT_COLORS.length]
-      })
-    );
+    const newSections: ChannelSection[] = config.channels.map(ch => {
+      const count =
+        ch.channel === 'carousel' ? 2 + ch.imageCount : ch.imageCount;
+      return {
+        channel: ch.channel,
+        images: Array.from({ length: count }, (_, i) => ({
+          id: `img-${ch.channel}-${Date.now()}-${i}`,
+          accentColor: MOCK_ACCENT_COLORS[i % MOCK_ACCENT_COLORS.length]
+        }))
+      };
+    });
     setTimeout(() => {
-      generatorStore.setImages(newImages);
+      generatorStore.setSections(newSections);
       generatorStore.setIsGenerating(false);
     }, 1800);
   }
 
-  function handleImageCountStep(direction: 'up' | 'down') {
-    const current = config.imageCount;
-    if (direction === 'up' && current < 8) {
-      generatorStore.setConfig({ imageCount: current + 1 });
-    } else if (direction === 'down' && current > 1) {
-      generatorStore.setConfig({ imageCount: current - 1 });
-    }
+  function handleChannelToggle(channel: Channel) {
+    const exists = config.channels.find(c => c.channel === channel);
+    generatorStore.setConfig({
+      channels: exists
+        ? config.channels.filter(c => c.channel !== channel)
+        : [
+            ...config.channels,
+            { channel, imageCount: channel === 'carousel' ? 2 : 4 }
+          ]
+    });
+  }
+
+  function handleChannelCount(channel: Channel, direction: 'up' | 'down') {
+    const min = channel === 'carousel' ? 2 : 1;
+    generatorStore.setConfig({
+      channels: config.channels.map(c =>
+        c.channel === channel
+          ? {
+              ...c,
+              imageCount:
+                direction === 'up'
+                  ? Math.min(8, c.imageCount + 1)
+                  : Math.max(min, c.imageCount - 1)
+            }
+          : c
+      )
+    });
   }
 
   function handleRegenerate(img: GeneratedImage) {
@@ -833,7 +859,7 @@ export function GeneratorShell() {
                       setIlluminationOpen(false);
                     }}
                   >
-                    <Aperture
+                    <Camera
                       size={14}
                       strokeWidth={1.5}
                       className="gen-box-trigger__icon"
@@ -1136,7 +1162,7 @@ export function GeneratorShell() {
               />
             </div>
 
-            <div className="gen-left__sep" />
+            <div className="gen-left__sep gen-left__sep--tight" />
 
             <div className="gen-left__section">
               <StepSlider
@@ -1152,6 +1178,127 @@ export function GeneratorShell() {
                 value={config.prominence}
                 onChange={v => generatorStore.setConfig({ prominence: v })}
               />
+            </div>
+
+            <div className="gen-left__sep" />
+
+            {/* ── CANAL ── */}
+            <div className="gen-left__section">
+              <p className="gen-left__section-label">{chnMsgs.label}</p>
+              <div className="gen-drop" ref={channelDropRef}>
+                <button
+                  type="button"
+                  className={cn(
+                    'gen-drop__trigger',
+                    config.channels.length > 0 && 'gen-drop__trigger--active'
+                  )}
+                  data-open={channelOpen}
+                  onClick={() => setChannelOpen(o => !o)}
+                >
+                  {config.channels.length > 0 ? (
+                    <span className="gen-drop__chips">
+                      {config.channels.map(c => (
+                        <span key={c.channel} className="gen-drop__chip">
+                          {CHANNEL_LABELS[c.channel]}
+                          <span className="gen-drop__chip-count">
+                            ×{c.imageCount}
+                          </span>
+                        </span>
+                      ))}
+                    </span>
+                  ) : (
+                    <span className="gen-drop__value gen-drop__value--empty">
+                      {chnMsgs.placeholder}
+                    </span>
+                  )}
+                  <ChevronDown
+                    size={13}
+                    strokeWidth={1.5}
+                    className="gen-drop__chevron"
+                    data-open={channelOpen}
+                    aria-hidden="true"
+                  />
+                </button>
+
+                {channelOpen && (
+                  <div className="gen-drop__menu gen-drop__menu--visual">
+                    {CHANNEL_ORDER.map(channel => {
+                      const ch = config.channels.find(
+                        c => c.channel === channel
+                      );
+                      const isActive = !!ch;
+                      return (
+                        <div key={channel} className="gen-channel-option-row">
+                          <button
+                            type="button"
+                            className="gen-visual-item gen-visual-item--check"
+                            onClick={() => handleChannelToggle(channel)}
+                            aria-pressed={isActive}
+                          >
+                            <span
+                              className={cn(
+                                'gen-visual-checkbox',
+                                isActive && 'gen-visual-checkbox--checked'
+                              )}
+                            >
+                              {isActive && (
+                                <Check
+                                  size={9}
+                                  strokeWidth={3}
+                                  color="#fff"
+                                  aria-hidden="true"
+                                />
+                              )}
+                            </span>
+                            {CHANNEL_LABELS[channel]}
+                          </button>
+                          {isActive && ch && (
+                            <div className="gen-chat-footer__stepper">
+                              <button
+                                type="button"
+                                className="gen-chat-footer__stepper-btn"
+                                onClick={() =>
+                                  handleChannelCount(channel, 'down')
+                                }
+                                aria-label="Reducir cantidad"
+                                disabled={
+                                  channel === 'carousel'
+                                    ? ch.imageCount <= 2
+                                    : ch.imageCount <= 1
+                                }
+                              >
+                                <Minus
+                                  size={9}
+                                  strokeWidth={2}
+                                  aria-hidden="true"
+                                />
+                              </button>
+                              <span className="gen-chat-footer__stepper-val">
+                                {ch.imageCount}
+                              </span>
+                              <button
+                                type="button"
+                                className="gen-chat-footer__stepper-btn"
+                                onClick={() =>
+                                  handleChannelCount(channel, 'up')
+                                }
+                                aria-label="Aumentar cantidad"
+                                disabled={ch.imageCount >= 8}
+                              >
+                                <Plus
+                                  size={9}
+                                  strokeWidth={2}
+                                  aria-hidden="true"
+                                />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="gen-left__sep" />
@@ -1203,7 +1350,7 @@ export function GeneratorShell() {
                   </div>
                 )}
 
-                {/* ── Chat footer: upload + aspect ratio + image count ── */}
+                {/* ── Chat footer: upload only ── */}
                 <div className="gen-chat-footer">
                   <input
                     ref={fileRef}
@@ -1213,7 +1360,6 @@ export function GeneratorShell() {
                     onChange={handleFile}
                   />
 
-                  {/* Upload / file preview */}
                   {config.referenceImageName ? (
                     <div className="gen-chat-footer__file">
                       <ImageIcon
@@ -1249,101 +1395,6 @@ export function GeneratorShell() {
                       />
                     </button>
                   )}
-
-                  {/* Aspect ratio */}
-                  <div className="gen-drop" ref={aspectDropRef}>
-                    <button
-                      type="button"
-                      className="gen-chat-footer__btn"
-                      data-open={aspectOpen}
-                      onClick={() => setAspectOpen(o => !o)}
-                    >
-                      <span
-                        className="gen-ratio-icon"
-                        style={{
-                          width:
-                            ASPECT_SHAPES[config.aspectRatio ?? '1:1'].w * 0.65,
-                          height:
-                            ASPECT_SHAPES[config.aspectRatio ?? '1:1'].h * 0.65
-                        }}
-                        aria-hidden="true"
-                      />
-                      {config.aspectRatio}
-                      <ChevronDown
-                        size={10}
-                        strokeWidth={1.5}
-                        className="gen-drop__chevron"
-                        data-open={aspectOpen}
-                        aria-hidden="true"
-                      />
-                    </button>
-                    {aspectOpen && (
-                      <div className="gen-drop__menu gen-drop__menu--visual gen-drop__menu--up gen-drop__menu--ratio">
-                        {(Object.keys(ASPECT_SHAPES) as AspectRatio[]).map(
-                          ratio => {
-                            const shape = ASPECT_SHAPES[ratio];
-                            const isSelected = config.aspectRatio === ratio;
-                            return (
-                              <button
-                                key={ratio}
-                                type="button"
-                                className={cn(
-                                  'gen-visual-item gen-visual-item--ratio',
-                                  isSelected && 'gen-visual-item--active'
-                                )}
-                                onClick={() => {
-                                  generatorStore.setConfig({
-                                    aspectRatio: ratio
-                                  });
-                                  setAspectOpen(false);
-                                }}
-                              >
-                                <span
-                                  className="gen-ratio-icon gen-ratio-icon--sm"
-                                  style={{
-                                    width: shape.w * 0.75,
-                                    height: shape.h * 0.75
-                                  }}
-                                  aria-hidden="true"
-                                />
-                                <span className="gen-visual-item__ratio-value">
-                                  {ratio}
-                                </span>
-                                <span className="gen-visual-item__ratio-label">
-                                  {ASPECT_LABELS[ratio]}
-                                </span>
-                              </button>
-                            );
-                          }
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Image count stepper */}
-                  <div className="gen-chat-footer__stepper">
-                    <button
-                      type="button"
-                      className="gen-chat-footer__stepper-btn"
-                      onClick={() => handleImageCountStep('down')}
-                      aria-label="Reducir cantidad"
-                      disabled={config.imageCount <= 1}
-                    >
-                      <Minus size={10} strokeWidth={2} aria-hidden="true" />
-                    </button>
-                    <span className="gen-chat-footer__stepper-val">
-                      {config.imageCount}
-                    </span>
-                    <button
-                      type="button"
-                      className="gen-chat-footer__stepper-btn"
-                      onClick={() => handleImageCountStep('up')}
-                      aria-label="Aumentar cantidad"
-                      disabled={config.imageCount >= 8}
-                    >
-                      <Plus size={10} strokeWidth={2} aria-hidden="true" />
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -1375,148 +1426,156 @@ export function GeneratorShell() {
 
         {/* ════ COL 2 — RESULTS PANEL ════ */}
         <div className="gen-unified__right">
-          {/* Top — blank state or generated images */}
-          <div className="gen-results__top">
-            {hasImages ? (
-              <div className="gen-results-imgs">
-                <div className="gen-results-imgs__header">
-                  <p className="gen-results-imgs__count">
-                    {images.length}{' '}
-                    {images.length === 1
-                      ? resMsgs.imageSingular
-                      : resMsgs.imagePlural}
-                  </p>
-                  <div className="gen-results-imgs__actions">
+          {hasSections ? (
+            <div className="gen-results-sections">
+              {/* Global actions bar */}
+              <div className="gen-results-imgs__header gen-results-global-header">
+                <p className="gen-results-imgs__count">
+                  {images.length}{' '}
+                  {images.length === 1
+                    ? resMsgs.imageSingular
+                    : resMsgs.imagePlural}
+                </p>
+                <div className="gen-results-imgs__actions">
+                  <button
+                    type="button"
+                    className="btn btn--secondary"
+                    onClick={handleRegenerateAll}
+                  >
+                    <RefreshCw size={12} strokeWidth={1.5} aria-hidden="true" />
+                    {resMsgs.regenerateAll}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn--secondary"
+                    onClick={handleDownloadAll}
+                  >
+                    <Download size={12} strokeWidth={1.5} aria-hidden="true" />
+                    {resMsgs.downloadAll}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn--primary gen-results-action-btn--cta"
+                    onClick={() => setShowAddModal(true)}
+                  >
+                    <FolderPlus
+                      size={12}
+                      strokeWidth={1.5}
+                      aria-hidden="true"
+                    />
+                    {resMsgs.addToProject}
+                  </button>
+                </div>
+              </div>
+
+              {/* One section per channel */}
+              {sections.map((section, sIdx) => (
+                <div key={section.channel} className="gen-channel-section">
+                  {sIdx > 0 && (
+                    <div
+                      className="gen-channel-section__sep"
+                      aria-hidden="true"
+                    />
+                  )}
+                  <div className="gen-channel-section__header">
+                    <div className="gen-channel-section__title-group">
+                      <span className="gen-channel-section__title">
+                        {CHANNEL_LABELS[section.channel]}
+                      </span>
+                      <span className="gen-channel-section__count">
+                        {section.images.length}{' '}
+                        {section.images.length === 1
+                          ? resMsgs.imageSingular
+                          : resMsgs.imagePlural}
+                      </span>
+                    </div>
                     <button
                       type="button"
-                      className="btn btn--secondary"
-                      onClick={handleRegenerateAll}
-                    >
-                      <RefreshCw
-                        size={12}
-                        strokeWidth={1.5}
-                        aria-hidden="true"
-                      />
-                      {resMsgs.regenerateAll}
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn--secondary"
-                      onClick={handleDownloadAll}
+                      className="gen-channel-section__icon-btn"
+                      onClick={() =>
+                        section.images.forEach(img => handleDownload(img))
+                      }
+                      aria-label={resMsgs.downloadSection}
+                      title={resMsgs.downloadSection}
                     >
                       <Download
-                        size={12}
+                        size={13}
                         strokeWidth={1.5}
                         aria-hidden="true"
                       />
-                      {resMsgs.downloadAll}
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn--primary gen-results-action-btn--cta"
-                      onClick={() => setShowAddModal(true)}
-                    >
-                      <FolderPlus
-                        size={12}
-                        strokeWidth={1.5}
-                        aria-hidden="true"
-                      />
-                      {resMsgs.addToProject}
                     </button>
                   </div>
-                </div>
-                <div className="gen-results-grid">
-                  {images.map((img, idx) => (
-                    <div key={img.id} className="result-img">
-                      <button
-                        type="button"
-                        className="result-img__btn"
-                        aria-label={resMsgs.imageAlt(idx + 1)}
-                      >
-                        <img
-                          src="/Images/Placceholder-Image.png"
-                          alt={resMsgs.imageAlt(idx + 1)}
-                          className="result-img__placeholder"
-                        />
-                      </button>
-                      <div
-                        className="result-img__overlay"
-                        onClick={() => setActiveImage(img)}
-                        role="button"
-                        aria-label={resMsgs.imageAlt(idx + 1)}
-                      >
-                        <div
-                          className="result-img__pill result-img__pill--top"
-                          onClick={e => e.stopPropagation()}
+
+                  <div className="gen-results-grid">
+                    {section.images.map((img, idx) => (
+                      <div key={img.id} className="result-img">
+                        <button
+                          type="button"
+                          className="result-img__btn"
+                          aria-label={resMsgs.imageAlt(idx + 1)}
                         >
-                          <button
-                            type="button"
-                            className="result-img__pill-btn"
-                            aria-label="Me gusta"
-                          >
-                            <ThumbsUp size={13} strokeWidth={1.5} />
-                          </button>
-                          <span
-                            className="result-img__pill-sep"
-                            aria-hidden="true"
+                          <img
+                            src="/Images/Placceholder-Image.png"
+                            alt={resMsgs.imageAlt(idx + 1)}
+                            className="result-img__placeholder"
                           />
-                          <button
-                            type="button"
-                            className="result-img__pill-btn"
-                            aria-label="No me gusta"
-                          >
-                            <ThumbsDown size={13} strokeWidth={1.5} />
-                          </button>
-                        </div>
+                        </button>
                         <div
-                          className="result-img__pill result-img__pill--bottom"
-                          onClick={e => e.stopPropagation()}
+                          className="result-img__overlay"
+                          onClick={() => setActiveImage(img)}
+                          role="button"
+                          aria-label={resMsgs.imageAlt(idx + 1)}
                         >
-                          <button
-                            type="button"
-                            className="result-img__pill-btn"
-                            onClick={() => handleDownload(img)}
-                            aria-label={resMsgs.download}
+                          <div
+                            className="result-img__pill result-img__pill--bottom"
+                            onClick={e => e.stopPropagation()}
                           >
-                            <Download size={13} strokeWidth={1.5} />
-                          </button>
-                          <span
-                            className="result-img__pill-sep"
-                            aria-hidden="true"
-                          />
-                          <button
-                            type="button"
-                            className="result-img__pill-btn"
-                            onClick={() => handleRegenerate(img)}
-                            aria-label={resMsgs.regenerate}
-                          >
-                            <RefreshCw size={13} strokeWidth={1.5} />
-                          </button>
+                            <button
+                              type="button"
+                              className="result-img__pill-btn"
+                              onClick={() => handleDownload(img)}
+                              aria-label={resMsgs.download}
+                            >
+                              <Download size={13} strokeWidth={1.5} />
+                            </button>
+                            <span
+                              className="result-img__pill-sep"
+                              aria-hidden="true"
+                            />
+                            <button
+                              type="button"
+                              className="result-img__pill-btn"
+                              onClick={() => handleRegenerate(img)}
+                              aria-label={resMsgs.regenerate}
+                            >
+                              <RefreshCw size={13} strokeWidth={1.5} />
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="gen-results-empty">
-                <Wand2
-                  size={36}
-                  strokeWidth={1}
-                  className="gen-results-empty__icon"
-                  aria-hidden="true"
-                />
-                <p className="gen-results-empty__title">
-                  {resMsgs.emptyState.title}
-                </p>
-                <p className="gen-results-empty__sub">
-                  {resMsgs.emptyState.subtitle}
-                </p>
-              </div>
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="gen-results-empty">
+              <Wand2
+                size={36}
+                strokeWidth={1}
+                className="gen-results-empty__icon"
+                aria-hidden="true"
+              />
+              <p className="gen-results-empty__title">
+                {resMsgs.emptyState.title}
+              </p>
+              <p className="gen-results-empty__sub">
+                {resMsgs.emptyState.subtitle}
+              </p>
+            </div>
+          )}
 
-          {/* Bottom ~25% — past project images gallery */}
+          {/* Gallery — past project images */}
           {GALLERY_ITEMS.length > 0 && (
             <div className="gen-gallery">
               <p className="gen-gallery__label">{resMsgs.galleryTitle}</p>
@@ -1705,10 +1764,12 @@ export function GeneratorShell() {
                       </div>
                       <div className="pd-modal-param">
                         <span className="pd-modal-param__key">
-                          {resMsgs.modal.params.aspect}
+                          {resMsgs.modal.params.channel}
                         </span>
                         <span className="pd-modal-param__val">
-                          {config.aspectRatio}
+                          {config.channels
+                            .map(c => CHANNEL_LABELS[c.channel])
+                            .join(', ') || '—'}
                         </span>
                       </div>
                       <div className="pd-modal-param">
