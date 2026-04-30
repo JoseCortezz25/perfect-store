@@ -37,13 +37,15 @@ import { generatorStore } from '../../stores/generator.store';
 import { generatorMessages } from '../../messages';
 import { MOCK_SKUS, SKU_BRANDS } from '../../generator.repository';
 import { getAllPsProjects } from '@/domains/projects/ps-project-detail.repository';
-import type {
-  ImageAngle,
-  ImageIllumination,
-  Channel,
-  ChannelSection,
-  GeneratedImage,
-  Sku
+import {
+  FORMAT_CATALOG,
+  type ImageAngle,
+  type ImageIllumination,
+  type Channel,
+  type ChannelSection,
+  type GeneratedImage,
+  type Sku,
+  type FormatCategory
 } from '../../generator.types';
 
 function formatGroupLabel(category: FormatCategory, formatId: string): string {
@@ -458,12 +460,14 @@ export function GeneratorShell() {
     });
   });
 
+  const totalImages = config.formats.reduce((sum, f) => sum + f.count, 0);
   const canGenerate =
     config.selectedSkus.length > 0 &&
     config.channels.length > 0 &&
     !isGenerating;
   const selectedCount = config.selectedSkus.length;
   const hasSections = sections.length > 0;
+  const hasImages = images.length > 0;
 
   const chnMsgs = msgs.channel;
 

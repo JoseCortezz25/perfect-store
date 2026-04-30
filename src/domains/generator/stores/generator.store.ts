@@ -17,6 +17,7 @@ const DEFAULT_CONFIG: GeneratorConfig = {
   angle: null,
   illumination: null,
   channels: [],
+  formats: [],
   freeText: '',
   elementChips: [],
   atmosphericChips: [],
