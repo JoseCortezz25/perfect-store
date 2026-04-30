@@ -1,10 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import {
-  ArrowLeft,
   Share2,
   ChevronDown,
   CheckCircle,
@@ -76,11 +74,6 @@ export function ProjectDetailHeader({
 
   return (
     <div className="detail-header">
-      <Link href="/" className="detail-back-btn">
-        <ArrowLeft size={16} strokeWidth={2} aria-hidden="true" />
-        <span>{msgs.backButton}</span>
-      </Link>
-
       <div className="detail-header__row">
         <div className="detail-header__title-area">
           <h1 className="detail-header__title">{project.name}</h1>

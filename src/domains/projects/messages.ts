@@ -98,6 +98,7 @@ export const projectMessages = {
       `${dateLabel} · ${count} ${count === 1 ? 'imagen' : 'imágenes'}`,
     regenerate: 'Regenerar',
     download: 'Descargar',
+    downloadAll: 'Descargar todo',
     imageAlt: (n: number) => `Imagen generada ${n}`,
     modal: {
       title: 'Detalle de imagen',

@@ -20,17 +20,42 @@ const NAV_ITEMS = [
   { icon: Wand2, label: 'Generador', active: false },
   { icon: ShieldCheck, label: 'Admin', active: false },
   { icon: LayoutDashboard, label: 'Dashboard', active: false },
-  { icon: Settings, label: 'Ajustes', active: false },
+  { icon: Settings, label: 'Ajustes', active: false }
 ];
 
 /* ── Sidebar variants config ─────────────────────────── */
 
 const VARIANTS = [
-  { id: 1, cls: 'sb-v1', name: 'Azul · flotante', tag: 'Brand blue · pill radius · shadow' },
-  { id: 2, cls: 'sb-v2', name: 'Blanco · flotante', tag: 'White · pill radius · shadow' },
-  { id: 3, cls: 'sb-v3', name: 'Navy · fijo', tag: 'Dark navy · full edge · no radius' },
-  { id: 4, cls: 'sb-v4', name: 'Gris · fijo', tag: 'Light grey · divider right · white active card' },
-  { id: 5, cls: 'sb-v5', name: 'Azul degradado · fijo', tag: 'Gradient blue · full edge' },
+  {
+    id: 1,
+    cls: 'sb-v1',
+    name: 'Azul · flotante',
+    tag: 'Brand blue · pill radius · shadow'
+  },
+  {
+    id: 2,
+    cls: 'sb-v2',
+    name: 'Blanco · flotante',
+    tag: 'White · pill radius · shadow'
+  },
+  {
+    id: 3,
+    cls: 'sb-v3',
+    name: 'Navy · fijo',
+    tag: 'Dark navy · full edge · no radius'
+  },
+  {
+    id: 4,
+    cls: 'sb-v4',
+    name: 'Gris · fijo',
+    tag: 'Light grey · divider right · white active card'
+  },
+  {
+    id: 5,
+    cls: 'sb-v5',
+    name: 'Azul degradado · fijo',
+    tag: 'Gradient blue · full edge'
+  }
 ];
 
 /* ── Sidebar component ───────────────────────────────── */
@@ -53,9 +78,7 @@ function Sidebar({ variantCls, isCollapsed, onToggle }: SidebarProps) {
           width={20}
           height={22}
         />
-        {!isCollapsed && (
-          <span className="sb__logo-text">Perfect Store</span>
-        )}
+        {!isCollapsed && <span className="sb__logo-text">Perfect Store</span>}
       </div>
 
       {/* Nav */}
@@ -133,7 +156,8 @@ export default function PruebasPage() {
       <div className="pruebas-page__header">
         <h1 className="pruebas-page__title">Pruebas · Sidebar</h1>
         <p className="pruebas-page__sub">
-          5 variantes de barra lateral — haz clic en «Colapsar» dentro de cada una para probar el estado reducido
+          5 variantes de barra lateral — haz clic en «Colapsar» dentro de cada
+          una para probar el estado reducido
         </p>
       </div>
 
@@ -151,7 +175,11 @@ export default function PruebasPage() {
                   className="preview-card__toggle"
                   onClick={() => toggleVariant(variant.id)}
                 >
-                  {isCollapsed ? <ChevronRight size={10} /> : <ChevronLeft size={10} />}
+                  {isCollapsed ? (
+                    <ChevronRight size={10} />
+                  ) : (
+                    <ChevronLeft size={10} />
+                  )}
                   {isCollapsed ? 'Expandir' : 'Colapsar'}
                 </button>
               </div>
@@ -163,13 +191,15 @@ export default function PruebasPage() {
                 />
                 <MockContent />
               </div>
-              <div style={{
-                padding: '8px 14px',
-                fontFamily: 'var(--font-montserrat)',
-                fontSize: '10px',
-                color: '#AAAAAA',
-                borderTop: '1px solid #EAECEF'
-              }}>
+              <div
+                style={{
+                  padding: '8px 14px',
+                  fontFamily: 'var(--font-montserrat)',
+                  fontSize: '10px',
+                  color: '#AAAAAA',
+                  borderTop: '1px solid #EAECEF'
+                }}
+              >
                 {variant.tag}
               </div>
             </div>

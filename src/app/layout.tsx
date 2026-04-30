@@ -27,7 +27,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${montserrat.variable} ${sodaFont.variable} antialiased`}>{children}</body>
+      <body
+        className={`${montserrat.variable} ${sodaFont.variable} antialiased`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

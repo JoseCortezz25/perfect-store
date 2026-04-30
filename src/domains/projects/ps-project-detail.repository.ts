@@ -294,7 +294,8 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-c03',
     name: 'Colombiana Góndola Q2',
     brand: 'Colombiana',
-    thumbnail: '/images/Colombiana/83e6d28646340c7ef5b37db25a87d06c3829aa2d_SoftDrinks_509470_06.jpg',
+    thumbnail:
+      '/images/Colombiana/83e6d28646340c7ef5b37db25a87d06c3829aa2d_SoftDrinks_509470_06.jpg',
     skus: [
       'Colombiana 400ml',
       'Colombiana Naranja 400ml',
@@ -372,7 +373,8 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-004',
     name: 'Postobón Original Q2',
     brand: 'Sabores',
-    thumbnail: '/images/Sabores/503bc9164592099.Y3JvcCwxNDAwLDEwOTUsMCwxNTk.png',
+    thumbnail:
+      '/images/Sabores/503bc9164592099.Y3JvcCwxNDAwLDEwOTUsMCwxNTk.png',
     skus: [
       'Postobón Manzana 400ml',
       'Postobón Uva 400ml',
@@ -480,7 +482,8 @@ const PS_PROJECTS: PsProjectDetail[] = [
     id: 'ps-002',
     name: 'Activación Hit Frutas',
     brand: 'Hit',
-    thumbnail: '/images/Hit/498117045_1065010415676976_4799101696404848688_n.jpg',
+    thumbnail:
+      '/images/Hit/498117045_1065010415676976_4799101696404848688_n.jpg',
     skus: ['Hit Mango 400ml', 'Hit Mora 400ml', 'Hit Lulo 400ml'],
     createdAt: new Date('2026-03-18'),
     sessions: [
@@ -573,9 +576,7 @@ const PS_PROJECTS: PsProjectDetail[] = [
         'Botella de Hit Lulo 400ml sobre lulos frescos partidos en mitad sobre superficie de pizarra negra, gotas de lulo salpicando alrededor, fondo verde oscuro de vegetación, iluminación de estudio con rim light blanco perimetral creando volumen, fotografía food styling editorial de lanzamiento, lente 85mm macro, colores verde lima intenso y amarillo del lulo protagonistas'
       )
     ]
-  },
-
-
+  }
 ];
 
 /* ─── Repository ────────────────────────────────────────────── */

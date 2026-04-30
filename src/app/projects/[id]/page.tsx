@@ -24,7 +24,7 @@ export default async function ProjectDetailPage({
     return (
       <div className="dashboard">
         <AppSidebar />
-        <main className="dashboard__main dashboard__main--workspace">
+        <main className="dashboard__main">
           <div className="dashboard__bg" />
           <PsProjectDetailShell project={psProject} />
         </main>

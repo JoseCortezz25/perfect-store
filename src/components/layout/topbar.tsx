@@ -56,11 +56,7 @@ export function Topbar() {
           />
         </Link>
         <div className="topbar__divider" aria-hidden="true" />
-        <Link
-          href="/"
-          className="topbar__home-btn"
-          aria-label="Ir al inicio"
-        >
+        <Link href="/" className="topbar__home-btn" aria-label="Ir al inicio">
           <Home size={15} strokeWidth={1.5} aria-hidden="true" />
         </Link>
       </div>

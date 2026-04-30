@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
-import { RefreshCw, Download, X, ArrowLeft } from 'lucide-react';
+import { RefreshCw, Download, X } from 'lucide-react';
 import { projectMessages } from '../../messages';
 import type {
   PsProjectDetail,
@@ -72,6 +72,10 @@ export function PsProjectDetailShell({ project }: PsProjectDetailShellProps) {
     );
   }
 
+  function handleDownloadAll(session: GenerationSession) {
+    session.images.forEach(img => handleDownload(img));
+  }
+
   function handleDownload(img: PsGeneratedImage) {
     const canvas = document.createElement('canvas');
     canvas.width = 512;
@@ -101,17 +105,6 @@ export function PsProjectDetailShell({ project }: PsProjectDetailShellProps) {
   return (
     <>
       <div className="pd-page">
-        {/* Back nav */}
-        <button
-          type="button"
-          className="pd-back-btn"
-          onClick={() => router.push('/projects')}
-          aria-label={msgs.backButton}
-        >
-          <ArrowLeft size={13} strokeWidth={1.5} aria-hidden="true" />
-          {msgs.backButton}
-        </button>
-
         {/* Header row: section-header + CTA */}
         <div className="pd-header-row">
           <div className="section-header">
@@ -158,15 +151,23 @@ export function PsProjectDetailShell({ project }: PsProjectDetailShellProps) {
                   )}
                 </span>
                 <div className="pd-session-divider__line" aria-hidden="true" />
+                <button
+                  type="button"
+                  className="btn btn--secondary"
+                  onClick={() => handleDownloadAll(session)}
+                >
+                  <Download size={12} strokeWidth={1.5} aria-hidden="true" />
+                  {msgs.downloadAll}
+                </button>
               </div>
 
               {/* Image grid — 3 columns via .pd-feed override */}
               <div className="results-grid">
                 {session.images.map((img, idx) => (
-                  <div key={img.id} className="result-card">
+                  <div key={img.id} className="result-img">
                     <button
                       type="button"
-                      className="result-card__image-btn"
+                      className="result-img__btn"
                       onClick={() =>
                         setActiveImageState({ image: img, session, index: idx })
                       }
@@ -175,30 +176,32 @@ export function PsProjectDetailShell({ project }: PsProjectDetailShellProps) {
                       <img
                         src="/Images/Placceholder-Image.png"
                         alt={msgs.imageAlt(idx + 1)}
-                        className="result-card__placeholder"
+                        className="result-img__placeholder"
                       />
                     </button>
-                    <div className="result-card__actions">
-                      <button
-                        type="button"
-                        className="result-action-btn"
-                        onClick={() => handleRegenerate(session.id, img)}
-                        title={msgs.regenerate}
-                        aria-label={msgs.regenerate}
-                      >
-                        <RefreshCw size={14} strokeWidth={1.5} />
-                        <span>{msgs.regenerate}</span>
-                      </button>
-                      <button
-                        type="button"
-                        className="result-action-btn result-action-btn--primary"
-                        onClick={() => handleDownload(img)}
-                        title={msgs.download}
-                        aria-label={msgs.download}
-                      >
-                        <Download size={14} strokeWidth={1.5} />
-                        <span>{msgs.download}</span>
-                      </button>
+                    <div className="result-img__overlay">
+                      <div className="result-img__pill result-img__pill--bottom">
+                        <button
+                          type="button"
+                          className="result-img__pill-btn"
+                          onClick={() => handleRegenerate(session.id, img)}
+                          aria-label={msgs.regenerate}
+                        >
+                          <RefreshCw size={13} strokeWidth={1.5} />
+                        </button>
+                        <span
+                          className="result-img__pill-sep"
+                          aria-hidden="true"
+                        />
+                        <button
+                          type="button"
+                          className="result-img__pill-btn"
+                          onClick={() => handleDownload(img)}
+                          aria-label={msgs.download}
+                        >
+                          <Download size={13} strokeWidth={1.5} />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -209,131 +212,136 @@ export function PsProjectDetailShell({ project }: PsProjectDetailShellProps) {
       </div>
 
       {/* Image detail modal — wide two-column layout */}
-      {activeImageState && createPortal(
-        <div
-          className="gen-modal-overlay"
-          onClick={() => setActiveImageState(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={msgs.modal.title}
-        >
+      {activeImageState &&
+        createPortal(
           <div
-            className="gen-modal gen-modal--ps-detail"
-            onClick={e => e.stopPropagation()}
+            className="gen-modal-overlay"
+            onClick={() => setActiveImageState(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={msgs.modal.title}
           >
-            <div className="pd-modal-layout">
-              {/* Left: large image */}
-              <div className="pd-modal-image">
-                <img
-                  src="/Images/Placceholder-Image.png"
-                  alt=""
-                  className="pd-modal-image__preview"
-                  aria-hidden="true"
-                />
-              </div>
-
-              {/* Right: details */}
-              <div className="pd-modal-info">
-                <div className="pd-modal-info__header">
-                  <h2 className="pd-modal-info__title">{msgs.modal.title}</h2>
-                  <button
-                    type="button"
-                    className="gen-modal__close"
-                    onClick={() => setActiveImageState(null)}
-                    aria-label={msgs.modal.close}
-                  >
-                    <X size={16} strokeWidth={1.5} />
-                  </button>
+            <div
+              className="gen-modal gen-modal--ps-detail"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="pd-modal-layout">
+                {/* Left: large image */}
+                <div className="pd-modal-image">
+                  <img
+                    src="/Images/Placceholder-Image.png"
+                    alt=""
+                    className="pd-modal-image__preview"
+                    aria-hidden="true"
+                  />
                 </div>
 
-                <div className="pd-modal-info__body">
-                  {/* Prompt — always visible */}
-                  <div className="pd-modal-prompt">
-                    <span className="pd-modal-prompt__label">
-                      {msgs.modal.params.prompt}
-                    </span>
-                    <p className="pd-modal-prompt__text">
-                      {activeImageState.session.params.freeText ??
-                        buildFallbackPrompt(
-                          activeImageState.session.params.skus,
-                          activeImageState.session.params.imageType,
-                          activeImageState.session.params.angle
-                        )}
-                    </p>
+                {/* Right: details */}
+                <div className="pd-modal-info">
+                  <div className="pd-modal-info__header">
+                    <h2 className="pd-modal-info__title">{msgs.modal.title}</h2>
+                    <button
+                      type="button"
+                      className="gen-modal__close"
+                      onClick={() => setActiveImageState(null)}
+                      aria-label={msgs.modal.close}
+                    >
+                      <X size={16} strokeWidth={1.5} />
+                    </button>
                   </div>
-                  <div className="pd-modal-sep" />
 
-                  {/* Flat params list */}
-                  <div className="pd-modal-params">
-                    <div className="pd-modal-param">
-                      <span className="pd-modal-param__key">
-                        {msgs.modal.params.skus}
+                  <div className="pd-modal-info__body">
+                    {/* Prompt — always visible */}
+                    <div className="pd-modal-prompt">
+                      <span className="pd-modal-prompt__label">
+                        {msgs.modal.params.prompt}
                       </span>
-                      <span className="pd-modal-param__val">
-                        {activeImageState.session.params.skus.join(', ')}
-                      </span>
+                      <p className="pd-modal-prompt__text">
+                        {activeImageState.session.params.freeText ??
+                          buildFallbackPrompt(
+                            activeImageState.session.params.skus,
+                            activeImageState.session.params.imageType,
+                            activeImageState.session.params.angle
+                          )}
+                      </p>
                     </div>
-                    <div className="pd-modal-param">
-                      <span className="pd-modal-param__key">
-                        {msgs.modal.params.type}
-                      </span>
-                      <span className="pd-modal-param__val">
-                        {activeImageState.session.params.imageType}
-                      </span>
-                    </div>
-                    <div className="pd-modal-param">
-                      <span className="pd-modal-param__key">
-                        {msgs.modal.params.angle}
-                      </span>
-                      <span className="pd-modal-param__val">
-                        {activeImageState.session.params.angle}
-                      </span>
-                    </div>
-                    <div className="pd-modal-param">
-                      <span className="pd-modal-param__key">
-                        {msgs.modal.params.aspect}
-                      </span>
-                      <span className="pd-modal-param__val">
-                        {activeImageState.session.params.aspectRatio}
-                      </span>
-                    </div>
-                    <div className="pd-modal-param">
-                      <span className="pd-modal-param__key">
-                        {msgs.modal.params.quality}
-                      </span>
-                      <span className="pd-modal-param__val">
-                        {activeImageState.session.params.quality}
-                      </span>
+                    <div className="pd-modal-sep" />
+
+                    {/* Flat params list */}
+                    <div className="pd-modal-params">
+                      <div className="pd-modal-param">
+                        <span className="pd-modal-param__key">
+                          {msgs.modal.params.skus}
+                        </span>
+                        <span className="pd-modal-param__val">
+                          {activeImageState.session.params.skus.join(', ')}
+                        </span>
+                      </div>
+                      <div className="pd-modal-param">
+                        <span className="pd-modal-param__key">
+                          {msgs.modal.params.type}
+                        </span>
+                        <span className="pd-modal-param__val">
+                          {activeImageState.session.params.imageType}
+                        </span>
+                      </div>
+                      <div className="pd-modal-param">
+                        <span className="pd-modal-param__key">
+                          {msgs.modal.params.angle}
+                        </span>
+                        <span className="pd-modal-param__val">
+                          {activeImageState.session.params.angle}
+                        </span>
+                      </div>
+                      <div className="pd-modal-param">
+                        <span className="pd-modal-param__key">
+                          {msgs.modal.params.aspect}
+                        </span>
+                        <span className="pd-modal-param__val">
+                          {activeImageState.session.params.aspectRatio}
+                        </span>
+                      </div>
+                      <div className="pd-modal-param">
+                        <span className="pd-modal-param__key">
+                          {msgs.modal.params.quality}
+                        </span>
+                        <span className="pd-modal-param__val">
+                          {activeImageState.session.params.quality}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="pd-modal-info__footer">
-                  <button
-                    type="button"
-                    className="btn btn--secondary"
-                    onClick={() => setActiveImageState(null)}
-                  >
-                    {msgs.modal.close}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn--primary"
-                    onClick={() => {
-                      handleDownload(activeImageState.image);
-                      setActiveImageState(null);
-                    }}
-                  >
-                    <Download size={14} strokeWidth={1.5} aria-hidden="true" />
-                    {msgs.download}
-                  </button>
+                  <div className="pd-modal-info__footer">
+                    <button
+                      type="button"
+                      className="btn btn--secondary"
+                      onClick={() => setActiveImageState(null)}
+                    >
+                      {msgs.modal.close}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn--primary"
+                      onClick={() => {
+                        handleDownload(activeImageState.image);
+                        setActiveImageState(null);
+                      }}
+                    >
+                      <Download
+                        size={14}
+                        strokeWidth={1.5}
+                        aria-hidden="true"
+                      />
+                      {msgs.download}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body
+        )}
     </>
   );
 }

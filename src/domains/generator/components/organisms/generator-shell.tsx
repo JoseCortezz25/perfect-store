@@ -46,6 +46,14 @@ import type {
   Sku
 } from '../../generator.types';
 
+function formatGroupLabel(category: FormatCategory, formatId: string): string {
+  const cat = FORMAT_CATALOG.find(c => c.id === category);
+  if (!cat) return category;
+  if (!cat.expandable) return cat.label;
+  const fmt = cat.formats.find(f => f.id === formatId);
+  return fmt ? `${cat.label} ${fmt.label}` : cat.label;
+}
+
 const msgs = generatorMessages.config;
 const ctxMsgs = msgs.context;
 const resMsgs = generatorMessages.results;
@@ -458,6 +466,34 @@ export function GeneratorShell() {
   const hasSections = sections.length > 0;
 
   const chnMsgs = msgs.channel;
+
+  /* Build ordered format groups from the images array */
+  const formatGroups: Array<{
+    key: string;
+    category: FormatCategory;
+    format: string;
+    label: string;
+    imgs: GeneratedImage[];
+  }> = [];
+  if (hasImages) {
+    const seen = new Set<string>();
+    images.forEach(img => {
+      if (!img.category || !img.format) return;
+      const key = `${img.category}::${img.format}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        formatGroups.push({
+          key,
+          category: img.category,
+          format: img.format,
+          label: formatGroupLabel(img.category, img.format),
+          imgs: []
+        });
+      }
+      const group = formatGroups.find(g => g.key === key);
+      if (group) group.imgs.push(img);
+    });
+  }
 
   const refItems = refPanel === 'angle' ? ANGLE_REFS : ILLUMINATION_REFS;
 
@@ -1414,7 +1450,9 @@ export function GeneratorShell() {
               ) : (
                 <>
                   <Wand2 size={15} strokeWidth={1.5} aria-hidden="true" />
-                  {msgs.generateBtn}
+                  {totalImages > 0
+                    ? msgs.generateBtnWithCount(totalImages)
+                    : msgs.format.emptyState}
                 </>
               )}
             </button>

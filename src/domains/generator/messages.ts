@@ -14,7 +14,7 @@ export const generatorMessages = {
     subtitle: 'Selecciona o crea el proyecto donde se guardarán las imágenes',
     selectLabel: 'Proyecto existente',
     selectPlaceholder: 'Seleccionar proyecto...',
-    orCreate: 'o crear uno nuevo',
+    orCreate: 'Nuevo proyecto',
     newNameLabel: 'Nombre del proyecto',
     newNamePlaceholder: 'Ej: Campaña Verano 2026',
     newBrandLabel: 'Marca',
@@ -96,6 +96,20 @@ export const generatorMessages = {
       extraLabel: (n: number) => `${n} IA`,
       imageCountLabel: (n: number) => `×${n}`
     },
+
+    format: {
+      label: 'Formato',
+      placeholder: 'Seleccionar formato...',
+      addCta: 'Agregar',
+      remove: 'Quitar',
+      decrease: 'Reducir cantidad',
+      increase: 'Aumentar cantidad',
+      minHint: (n: number) => `Mínimo ${n} ${n === 1 ? 'imagen' : 'imágenes'}`,
+      emptyState: 'Selecciona al menos un formato'
+    },
+
+    generateBtnWithCount: (n: number) =>
+      `Generar ${n} ${n === 1 ? 'imagen' : 'imágenes'}`,
 
     context: {
       label: 'Descripción de contexto',

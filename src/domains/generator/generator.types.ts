@@ -59,4 +59,6 @@ export interface GeneratorConfig {
 export interface GeneratedImage {
   id: string;
   accentColor: string;
+  category?: FormatCategory;
+  format?: string;
 }
